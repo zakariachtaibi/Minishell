@@ -23,7 +23,7 @@ t_token *init_token(void)
     token = (t_token *)malloc(sizeof(t_token));
     if (!token)
         exit(1);
-    token->word = NULL;
+    token->word = malloc(sizeof(char**));
     token->heredoc = NULL;
     token->pipe = NULL;
     token->redirect_output = NULL;
@@ -35,9 +35,10 @@ t_token *init_token(void)
 void check_input(char *lex, t_token *token)
 {
     int i = 0;
-    char *tmp;
+    int j = 0;
+    // char *tmp;
     char **splitted;
-    int len = 0;
+    // int len = 0;
     
     splitted = ft_split(lex, ' ');
     while (splitted[i])
@@ -63,23 +64,32 @@ void check_input(char *lex, t_token *token)
             token->heredoc = splitted[i];
         }
         else if (!ft_strncmp(splitted[i], "|", 2))
+        {
             token->pipe = splitted[i];
+            // i++;
+        }
+            
         else
         {
-            if (!token->word)
-                token->word = splitted[i];
-            else
-            {
-                len = ft_strlen(token->word) + ft_strlen(splitted[i]) + 2;
-                tmp = malloc(len);
-                if (!tmp)
-                    exit(1);
-                ft_strlcpy(tmp, token->word, len);
-                ft_strlcat(tmp, " ", len);
-                ft_strlcat(tmp, splitted[i], len);
-                free(token->word);
-                token->word = tmp;
-            }
+            // if (!token->word)
+            // printf("%s", token->word[0]);
+            // exit(0);
+                token->word[j++] = splitted[i];
+                // j++;
+
+            // else
+            // {
+            //     len = ft_strlen(token->word) + ft_strlen(splitted[i]) + 2;
+            //     tmp = malloc(len);
+            //     if (!tmp)
+            //         exit(1);
+            //     ft_strlcpy(tmp, token->word, len);
+            //     ft_strlcat(tmp, " ", len);
+            //     ft_strlcat(tmp, splitted[i], len);
+                // free(token->word);
+            //     token->word = tmp;
+            // }
+            // i++;
         }
         i++;
     }

@@ -6,7 +6,7 @@
 //qaddir token struct hit lexer ghade ghe yqraa l input u ychuf wash word ula token chuf dek roadmap li seft
 typedef struct s_token
 {
-    char *word ;
+    char **word ;
     char *redirect_input;
     char *redirect_output;
     char *heredoc;
