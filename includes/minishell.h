@@ -18,4 +18,6 @@ typedef struct s_lexical
 #include <readline/readline.h>
 #include <readline/history.h>
 
+t_lexical *init_lexical(void);
+
 #endif 

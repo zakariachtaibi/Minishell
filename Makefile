@@ -1,4 +1,4 @@
-NAME = Minishell
+NAME = minishell
 
 SRCS = srcs/main.c \
 		libft/ft_isdigit.c \
@@ -15,6 +15,7 @@ SRCS = srcs/main.c \
 		libft/ft_memcpy.c \
 		libft/ft_strlcat.c \
 		libft/ft_memset.c \
+		srcs/lexer/token_reader.c\
 
 OBJS = $(SRCS:.c=.o)
 
