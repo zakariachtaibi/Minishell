@@ -10,14 +10,14 @@ typedef struct s_token
     char *redirect_input;
     char *redirect_output;
     char *heredoc;
-    char  *redirect_append;
+    char *redirect_append;
     char *pipe;
 }   t_token;
 
 typedef struct s_lexical
 {
     char *input;
-    t_token token;
+    // t_token token;
     struct s_lexical *next;
     struct s_lexical *prev;
     int i;
@@ -32,6 +32,7 @@ typedef struct s_lexical
 #include <readline/history.h>
 
 t_lexical *init_lexical(void);
+t_token *init_token(void);
 void check_input(char *lex, t_token *token);
 
 #endif 

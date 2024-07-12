@@ -15,46 +15,73 @@ t_lexical *init_lexical(void)
     lex->i = 0;
     return (lex);
 }
+
+t_token *init_token(void)
+{
+    t_token *token;
+    
+    token = (t_token *)malloc(sizeof(t_token));
+    if (!token)
+        exit(1);
+    token->word = NULL;
+    token->heredoc = NULL;
+    token->pipe = NULL;
+    token->redirect_output = NULL;
+    token->redirect_input = NULL;
+    token->redirect_append = NULL;
+    return (token);
+}
 // hade fen ka initialiser duk lparams d tokens
 void check_input(char *lex, t_token *token)
 {
-    // t_token *token;
     int i = 0;
-    // int j = 0;
+    char *tmp;
     char **splitted;
-    splitted  = ft_split(lex, ' ');
-    while (*splitted)
+    int len = 0;
+    
+    splitted = ft_split(lex, ' ');
+    while (splitted[i])
     {
-        if (strcmp(splitted[i], ">"))
+        if (!ft_strncmp(splitted[i], ">", 2))
         {
+            i++;
             token->redirect_output = splitted[i];
-            i++;
         }
-        else if (strcmp(splitted[i], "<"))
+        else if (!ft_strncmp(splitted[i], "<", 2))
         {
+            i++;
             token->redirect_input = splitted[i];
-            i++;
         }
-        else  if (strcmp(splitted[i], ">>"))
+        else if (!ft_strncmp(splitted[i], ">>", 3))
         {
+            i++;
             token->redirect_append = splitted[i];
-            i++;
         }
-        else  if (strcmp(splitted[i], "<<"))
+        else if (!ft_strncmp(splitted[i], "<<", 3))
         {
+            i++;
             token->heredoc = splitted[i];
-            i++;
         }
-        else  if (strcmp(splitted[i], "|"))
-        {
+        else if (!ft_strncmp(splitted[i], "|", 2))
             token->pipe = splitted[i];
-            i++;
-        }
         else
         {
-            token->word = splitted[i];
-            i++;
+            if (!token->word)
+                token->word = splitted[i];
+            else
+            {
+                len = ft_strlen(token->word) + ft_strlen(splitted[i]) + 2;
+                tmp = malloc(len);
+                if (!tmp)
+                    exit(1);
+                ft_strlcpy(tmp, token->word, len);
+                ft_strlcat(tmp, " ", len);
+                ft_strlcat(tmp, splitted[i], len);
+                free(token->word);
+                token->word = tmp;
+            }
         }
-
+        i++;
     }
+    free(splitted);
 }
