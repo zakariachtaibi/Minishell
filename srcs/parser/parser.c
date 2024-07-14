@@ -64,8 +64,11 @@ void process_tokens(t_lexical *tokens)
         printf("----------Command[%d]---------: ", num);
         int i = -1;
         while (current_cmd->str[++i])
-            printf("%s ", current_cmd->str[i]);
+        {
+             printf("cmd[%d]%s ", i, current_cmd->str[i]);
         printf("\n");
+        
+        }
         current_cmd = current_cmd->next;
         num++;
     }

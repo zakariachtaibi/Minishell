@@ -2,10 +2,6 @@
 
 #define MINISHELL_H
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 9b266628a3f111a29f39f6f4e86aba2cfa59a470
 typedef enum e_token
 {
     TOKEN_PIPE,
@@ -42,12 +38,9 @@ typedef struct s_simple_cmds
 #include <readline/readline.h>
 #include <readline/history.h>
 
-<<<<<<< HEAD
-=======
 // t_lexical *init_lexical(void);
 // t_token *init_token(void);
 t_simple_cmds *init_cmd(void);
->>>>>>> 9b266628a3f111a29f39f6f4e86aba2cfa59a470
 t_lexical *tokenize(char *input);
 void process_tokens(t_lexical *tokens);
 
