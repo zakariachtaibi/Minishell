@@ -10,8 +10,8 @@ t_lexical *tokenize(char *input)
     i = 0;
     
     word = ft_split(input, ' ');
-     node = malloc(sizeof(t_lexical));
-     node->prev = NULL;
+    node = malloc(sizeof(t_lexical));
+    node->prev = NULL;
     while (word[i])
     {
         node = malloc(sizeof(t_lexical));
@@ -32,7 +32,6 @@ t_lexical *tokenize(char *input)
 
         if (head == NULL)
         {
-            // node->prev = NULL;
             head = node;
             current = node;
         }
