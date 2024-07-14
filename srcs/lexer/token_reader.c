@@ -19,11 +19,23 @@ t_lexical *init_lexical(void)
 t_token *init_token(void)
 {
     t_token *token;
+    int     i;
     
     token = (t_token *)malloc(sizeof(t_token));
     if (!token)
         exit(1);
-    token->word = malloc(sizeof(char**));
+    token->word = malloc(sizeof(char*) * 10);
+    token->cmd = malloc(sizeof(char*) * 10);
+    if (!token->cmd)
+        exit(1);
+    if (!token->word)
+        exit(1);
+    i = -1;
+    while (++i < 10)
+    {
+        token->word[i] = NULL;
+        token->cmd[i] = NULL;
+    }
     token->heredoc = NULL;
     token->pipe = NULL;
     token->redirect_output = NULL;
@@ -31,14 +43,14 @@ t_token *init_token(void)
     token->redirect_append = NULL;
     return (token);
 }
-// hade fen ka initialiser duk lparams d tokens
+
 void check_input(char *lex, t_token *token)
 {
     int i = 0;
     int j = 0;
-    // char *tmp;
     char **splitted;
-    // int len = 0;
+    char *cmd;
+    size_t cmd_len = 0;
     
     splitted = ft_split(lex, ' ');
     while (splitted[i])
@@ -66,32 +78,35 @@ void check_input(char *lex, t_token *token)
         else if (!ft_strncmp(splitted[i], "|", 2))
         {
             token->pipe = splitted[i];
-            // i++;
+            i++;
+            continue;
         }
-            
         else
         {
-            // if (!token->word)
-            // printf("%s", token->word[0]);
-            // exit(0);
-                token->word[j++] = splitted[i];
-                // j++;
-
-            // else
-            // {
-            //     len = ft_strlen(token->word) + ft_strlen(splitted[i]) + 2;
-            //     tmp = malloc(len);
-            //     if (!tmp)
-            //         exit(1);
-            //     ft_strlcpy(tmp, token->word, len);
-            //     ft_strlcat(tmp, " ", len);
-            //     ft_strlcat(tmp, splitted[i], len);
-                // free(token->word);
-            //     token->word = tmp;
-            // }
-            // i++;
+            token->word[j++] = splitted[i];
         }
         i++;
     }
+    
+    cmd_len = 0;
+    i = 0;
+    while (token->word[i])
+    {
+        cmd_len += strlen(token->word[i]) + 1;
+        i++;
+    }
+    cmd = malloc(cmd_len + 1);
+    if (!cmd)
+        exit(1);
+    cmd[0] = '\0';
+    for (i = 0; token->word[i]; i++)
+    {
+        ft_strlcat(cmd, token->word[i], ft_strlen(token->word[i]));
+        if (token->word[i + 1])
+            strcat(cmd, " ");
+    }
+    
+    token->cmd = cmd;
+    
     free(splitted);
 }

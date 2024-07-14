@@ -4,15 +4,16 @@
 
 // ha hiya hna 
 //qaddir token struct hit lexer ghade ghe yqraa l input u ychuf wash word ula token chuf dek roadmap li seft
-typedef struct s_token
-{
-    char **word ;
-    char *redirect_input;
-    char *redirect_output;
+typedef struct s_token {
+    char **word;
     char *heredoc;
-    char *redirect_append;
     char *pipe;
-}   t_token;
+    char *redirect_output;
+    char *redirect_input;
+    char *redirect_append;
+    char **cmd;
+} t_token;
+
 
 typedef struct s_lexical
 {
