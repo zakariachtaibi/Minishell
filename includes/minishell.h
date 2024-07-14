@@ -42,8 +42,8 @@ typedef struct s_lexical
 #include <readline/readline.h>
 #include <readline/history.h>
 
-t_lexical *init_lexical(void);
-t_token *init_token(void);
-void check_input(char *lex, t_token *token);
+// t_lexical *init_lexical(void);
+// t_token *init_token(void);
+t_lexical *tokenize(char *input);
 
 #endif 
