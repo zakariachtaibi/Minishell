@@ -44,5 +44,6 @@ t_lexical *tokenize(char *input)
         }
         i++;
     }
+    free(word);
     return(head);
 }
