@@ -2,18 +2,6 @@
 
 #define MINISHELL_H
 
-// ha hiya hna 
-//qaddir token struct hit lexer ghade ghe yqraa l input u ychuf wash word ula token chuf dek roadmap li seft
-// typedef struct s_token
-// {
-//     // char **word ;
-//     char *redirect_input;
-//     char *redirect_output;
-//     char *heredoc;
-//     char *redirect_append;
-//     char *pipe;
-// }   t_token;
-
 typedef enum e_token
 {
     TOKEN_PIPE,
@@ -34,7 +22,16 @@ typedef struct s_lexical
     int i;
 }   t_lexical;
 
-
+typedef struct s_simple_cmds
+{
+	char                    **str;
+	// int                     (*builtin)(t_tools *, struct s_simple_cmds *);
+	int                     num_redirections;
+	char                    *hd_file_name;
+	t_lexical               *redirections;
+	struct s_simple_cmds	*next;
+	struct s_simple_cmds	*prev;
+}	t_simple_cmds;
 
 # include "../libft/libft.h"
 #include <stdio.h>
@@ -44,6 +41,8 @@ typedef struct s_lexical
 
 // t_lexical *init_lexical(void);
 // t_token *init_token(void);
+t_simple_cmds *init_cmd(void);
 t_lexical *tokenize(char *input);
+void process_tokens(t_lexical *tokens);
 
 #endif 
