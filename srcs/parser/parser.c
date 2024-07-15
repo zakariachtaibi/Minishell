@@ -12,10 +12,37 @@ t_simple_cmds *init_cmd(void)
     return new_cmd;
 }
 
+void delete_node(t_lexical **head, t_lexical *node_to_delete) 
+{
+    // If the list is empty or node_to_delete is NULL, do nothing
+    if (*head == NULL || node_to_delete == NULL) {
+        return;
+    }
+
+    // If node_to_delete is the head node
+    if (*head == node_to_delete) {
+        *head = node_to_delete->next;
+    }
+
+    // Change next only if node_to_delete is NOT the last node
+    if (node_to_delete->next != NULL) {
+        node_to_delete->next->prev = node_to_delete->prev;
+    }
+
+    // Change prev only if node_to_delete is NOT the first node
+    if (node_to_delete->prev != NULL) {
+        node_to_delete->prev->next = node_to_delete->next;
+    }
+
+    // Free the memory allocated for node_to_delete
+    free(node_to_delete->str);
+}
+  
 void add_redirection(t_lexical **redirections, t_lexical *redir_node)
 {
     redir_node->next = *redirections;
-    if (*redirections) (*redirections)->prev = redir_node;
+    if (*redirections) 
+        (*redirections)->prev = redir_node;
     *redirections = redir_node;
 }
 
@@ -55,24 +82,43 @@ void process_tokens(t_lexical *tokens)
             temp->token == TOKEN_HEREDOC || temp->token == TOKEN_APPEND)
         {
             t_lexical *redir;
+            t_lexical *filename;
 
             redir = malloc(sizeof(t_lexical));
+            filename = malloc(sizeof(t_lexical));
             *redir = *temp;
+            // *filename = *temp->next;
             redir->next = current_cmd->redirections;
             if (current_cmd->redirections)
                 current_cmd->redirections->prev = redir;
             current_cmd->redirections = redir;
+           
+            // current_cmd->redirections = redir->next;
+            // printf("---------------%s------------------\n", current_cmd->redirections->next->str);
             current_cmd->num_redirections++;
-
+            // delete_node(temp);
             temp = temp->next;
             if (temp && temp->token == TOKEN_WORD)
             {
-                current_cmd->hd_file_name = strdup(temp->str);
-                temp = temp->next;
+                if (redir->token == TOKEN_HEREDOC)
+                {
+                    current_cmd->hd_file_name = strdup(temp->str);
+                    temp = temp->next;
+                }
+                else
+                {
+                    *filename = *temp;
+                    redir->next = filename;
+                    filename->prev = redir;
+                    filename->next = NULL;
+                     temp = temp->next;
+                }
+                
             }
+            
             continue;
         }
-
+       
         // words
         if (temp->token == TOKEN_WORD)
         {
@@ -100,30 +146,35 @@ void process_tokens(t_lexical *tokens)
     }
 
     // Test
+    
     t_simple_cmds *cmd_temp = cmds_head;
-    while (cmd_temp)
-    {
+    while (cmd_temp) {
         printf("Command: ");
-        if (cmd_temp->str)
-        {
-            int i;
-            i = -1;
-            while (cmd_temp->str[++i])
+        if (cmd_temp->str) {
+            int i = 0;
+            while (cmd_temp->str[i]) {
                 printf("%s ", cmd_temp->str[i]);
-        }
-        if (cmd_temp->redirections)
-        {
-            printf("\nRedirections: ");
-            t_lexical *redir_temp = cmd_temp->redirections;
-            while (redir_temp)
-            {
-            printf("%s\n", redir_temp->str);
-            redir_temp = redir_temp->next;
+                i++;
             }
+        } else {
+            printf("(null)");
         }
-        if (cmd_temp->hd_file_name)
-            printf("Heredoc file: %s\n", cmd_temp->hd_file_name);
-        printf("\n");
+        printf("\nRedirections: ");
+        if (cmd_temp->redirections) {
+            t_lexical *redir_temp = cmd_temp->redirections;
+            while (redir_temp) {
+                printf("%s ", redir_temp->str);
+                redir_temp = redir_temp->next;
+            }
+        } else {
+            printf("(null)");
+        }
+        if (cmd_temp->hd_file_name) {
+            printf("\nHeredoc delimiter: %s", cmd_temp->hd_file_name);
+        } else {
+            printf("\nHeredoc delimiter: (null)");
+        }
+        printf("\n\n");
         cmd_temp = cmd_temp->next;
     }
 }
