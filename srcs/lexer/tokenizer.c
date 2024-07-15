@@ -7,41 +7,48 @@ t_lexical *tokenize(char *input)
     t_lexical *current = NULL;
     t_lexical *node;
     int i;
-    i = 0;
-    
+
     word = ft_split(input, ' ');
-    node = malloc(sizeof(t_lexical));
-    node->prev = NULL;
+    if (!word)
+        return NULL;
+
+    i = 0;
     while (word[i])
     {
         node = malloc(sizeof(t_lexical));
+        if (!node)
+            exit(1);
         node->str = ft_strdup(word[i]);
+        if (!node->str)
+            exit(1);
         node->i = i;
-        if (strcmp(word[i],"|") == 0)
+        if (strcmp(word[i], "|") == 0)
             node->token = TOKEN_PIPE;
-        else if (strcmp(word[i],"<") == 0)
+        else if (strcmp(word[i], "<") == 0)
             node->token = TOKEN_REDIRECT_IN;
-        else if (strcmp(word[i],"<<") == 0)
+        else if (strcmp(word[i], "<<") == 0)
             node->token = TOKEN_HEREDOC;
-        else if (strcmp(word[i],">") == 0)
+        else if (strcmp(word[i], ">") == 0)
             node->token = TOKEN_REDIRECT_OUT;
-        else if (strcmp(word[i],">>") == 0)
+        else if (strcmp(word[i], ">>") == 0)
             node->token = TOKEN_APPEND;
         else
             node->token = TOKEN_WORD;
 
-        if (head == NULL)
-        {
-            head = node;
-            current = node;
-        }
-        else
-        {
+        node->next = NULL;
+        node->prev = current;
+
+        if (current)
             current->next = node;
-            node->prev = current;
-            current = node;
-        }
+        else
+            head = node;
+
+        current = node;
         i++;
     }
-    return(head);
+    for (i = 0; word[i]; i++)
+        free(word[i]);
+    free(word);
+
+    return head;
 }
