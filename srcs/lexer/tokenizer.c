@@ -46,9 +46,6 @@ t_lexical *tokenize(char *input)
         current = node;
         i++;
     }
-    for (i = 0; word[i]; i++)
-        free(word[i]);
     free(word);
-
-    return head;
+    return(head);
 }

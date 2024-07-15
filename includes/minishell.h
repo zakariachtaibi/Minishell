@@ -12,7 +12,6 @@ typedef enum e_token
     TOKEN_WORD
 } t_token;
 
-
 typedef struct s_lexical
 {
     char *str;
