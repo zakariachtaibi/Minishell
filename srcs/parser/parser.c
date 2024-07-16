@@ -12,31 +12,35 @@ t_simple_cmds *init_cmd(void)
     return new_cmd;
 }
 
-void delete_node(t_lexical **head, t_lexical *node_to_delete) 
-{
-    // If the list is empty or node_to_delete is NULL, do nothing
-    if (*head == NULL || node_to_delete == NULL) {
-        return;
-    }
+// void delete_node(t_lexical **head, t_lexical *node_to_delete) 
+// {
+//     // If the list is empty or node_to_delete is NULL, do nothing
+//     if (node_to_delete == NULL) 
+//     {
+//         return;
+//     }
 
-    // If node_to_delete is the head node
-    if (*head == node_to_delete) {
-        *head = node_to_delete->next;
-    }
+//     // Update head if necessary
+//     if (*head == node_to_delete)
+//     {
+//         *head = node_to_delete->next;
+//     }
 
-    // Change next only if node_to_delete is NOT the last node
-    if (node_to_delete->next != NULL) {
-        node_to_delete->next->prev = node_to_delete->prev;
-    }
+//     // Change next only if node_to_delete is NOT the last node
+//     if (node_to_delete->next != NULL) {
+//         node_to_delete->next->prev = node_to_delete->prev;
+//     }
 
-    // Change prev only if node_to_delete is NOT the first node
-    if (node_to_delete->prev != NULL) {
-        node_to_delete->prev->next = node_to_delete->next;
-    }
+//     // Change prev only if node_to_delete is NOT the first node
+//     if (node_to_delete->prev != NULL) {
+//         node_to_delete->prev->next = node_to_delete->next;
+//     }
 
-    // Free the memory allocated for node_to_delete
-    free(node_to_delete->str);
-}
+//     // Free the memory allocated for node_to_delete
+//     free(node_to_delete->str);
+//     free(node_to_delete);
+// }
+
   
 void add_redirection(t_lexical **redirections, t_lexical *redir_node)
 {
@@ -48,6 +52,7 @@ void add_redirection(t_lexical **redirections, t_lexical *redir_node)
 
 void process_tokens(t_lexical *tokens)
 {
+    t_lexical *temp_tokens;
     t_simple_cmds *cmds_head;
     t_simple_cmds *current_cmd;
     t_simple_cmds *new_cmd;
@@ -56,6 +61,42 @@ void process_tokens(t_lexical *tokens)
     cmds_head = NULL;
     current_cmd = NULL;
     temp = tokens;
+    temp_tokens = tokens;
+        
+    //     printf("befoooore--------------------------------------------");
+    //   while (tokens) 
+    //     {
+    //         printf("Node %d: \n", tokens->i);
+    //         printf("  str: %s\n", tokens->str);
+    //         printf("  token: %d\n", tokens->token); 
+    //         //   printf("  token: %p\n", tokens->next); 
+             
+    //         if ((tokens->next == NULL) && (tokens->prev == NULL))
+    //         {
+               
+    //             printf("  next : NULL\n");
+    //             printf("  prev : NULL\n");
+    //         }
+    //         else if(tokens->prev == NULL)
+    //         {
+    //             printf("  next: %s\n", tokens->next->str);
+    //             printf("  prev : NULL\n");
+
+    //         }
+           
+        
+    //          else if (tokens->next == NULL)
+    //         {
+    //             printf("  next : NULL\n");
+    //             printf("  prev: %s\n", tokens->prev->str);
+    //         } 
+    //         else
+    //         {
+    //             printf("  next: %s\n", tokens->next->str);
+    //             printf("  prev: %s\n", tokens->prev->str);
+    //         }
+    //         tokens = tokens->next;
+    //     }
     while (temp)
     {
         if (current_cmd == NULL || temp->token == TOKEN_PIPE)
@@ -83,20 +124,16 @@ void process_tokens(t_lexical *tokens)
         {
             t_lexical *redir;
             t_lexical *filename;
-
+    
             redir = malloc(sizeof(t_lexical));
             filename = malloc(sizeof(t_lexical));
             *redir = *temp;
-            // *filename = *temp->next;
             redir->next = current_cmd->redirections;
             if (current_cmd->redirections)
                 current_cmd->redirections->prev = redir;
             current_cmd->redirections = redir;
-           
-            // current_cmd->redirections = redir->next;
-            // printf("---------------%s------------------\n", current_cmd->redirections->next->str);
             current_cmd->num_redirections++;
-            // delete_node(temp);
+
             temp = temp->next;
             if (temp && temp->token == TOKEN_WORD)
             {
@@ -111,11 +148,12 @@ void process_tokens(t_lexical *tokens)
                     redir->next = filename;
                     filename->prev = redir;
                     filename->next = NULL;
-                     temp = temp->next;
+                    temp = temp->next;
+                   
                 }
                 
             }
-            
+                
             continue;
         }
        
@@ -145,36 +183,70 @@ void process_tokens(t_lexical *tokens)
         temp = temp->next;
     }
 
-    // Test
-    
-    t_simple_cmds *cmd_temp = cmds_head;
-    while (cmd_temp) {
-        printf("Command: ");
-        if (cmd_temp->str) {
-            int i = 0;
-            while (cmd_temp->str[i]) {
-                printf("%s ", cmd_temp->str[i]);
-                i++;
-            }
-        } else {
-            printf("(null)");
-        }
-        printf("\nRedirections: ");
-        if (cmd_temp->redirections) {
-            t_lexical *redir_temp = cmd_temp->redirections;
-            while (redir_temp) {
-                printf("%s ", redir_temp->str);
-                redir_temp = redir_temp->next;
-            }
-        } else {
-            printf("(null)");
-        }
-        if (cmd_temp->hd_file_name) {
-            printf("\nHeredoc delimiter: %s", cmd_temp->hd_file_name);
-        } else {
-            printf("\nHeredoc delimiter: (null)");
-        }
-        printf("\n\n");
-        cmd_temp = cmd_temp->next;
-    }
+    // // Test
+    // printf("after---------------------------------------------");
+    // while (temp_tokens) 
+    //     {
+    //         printf("Node %d: \n", temp_tokens->i);
+    //         printf("  str: %s\n", temp_tokens->str);
+    //         printf("  token: %d\n", temp_tokens->token); 
+    //         //   printf("  token: %p\n", tokens->next); 
+             
+    //         if ((temp_tokens->next == NULL) && (temp_tokens->prev == NULL))
+    //         {
+               
+    //             printf("  next : NULL\n");
+    //             printf("  prev : NULL\n");
+    //         }
+    //         else if(temp_tokens->prev == NULL)
+    //         {
+    //             printf("  next: %s\n", temp_tokens->next->str);
+    //             printf("  prev : NULL\n");
+
+    //         }
+           
+        
+    //          else if (temp_tokens->next == NULL)
+    //         {
+    //             printf("  next : NULL\n");
+    //             printf("  prev: %s\n", temp_tokens->prev->str);
+    //         } 
+    //         else
+    //         {
+    //             printf("  next: %s\n", temp_tokens->next->str);
+    //             printf("  prev: %s\n", temp_tokens->prev->str);
+    //         }
+    //         temp_tokens = temp_tokens->next;
+    //     }
+  
+//     t_simple_cmds *cmd_temp = cmds_head;
+//     while (cmd_temp) {
+//         // printf("Command: ");
+//         if (cmd_temp->str) {
+//             int i = 0;
+//             while (cmd_temp->str[i]) {
+//                 printf("command [%d] : %s \n",i, cmd_temp->str[i]);
+//                 i++;
+//             }
+//         } else {
+//             printf("(null)");
+//         }
+//         printf("\nRedirections: ");
+//         if (cmd_temp->redirections) {
+//             t_lexical *redir_temp = cmd_temp->redirections;
+//             while (redir_temp) {
+//                 printf("%s ", redir_temp->str);
+//                 redir_temp = redir_temp->next;
+//             }
+//         } else {
+//             printf("(null)");
+//         }
+//         if (cmd_temp->hd_file_name) {
+//             printf("\nHeredoc delimiter: %s", cmd_temp->hd_file_name);
+//         } else {
+//             printf("\nHeredoc delimiter: (null)");
+//         }
+//         printf("\n\n");
+//         cmd_temp = cmd_temp->next;
+//     }
 }

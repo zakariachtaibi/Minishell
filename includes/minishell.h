@@ -38,8 +38,8 @@ typedef struct s_simple_cmds
 #include <readline/readline.h>
 #include <readline/history.h>
 
-// t_lexical *init_lexical(void);
-// t_token *init_token(void);
+
+int has_unclosed_quotes(char *input);
 t_simple_cmds *init_cmd(void);
 t_lexical *tokenize(char *input);
 void process_tokens(t_lexical *tokens);

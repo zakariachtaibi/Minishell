@@ -1,5 +1,23 @@
 #include "../../includes/minishell.h"
 
+int has_unclosed_quotes(char *temp)
+{
+    char *input;
+    input = temp;
+    int i = 0;
+    int c = 0;
+    while(input[i])
+    {
+        if (input[i] == '"')
+            c++;
+        i++;
+    }
+    if (c % 2 == 0)
+        return(1);
+    else
+        return(0);
+}
+
 t_lexical *tokenize(char *input)
 {
     char **word;
