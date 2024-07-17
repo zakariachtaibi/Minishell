@@ -17,7 +17,6 @@ SRCS = srcs/main.c \
 		libft/ft_memset.c \
 		srcs/lexer/tokenizer.c\
 		srcs/parser/parser.c\
-		libft/ft_strchr.c\
 
 
 OBJS = $(SRCS:.c=.o)
