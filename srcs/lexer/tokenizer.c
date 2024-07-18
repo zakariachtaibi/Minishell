@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 13:53:00 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:05:25 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,57 +33,47 @@ int	has_unclosed_quotes(char *temp)
 		return (0);
 }
 
-void	check_token(char *word, t_lexical *node)
+t_lexical *handel_node(char *str, int i)
 {
-	if (strcmp(word, "|") == 0)
+	t_lexical *node;
+	
+	node = malloc(sizeof(t_lexical));
+	if (!node || !(node->str = ft_strdup(str)))
+		exit(1);
+	node->i = i;
+	if (!strcmp(str, "|"))
 		node->token = TOKEN_PIPE;
-	else if (strcmp(word, "<") == 0)
+	else if (!strcmp(str, "<"))
 		node->token = TOKEN_REDIRECT_IN;
-	else if (strcmp(word, "<<") == 0)
+	else if (!strcmp(str, "<<"))
 		node->token = TOKEN_HEREDOC;
-	else if (strcmp(word, ">") == 0)
+	else if (!strcmp(str, ">"))
 		node->token = TOKEN_REDIRECT_OUT;
-	else if (strcmp(word, ">>") == 0)
+	else if (!strcmp(str, ">>"))
 		node->token = TOKEN_APPEND;
 	else
 		node->token = TOKEN_WORD;
+	node->next = node->prev = NULL;
+	return node;
 }
 
-void	check_null(char *str)
+t_lexical *tokenize(char *input)
 {
-	if (!str)
-		return (NULL);
-}
+	char 		**word;
+	t_lexical 	*head;
+	t_lexical 	*current;
+	t_lexical 	*node;
+	int i;
 
-t_lexical	*tokenize(char *input)
-{
-	char		**word;
-	t_lexical	*head;
-	t_lexical	*current;
-	t_lexical	*node;
-	int			i;
-
-	current = NULL;
-	head = NULL;
 	word = ft_split(input, ' ');
 	head = NULL;
 	current = NULL;
 	i = 0;
 	if (!word)
 		return NULL;
-	check_null(word);
-	i = 0;
 	while (word[i])
 	{
 		node = handel_node(word[i], i);
-		node = malloc(sizeof(t_lexical));
-		if (!node)
-			exit(1);
-		node->str = ft_strdup(word[i]);
-		check_null(node->str);
-		node->i = i;
-		check_token(word[i], node);
-		node->next = NULL;
 		node->prev = current;
 		if (current)
 			current->next = node;
