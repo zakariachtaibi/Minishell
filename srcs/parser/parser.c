@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 13:11:40 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/18 13:49:50 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	add_redirection(t_lexical **redirections, t_lexical *redir_node)
 		*redirections = redir_node;
 	else
 	{
+		
 		current = *redirections;
 		while (current->next != NULL)
 			current = current->next;
