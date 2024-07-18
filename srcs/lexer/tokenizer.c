@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/17 14:11:12 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/18 13:31:25 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,28 @@ int	has_unclosed_quotes(char *temp)
 		return (0);
 }
 
+void	check_token(char *word, t_lexical *node)
+{
+	if (strcmp(word, "|") == 0)
+		node->token = TOKEN_PIPE;
+	else if (strcmp(word, "<") == 0)
+		node->token = TOKEN_REDIRECT_IN;
+	else if (strcmp(word, "<<") == 0)
+		node->token = TOKEN_HEREDOC;
+	else if (strcmp(word, ">") == 0)
+		node->token = TOKEN_REDIRECT_OUT;
+	else if (strcmp(word, ">>") == 0)
+		node->token = TOKEN_APPEND;
+	else
+		node->token = TOKEN_WORD;
+}
+
+void	check_null(char *str)
+{
+	if (!str)
+		return (NULL);
+}
+
 t_lexical	*tokenize(char *input)
 {
 	char		**word;
@@ -44,8 +66,7 @@ t_lexical	*tokenize(char *input)
 	current = NULL;
 	head = NULL;
 	word = ft_split(input, ' ');
-	if (!word)
-		return (NULL);
+	check_null(word);
 	i = 0;
 	while (word[i])
 	{
@@ -53,21 +74,9 @@ t_lexical	*tokenize(char *input)
 		if (!node)
 			exit(1);
 		node->str = ft_strdup(word[i]);
-		if (!node->str)
-			exit(1);
+		check_null(node->str);
 		node->i = i;
-		if (strcmp(word[i], "|") == 0)
-			node->token = TOKEN_PIPE;
-		else if (strcmp(word[i], "<") == 0)
-			node->token = TOKEN_REDIRECT_IN;
-		else if (strcmp(word[i], "<<") == 0)
-			node->token = TOKEN_HEREDOC;
-		else if (strcmp(word[i], ">") == 0)
-			node->token = TOKEN_REDIRECT_OUT;
-		else if (strcmp(word[i], ">>") == 0)
-			node->token = TOKEN_APPEND;
-		else
-			node->token = TOKEN_WORD;
+		check_token(word[i], node);
 		node->next = NULL;
 		node->prev = current;
 		if (current)
