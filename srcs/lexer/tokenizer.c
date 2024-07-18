@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 13:31:25 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/18 13:53:00 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,16 @@ t_lexical	*tokenize(char *input)
 	current = NULL;
 	head = NULL;
 	word = ft_split(input, ' ');
+	head = NULL;
+	current = NULL;
+	i = 0;
+	if (!word)
+		return NULL;
 	check_null(word);
 	i = 0;
 	while (word[i])
 	{
+		node = handel_node(word[i], i);
 		node = malloc(sizeof(t_lexical));
 		if (!node)
 			exit(1);
@@ -86,6 +92,7 @@ t_lexical	*tokenize(char *input)
 		current = node;
 		i++;
 	}
-	free (word);
-	return (head);
+	free(word);
+	return head;
 }
+
