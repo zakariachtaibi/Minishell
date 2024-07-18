@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 16:23:42 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/18 21:11:18 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	process_command(t_lexical **temp, t_simple_cmds **current_cmd, t_simple_cmds **cmds_head)
+void	process_command(t_lexical **temp, t_simple_cmds **current_cmd,
+							t_simple_cmds **cmds_head)
 {
 	t_simple_cmds	*new_cmd;
 
@@ -43,7 +44,8 @@ int	check_token(t_lexical *temp)
 		return (0);
 }
 
-void	handle_redirections(t_lexical **temp, t_simple_cmds **current_cmd, t_lexical *token)
+void	handle_redirections(t_lexical **temp, t_simple_cmds **current_cmd,
+								t_lexical *token)
 {
 	t_lexical	*redir;
 	t_lexical	*filename;

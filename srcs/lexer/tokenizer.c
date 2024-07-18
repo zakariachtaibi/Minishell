@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 14:58:49 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/18 21:10:32 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ t_lexical	*handel_node(char *str, int i)
 	t_lexical	*node;
 
 	node = malloc(sizeof(t_lexical));
-	if (!node || !(node->str = ft_strdup(str)))
+	if (!node)
+		exit(1);
+	node->str = ft_strdup(str);
+	if (!node->str)
 		exit(1);
 	node->i = i;
 	if (!strcmp(str, "|"))
@@ -53,11 +56,12 @@ t_lexical	*handel_node(char *str, int i)
 		node->token = TOKEN_APPEND;
 	else
 		node->token = TOKEN_WORD;
-	node->next = node->prev = NULL;
-	return node;
+	node->next = node->prev;
+	node->prev = NULL;
+	return (node);
 }
 
-t_lexical *tokenize(char *input)
+t_lexical	*tokenize(char *input)
 {
 	char		**word;
 	t_lexical	*head;
@@ -70,7 +74,7 @@ t_lexical *tokenize(char *input)
 	current = NULL;
 	i = 0;
 	if (!word)
-		return NULL;
+		return (NULL);
 	while (word[i])
 	{
 		node = handel_node(word[i], i);
