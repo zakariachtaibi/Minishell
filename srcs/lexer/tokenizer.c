@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 14:05:25 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:14:22 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int	has_unclosed_quotes(char *temp)
 		return (0);
 }
 
-t_lexical *handel_node(char *str, int i)
+t_lexical	*handel_node(char *str, int i)
 {
-	t_lexical *node;
-	
+	t_lexical	*node;
+
 	node = malloc(sizeof(t_lexical));
 	if (!node || !(node->str = ft_strdup(str)))
 		exit(1);
@@ -59,11 +59,11 @@ t_lexical *handel_node(char *str, int i)
 
 t_lexical *tokenize(char *input)
 {
-	char 		**word;
-	t_lexical 	*head;
-	t_lexical 	*current;
-	t_lexical 	*node;
-	int i;
+	char		**word;
+	t_lexical	*head;
+	t_lexical	*current;
+	t_lexical	*node;
+	int			i;
 
 	word = ft_split(input, ' ');
 	head = NULL;
@@ -83,6 +83,5 @@ t_lexical *tokenize(char *input)
 		i++;
 	}
 	free(word);
-	return head;
+	return (head);
 }
-

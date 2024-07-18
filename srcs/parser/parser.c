@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 14:06:40 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:57:06 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../includes/minishell.h"
 
@@ -21,7 +20,6 @@ void	add_redirection(t_lexical **redirections, t_lexical *redir_node)
 		*redirections = redir_node;
 	else
 	{
-		
 		current = *redirections;
 		while (current->next != NULL)
 			current = current->next;
