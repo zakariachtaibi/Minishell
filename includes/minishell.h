@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/17 14:03:58 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:22:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,8 @@ int				has_unclosed_quotes(char *input);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*tokenize(char *input);
 void			process_tokens(t_lexical *tokens);
-
+void			add_redirection(t_lexical **redirections, t_lexical *redir_node);
+t_simple_cmds	*init_cmd(void);
+t_lexical		*copy_node(t_lexical *src);
+void			delete_node(t_lexical **head, t_lexical *node_to_delete);
 #endif
