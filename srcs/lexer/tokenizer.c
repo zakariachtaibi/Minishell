@@ -3,37 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/19 11:44:39 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/19 13:32:59 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	has_unclosed_quotes(char *temp)
-{
-	char	*input;
-	int		i;
-	int		c;
-
-	input = temp;
-	i = 0;
-	c = 0;
-	while (input[i])
-	{
-		if (input[i] == '"')
-			c++;
-		i++;
-	}
-	if (c % 2 == 0)
-		return (1);
-	else
-		return (0);
-}
-
-t_lexical	*handel_node(char *str, int i)
+t_lexical	*check_node(char *str, int i)
 {
 	t_lexical	*node;
 	int k;
@@ -42,7 +21,7 @@ t_lexical	*handel_node(char *str, int i)
 	k = 0;
 	if (!node)
 		exit(1);
-	if (!has_unclosed_quotes(str))
+	if (has_unclosed_double_quotes(str))
 	{
 		printf("Error: Unclosed quotes\n");
 		free(str);
@@ -84,7 +63,7 @@ t_lexical	*tokenize(char *input)
 		return (NULL);
 	while (word[i])
 	{
-		node = handel_node(word[i], i);
+		node = check_node(word[i], i);
 		node->prev = current;
 		if (current)
 			current->next = node;

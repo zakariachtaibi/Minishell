@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 21:12:27 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/19 13:26:33 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ typedef struct s_simple_cmds
 	struct s_simple_cmds	*prev;
 }	t_simple_cmds;
 
-int				has_unclosed_quotes(char *input);
+int				has_unclosed_double_quotes(char *input);
+int				has_mismatched_parentheses(char *temp);
+int				has_invalid_redirections(t_lexical *tokens);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*tokenize(char *input);
 void			process_tokens(t_lexical *tokens);
 void			add_redirection(t_lexical **redirections,
-					t_lexical *redir_node);
+t_lexical		*redir_node);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*copy_node(t_lexical *src);
 void			delete_node(t_lexical **head, t_lexical *node_to_delete);
