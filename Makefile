@@ -20,7 +20,7 @@ SRCS = srcs/main.c \
 		srcs/parser/parser_utils.c\
 		srcs/parser/syntax_errors.c\
 		srcs/lexer/errors_checker.c\
-		srcs/lexer/check_input.c\
+		srcs/lexer/validate_input.c\
 
 
 OBJS = $(SRCS:.c=.o)

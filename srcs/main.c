@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/19 12:23:48 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:55:17 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int ac, char **av)
 		if (!input)
 			exit(1);
 		add_history(input);
-		check_input(input);
+		input = validat_input(input);
 		tokens = tokenize(input);
 		while (tokens) 
 		{
