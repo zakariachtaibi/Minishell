@@ -18,6 +18,8 @@ SRCS = srcs/main.c \
 		srcs/lexer/tokenizer.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\
+		srcs/parser/syntax_errors.c\
+		srcs/lexer/errors_checker.c\
 		srcs/lexer/check_input.c\
 
 
