@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 21:12:27 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/19 12:13:32 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ void			add_redirection(t_lexical **redirections,
 					t_lexical *redir_node);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*copy_node(t_lexical *src);
+void			check_input(char *input);
 void			delete_node(t_lexical **head, t_lexical *node_to_delete);
 #endif

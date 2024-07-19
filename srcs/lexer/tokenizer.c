@@ -6,32 +6,11 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/19 11:44:39 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/19 12:14:39 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	has_unclosed_quotes(char *temp)
-{
-	char	*input;
-	int		i;
-	int		c;
-
-	input = temp;
-	i = 0;
-	c = 0;
-	while (input[i])
-	{
-		if (input[i] == '"')
-			c++;
-		i++;
-	}
-	if (c % 2 == 0)
-		return (1);
-	else
-		return (0);
-}
 
 t_lexical	*handel_node(char *str, int i)
 {
@@ -42,11 +21,6 @@ t_lexical	*handel_node(char *str, int i)
 	k = 0;
 	if (!node)
 		exit(1);
-	if (!has_unclosed_quotes(str))
-	{
-		printf("Error: Unclosed quotes\n");
-		free(str);
-	}
 	node->str = ft_strdup(str);
 	if (!node->str)
 		exit(1);

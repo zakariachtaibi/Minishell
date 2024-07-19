@@ -18,6 +18,7 @@ SRCS = srcs/main.c \
 		srcs/lexer/tokenizer.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\
+		srcs/lexer/check_input.c\
 
 
 OBJS = $(SRCS:.c=.o)
