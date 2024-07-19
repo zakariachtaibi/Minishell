@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 21:10:32 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/19 11:44:39 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	has_unclosed_quotes(char *temp)
 	c = 0;
 	while (input[i])
 	{
-		if (input[i] == '"' || input[i] == '\'' )
+		if (input[i] == '"')
 			c++;
 		i++;
 	}
@@ -36,27 +36,34 @@ int	has_unclosed_quotes(char *temp)
 t_lexical	*handel_node(char *str, int i)
 {
 	t_lexical	*node;
+	int k;
 
 	node = malloc(sizeof(t_lexical));
+	k = 0;
 	if (!node)
 		exit(1);
+	if (!has_unclosed_quotes(str))
+	{
+		printf("Error: Unclosed quotes\n");
+		free(str);
+	}
 	node->str = ft_strdup(str);
 	if (!node->str)
 		exit(1);
 	node->i = i;
-	if (!strcmp(str, "|"))
+	if (!ft_strncmp(str, "|", 2))
 		node->token = TOKEN_PIPE;
-	else if (!strcmp(str, "<"))
+	else if (!ft_strncmp(str, "<", 2))
 		node->token = TOKEN_REDIRECT_IN;
-	else if (!strcmp(str, "<<"))
+	else if (!ft_strncmp(str, "<<", 2))
 		node->token = TOKEN_HEREDOC;
-	else if (!strcmp(str, ">"))
+	else if (!ft_strncmp(str, ">", 2))
 		node->token = TOKEN_REDIRECT_OUT;
-	else if (!strcmp(str, ">>"))
+	else if (!ft_strncmp(str, ">>", 2))
 		node->token = TOKEN_APPEND;
 	else
 		node->token = TOKEN_WORD;
-	node->next = node->prev;
+	node->next = NULL;
 	node->prev = NULL;
 	return (node);
 }

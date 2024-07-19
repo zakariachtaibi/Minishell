@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/18 13:16:17 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/19 11:41:55 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ int	main(int ac, char **av)
 		input = readline("minishell> ");
 		if (!input)
 			exit(1);
-		if (!has_unclosed_quotes(input))
-		{
-			printf("Error: Unclosed quotes");
-			continue ;
-		}
+		// if (!has_unclosed_quotes(input))
+		// {
+		// 	printf("Error: Unclosed quotes\n");
+		// 	free(input);
+		// 	continue ;
+		// }
 		add_history(input);
 		tokens = tokenize(input);
 		process_tokens(tokens);
