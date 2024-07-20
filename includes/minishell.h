@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/19 15:53:13 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:50:39 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ typedef struct s_simple_cmds
 	struct s_simple_cmds	*prev;
 }	t_simple_cmds;
 
-int				has_unclosed_double_quotes(char *input);
-int				has_mismatched_parentheses(char *temp);
+void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses);
+int				has_unclosed_quotes_or_parentheses(char *temp);
 int				has_invalid_redirections(t_lexical *tokens);
 char			*validat_input(char *input);
 t_simple_cmds	*init_cmd(void);
@@ -62,4 +62,5 @@ t_lexical		*redir_node);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*copy_node(t_lexical *src);
 void			delete_node(t_lexical **head, t_lexical *node_to_delete);
+char			*remove_enclosing_chars(char *input);
 #endif
