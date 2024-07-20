@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 17:03:09 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:02:05 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ int main(int ac, char **av)
         if (input == NULL)
             continue;
         tokens = tokenize(input);
-        
+        tokens = validate_syntax(&tokens);
+        if (tokens == NULL)
+            continue;
         process_tokens(tokens);
         free(input);
     }

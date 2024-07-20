@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 13:50:39 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:01:50 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ typedef struct s_simple_cmds
 
 void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses);
 int				has_unclosed_quotes_or_parentheses(char *temp);
-int				has_invalid_redirections(t_lexical *tokens);
+int				has_invalid_redirections(t_lexical **tokens);
 char			*validat_input(char *input);
+t_lexical		*validate_syntax(t_lexical **tokens);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*tokenize(char *input);
 void			process_tokens(t_lexical *tokens);

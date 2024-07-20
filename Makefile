@@ -21,6 +21,8 @@ SRCS = srcs/main.c \
 		srcs/parser/syntax_errors.c\
 		srcs/lexer/errors_checker.c\
 		srcs/lexer/validate_input.c\
+		srcs/parser/validate_syntax.c\
+
 
 
 OBJS = $(SRCS:.c=.o)
