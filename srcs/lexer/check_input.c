@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_input.c                                   :+:      :+:    :+:   */
+/*   check_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:09:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/07/19 16:28:27 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/19 16:28:08 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,12 @@ int	has_unclosed_quotes(char *temp)
 	return (dquote % 2 == 0 && quote % 2 == 0);
 }
 
-char *validat_input(char *input)
+void check_input(char *input)
 {
-    if (has_unclosed_quotes(input))
+    if (!has_unclosed_quotes(input))
 	{
 		printf("Error: Unclosed quotes\n");
         free(input);
         exit(1);
 	}
-	return(input);
 }
