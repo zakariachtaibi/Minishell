@@ -1,3 +1,4 @@
+
 NAME = minishell
 
 SRCS = srcs/main.c \
@@ -22,6 +23,8 @@ SRCS = srcs/main.c \
 		srcs/lexer/errors_checker.c\
 		srcs/lexer/validate_input.c\
 		srcs/parser/validate_syntax.c\
+		srcs/parser/builtins_checker.c\
+		srcs/executor/builtins.c\
 
 
 

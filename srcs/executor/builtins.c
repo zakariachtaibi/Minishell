@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 19:03:52 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/20 20:51:48 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,56 @@
 
 int builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 {
+    (void) *tools;
+    (void) *cmd;
     printf("echo cmd\n");
+    return(1);
 }
 
 int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
 {
+    (void) *tools;
+    (void) *cmd;
     printf("cd cmd\n");
+     return(1);
 }
 
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 {
+    (void) *tools;
+    (void) *cmd;
     printf("pwd cmd\n");
+     return(1);
 }
 
 int builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
+    (void) *tools;
+    (void) *cmd;
     printf("export cmd\n");
+     return(1);
 }
 
 int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
 {
+    (void) *tools;
+    (void) *cmd;
     printf("unset cmd\n");
+     return(1);
 }
 
 int builtin_env(t_tools *tools, t_simple_cmds *cmd)
 {
+    (void) *tools;
+    (void) *cmd;
     printf("env cmd\n");
+     return(1);
 }
 
 int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 {
+    (void) *tools;
+    (void) *cmd;
     printf("exit cmd\n");
+     return(1);
 }

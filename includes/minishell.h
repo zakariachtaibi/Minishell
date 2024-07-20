@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 19:30:23 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/20 21:17:59 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ typedef struct s_lexical
 	int					i;
 }	t_lexical;
 
+typedef struct s_tools
+{
+	int echo;
+}	t_tools;
+
 typedef struct s_simple_cmds
 {
 	char					**str;
@@ -62,16 +67,13 @@ typedef struct s_simple_cmds
 	struct s_simple_cmds	*prev;
 }	t_simple_cmds;
 
-typedef struct s_tools
-{
-	int echo;
-}	t_tools;
+
 
 void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses);
 int				has_unclosed_quotes_or_parentheses(char *temp);
-int				has_invalid_redirections(t_lexical **tokens);
+int				has_invalid_redirections(t_lexical *tokens);
 char			*validat_input(char *input);
-t_lexical		*validate_syntax(t_lexical **tokens);
+t_lexical		*validate_syntax(t_lexical *tokens);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*tokenize(char *input);
 void			process_tokens(t_lexical *tokens);
@@ -81,7 +83,9 @@ t_simple_cmds	*init_cmd(void);
 t_lexical		*copy_node(t_lexical *src);
 void			delete_node(t_lexical **head, t_lexical *node_to_delete);
 char			*remove_enclosing_chars(char *input);
-int				check_builtins_type(t_simple_cmds *cmds);
+t_builtin		check_builtins_type(char *str);
+void			check_and_set_builtin(t_simple_cmds *cmd);
+int				(*get_builtin_func(t_builtin type))(t_tools *, t_simple_cmds *);
 
 int				builtin_echo(t_tools *tools, t_simple_cmds *cmd);
 int				builtin_cd(t_tools *tools, t_simple_cmds *cmd);

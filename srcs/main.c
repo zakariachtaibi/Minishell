@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 18:02:05 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/20 21:18:04 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ int main(int ac, char **av)
         if (input == NULL)
             continue;
         tokens = tokenize(input);
-        tokens = validate_syntax(&tokens);
+        tokens = validate_syntax(tokens);
         if (tokens == NULL)
             continue;
+        printf("gggggg");
         process_tokens(tokens);
         free(input);
     }
