@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/19 15:23:41 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:02:43 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@ t_lexical	*check_node(char *str, int i)
 	k = 0;
 	if (!node)
 		exit(1);
-	if (has_unclosed_double_quotes(str))
-	{
-		printf("Error: Unclosed quotes\n");
-		free(str);
-	}
 	node->str = ft_strdup(str);
 	if (!node->str)
 		exit(1);

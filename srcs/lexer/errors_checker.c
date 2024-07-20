@@ -3,52 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   errors_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:36:42 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/19 13:24:50 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/20 13:50:23 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	has_unclosed_double_quotes(char *temp)
+void	count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses)
 {
-	char	*input;
-	int		i;
-	int		c;
-
-	input = temp;
-	i = 0;
-	c = 0;
-	while (input[i])
-	{
-		if (input[i] == '"')
-			c++;
-		i++;
-	}
-	if (c % 2 == 0)
-		return (0);
-	else
-		return (1);
+	if (c == '\'' && *dquote % 2 == 0)
+		(*quote)++;
+	else if (c == '"' && *quote % 2 == 0)
+		(*dquote)++;
+	else if (c == '(')
+		(*parentheses)++;
+	else if (c == ')')
+		(*parentheses)--;
 }
 
-int	has_mismatched_parentheses(char *temp)
+int	has_unclosed_quotes_or_parentheses(char *temp)
 {
-	char	*input;
-	int		i;
-	int		c;
+	int	i;
+	int	quote;
+	int	dquote;
+	int	parentheses;
 
-	input = temp;
 	i = 0;
-	c = 0;
-	while (input[i])
+	quote = 0;
+	dquote = 0;
+	parentheses = 0;
+	while (temp[i])
 	{
-		if (input[i] == '(')
-			c++;
-		else if (input[i] == ')')
-			c--;
+		count_quotes_and_parentheses(temp[i], &quote, &dquote, &parentheses);
 		i++;
 	}
-	return (c);
+	if ((quote % 2 != 0) || (dquote % 2 != 0) || (parentheses != 0))
+	{
+		printf("Error: Unclosed quotes or parentheses\n");
+		return (1);
+	}
+	return (0);
+}
+
+char	*remove_enclosing_chars(char *input)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*new_input;
+	int		single_quote_open;
+	int		double_quote_open;
+	int		parentheses_open;
+
+	i = 0;
+	j = 0;
+	len = ft_strlen(input);
+	new_input = malloc(len + 1);
+	if (!new_input)
+		return (NULL);
+	single_quote_open = 0;
+	double_quote_open = 0;
+	parentheses_open = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'' && !double_quote_open && !parentheses_open)
+			single_quote_open = !single_quote_open;
+		else if (input[i] == '"' && !single_quote_open && !parentheses_open)
+			double_quote_open = !double_quote_open;
+		else if (input[i] == '(' && !single_quote_open && !double_quote_open)
+			parentheses_open = 1;
+		else if (input[i] == ')' && !single_quote_open && !double_quote_open && parentheses_open)
+			parentheses_open = 0;
+		else
+			new_input[j++] = input[i];
+		i++;
+	}
+	new_input[j] = '\0';
+	return (new_input);
 }
