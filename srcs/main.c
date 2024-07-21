@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 13:32:11 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 16:09:16 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int ac, char **av)
 		if (tokens == NULL)
 			continue ;
 		cmds = process_tokens(tokens);
-		execute_commands(cmds, tools);
+		execute_commands(cmds, &tools);
 		free(input);
 	}
 }

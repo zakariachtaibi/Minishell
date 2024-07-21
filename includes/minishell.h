@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 14:51:05 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 16:16:22 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,5 @@ int 			builtin_export(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_unset(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_env(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_exit(t_tools *tools, t_simple_cmds *cmd);
-void			execute_commands(t_simple_cmds *cmds_head, t_tools *tools);
+void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools);
 #endif

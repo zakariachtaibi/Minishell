@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 14:13:19 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 16:21:12 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,22 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
 
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 {
-    (void) *tools;
-    (void) *cmd;
-    printf("pwd cmd\n");
-     return(1);
+    (void)cmd;
+    (void)tools;
+    char *buff;
+    buff= malloc(1024 * sizeof(char));
+    if (!buff) {
+        perror("malloc");
+        return (1);
+    }
+    if (getcwd(buff, 1024) == NULL) {
+        perror("getcwd");
+        free(buff);
+        return (1);
+    }
+    printf("%s\n", buff);
+    free(buff);
+    return (0); 
 }
 
 int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
