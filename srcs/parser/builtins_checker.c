@@ -6,13 +6,13 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:04:13 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 21:20:22 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/20 21:28:12 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_builtin check_builtins_type(char *str)
+t_builtin   check_builtins_type(char *str)
 {
     if(strcmp(str, "echo") == 0)
         return(BUILTIN_ECHO);
@@ -50,7 +50,6 @@ int (*get_builtin_func(t_builtin type))(t_tools *, t_simple_cmds *)
         return (builtin_exit);
     return (NULL);
 }
-
 
 void check_and_set_builtin(t_simple_cmds *cmd)
 {
