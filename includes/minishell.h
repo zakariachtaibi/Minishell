@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 13:32:45 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 14:51:05 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ typedef struct s_lexical
 
 typedef struct s_tools
 {
-	int echo;
+	
+	char *working_dir_path;
 }	t_tools;
 
 typedef struct s_simple_cmds
