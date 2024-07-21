@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 16:16:22 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 16:26:18 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,7 @@ t_lexical		*validate_syntax(t_lexical *tokens);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*tokenize(char *input);
 t_simple_cmds	*process_tokens(t_lexical *tokens);
-void			add_redirection(t_lexical **redirections,
-t_lexical		*redir_node);
+void			add_redirection(t_lexical **redirections, t_lexical		*redir_node);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*copy_node(t_lexical *src);
 void			delete_node(t_lexical **head, t_lexical *node_to_delete);
@@ -87,7 +86,6 @@ char			*remove_enclosing_chars(char *input);
 t_builtin		check_builtins_type(char *str);
 void			check_and_set_builtin(t_simple_cmds *cmd);
 int				(*get_builtin_func(t_builtin type))(t_tools *tools, t_simple_cmds *cmds);
-
 int				builtin_echo(t_tools *tools, t_simple_cmds *cmd);
 int				builtin_cd(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_pwd(t_tools *tools, t_simple_cmds *cmd);
