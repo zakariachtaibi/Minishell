@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_input.c                                   :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 12:09:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/07/21 13:55:57 by hchouai          ###   ########.fr       */
+/*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
+/*   Updated: 2024/07/21 13:39:15 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*validat_input(char *input)
+void execute_commands(t_simple_cmds *cmds_head, t_tools *tools)
 {
-	char	*new_input;
-
-	if (has_unclosed_quotes_or_parentheses(input))
-	{
-		free(input);
-		return (NULL);
-	}
-	new_input = remove_enclosing_chars(input);
-	if (!new_input)
-	{
-		free(input);
-		return (NULL);
-	}
-	return (new_input);
+    (void) *tools;
+    t_simple_cmds *current_cmd = cmds_head;
+    while (current_cmd != NULL) {
+        if (current_cmd->builtin != NULL) {
+            current_cmd->builtin(tools, current_cmd);
+        } else {
+            // Code to execute non-builtin commands goes here
+        }
+        current_cmd = current_cmd->next;
+    }
 }

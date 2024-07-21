@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 13:01:46 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 13:32:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char			*validat_input(char *input);
 t_lexical		*validate_syntax(t_lexical *tokens);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*tokenize(char *input);
-void			process_tokens(t_lexical *tokens);
+t_simple_cmds	*process_tokens(t_lexical *tokens);
 void			add_redirection(t_lexical **redirections,
 t_lexical		*redir_node);
 t_simple_cmds	*init_cmd(void);
@@ -94,4 +94,5 @@ int 			builtin_export(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_unset(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_env(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_exit(t_tools *tools, t_simple_cmds *cmd);
+void			execute_commands(t_simple_cmds *cmds_head, t_tools *tools);
 #endif

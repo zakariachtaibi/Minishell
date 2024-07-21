@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 13:06:36 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 13:32:11 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	main(int ac, char **av)
 {
 	t_lexical	*tokens;
 	char		*input;
+	t_simple_cmds *cmds;
+	t_tools *tools = NULL;
 
 	(void)av;
 	if (ac != 1)
@@ -33,7 +35,8 @@ int	main(int ac, char **av)
 		tokens = validate_syntax(tokens);
 		if (tokens == NULL)
 			continue ;
-		process_tokens(tokens);
+		cmds = process_tokens(tokens);
+		execute_commands(cmds, tools);
 		free(input);
 	}
 }

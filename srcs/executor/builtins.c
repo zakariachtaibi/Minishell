@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 12:50:28 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 14:10:05 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,18 @@ int builtin_env(t_tools *tools, t_simple_cmds *cmd)
      return(1);
 }
 
-int builtin_echo(t_tools *tools, t_simple_cmds *cmd)
+int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 {
     (void) *tools;
-    (void) *cmd;
-    printf("echo cmd\n");
-    return(1);
+	int j = 1;
+	while(cmd->str[j])
+	{
+		ft_putstr_fd(cmd->str[j],1);
+		ft_putchar_fd(' ',1);
+		j++;
+	}
+	printf("\n");
+    return (0);
 }
 
 int builtin_cd(t_tools *tools, t_simple_cmds *cmd)

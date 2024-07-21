@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:36:42 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 12:25:59 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 13:54:50 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,34 +49,40 @@ int	has_unclosed_quotes_or_parentheses(char *temp)
 	return (0);
 }
 
-void	init_vars(int *i, int *j, int *array)
+void	init_vars(int *single_quote_open, int *double_quote_open,
+				int *parentheses_open)
 {
-	*i = 0;
-	*j = 0;
-	*array = 0;
+	*single_quote_open = 0;
+	*double_quote_open = 0;
+	*parentheses_open = 0;
 }
 
 char	*remove_enclosing_chars(char *input)
 {
 	int		i;
 	int		j;
-	int		array[3];
 	char	*new_input;
+	int		single_quote_open;
+	int		double_quote_open;
+	int		parentheses_open;
 
-	init_vars(&i, &j, array);
+	i = 0;
+	j = 0;
+
 	new_input = malloc(ft_strlen(input) + 1);
 	if (!new_input)
 		return (NULL);
+	init_vars(&single_quote_open, &double_quote_open, &parentheses_open);
 	while (input[i])
 	{
-		if (input[i] == '\'' && !array[1] && !array[2])
-			array[0] = !array[0];
-		else if (input[i] == '"' && !array[0] && !array[2])
-			array[1] = !array[1];
-		else if (input[i] == '(' && !array[0] && !array[1])
-			array[2] = 1;
-		else if (input[i] == ')' && !array[0] && !array[1] && array[2])
-			array[2] = 0;
+		if (input[i] == '\'' && !double_quote_open && !parentheses_open)
+			single_quote_open = !single_quote_open;
+		else if (input[i] == '"' && !single_quote_open && !parentheses_open)
+			double_quote_open = !double_quote_open;
+		else if (input[i] == '(' && !single_quote_open && !double_quote_open)
+			parentheses_open = 1;
+		else if (input[i] == ')' && !single_quote_open && !double_quote_open && parentheses_open)
+			parentheses_open = 0;
 		else
 			new_input[j++] = input[i];
 		i++;
