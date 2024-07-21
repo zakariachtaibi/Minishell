@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 21:17:59 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 13:01:46 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void			delete_node(t_lexical **head, t_lexical *node_to_delete);
 char			*remove_enclosing_chars(char *input);
 t_builtin		check_builtins_type(char *str);
 void			check_and_set_builtin(t_simple_cmds *cmd);
-int				(*get_builtin_func(t_builtin type))(t_tools *, t_simple_cmds *);
+int				(*get_builtin_func(t_builtin type))(t_tools *tools, t_simple_cmds *cmds);
 
 int				builtin_echo(t_tools *tools, t_simple_cmds *cmd);
 int				builtin_cd(t_tools *tools, t_simple_cmds *cmd);

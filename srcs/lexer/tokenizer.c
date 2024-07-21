@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 21:18:17 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 12:31:40 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 t_lexical	*check_node(char *str, int i)
 {
 	t_lexical	*node;
-	int k;
 
 	node = malloc(sizeof(t_lexical));
-	k = 0;
 	if (!node)
 		exit(1);
 	node->str = ft_strdup(str);

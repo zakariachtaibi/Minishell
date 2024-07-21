@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 21:23:25 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 12:38:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,5 @@ void	process_tokens(t_lexical *tokens)
 		handle_redirections(&temp, &current_cmd, tokens);
 		handle_words(&temp, current_cmd);
 		check_and_set_builtin(current_cmd);
-		
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:09:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/07/20 17:28:51 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 12:04:09 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,5 @@ char	*validat_input(char *input)
 		free(input);
 		return (NULL);
 	}
-    
 	return (new_input);
 }

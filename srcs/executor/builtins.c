@@ -6,25 +6,17 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/20 20:51:48 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 12:50:28 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int builtin_echo(t_tools *tools, t_simple_cmds *cmd)
+int builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
     (void) *tools;
     (void) *cmd;
-    printf("echo cmd\n");
-    return(1);
-}
-
-int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
-{
-    (void) *tools;
-    (void) *cmd;
-    printf("cd cmd\n");
+    printf("export cmd\n");
      return(1);
 }
 
@@ -36,11 +28,11 @@ int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
      return(1);
 }
 
-int builtin_export(t_tools *tools, t_simple_cmds *cmd)
+int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 {
     (void) *tools;
     (void) *cmd;
-    printf("export cmd\n");
+    printf("exit cmd\n");
      return(1);
 }
 
@@ -60,10 +52,18 @@ int builtin_env(t_tools *tools, t_simple_cmds *cmd)
      return(1);
 }
 
-int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
+int builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 {
     (void) *tools;
     (void) *cmd;
-    printf("exit cmd\n");
+    printf("echo cmd\n");
+    return(1);
+}
+
+int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
+{
+    (void) *tools;
+    (void) *cmd;
+    printf("cd cmd\n");
      return(1);
 }
