@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 16:21:12 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/21 18:10:53 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
     (void)tools;
     char *buff;
     buff= malloc(1024 * sizeof(char));
-    if (!buff) {
+    if (!buff)
+    {
         perror("malloc");
         return (1);
     }
-    if (getcwd(buff, 1024) == NULL) {
+    if (getcwd(buff, 1024) == NULL)
+    {
         perror("getcwd");
         free(buff);
         return (1);
