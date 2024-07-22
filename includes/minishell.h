@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 16:26:18 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/22 10:25:00 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,16 @@ typedef struct s_lexical
 	int					i;
 }	t_lexical;
 
+typedef struct s_env_var
+{
+    char *key;
+    char *value;
+    struct s_env_var *next;
+} t_env_var;
+
 typedef struct s_tools
 {
-	
+	t_env_var *env_vars;
 	char *working_dir_path;
 }	t_tools;
 

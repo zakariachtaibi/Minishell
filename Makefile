@@ -16,6 +16,9 @@ SRCS = srcs/main.c \
 		libft/ft_memcpy.c \
 		libft/ft_strlcat.c \
 		libft/ft_memset.c \
+		libft/ft_atoi.c\
+		libft/ft_substr.c\
+		libft/ft_strchr.c\
 		srcs/lexer/tokenizer.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\

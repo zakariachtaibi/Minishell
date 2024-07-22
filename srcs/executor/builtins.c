@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 18:10:53 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/22 12:14:41 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,58 @@
 
 int builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
-    (void) *tools;
-    (void) *cmd;
-    printf("export cmd\n");
-     return(1);
+    int i;
+
+    i = 1;
+    if (cmd->str[i] == NULL)
+    {
+        t_env_var *current = tools->env_vars;
+        while (current)
+        {
+            printf("%s=\"%s\"\n", current->key, current->value);
+            current = current->next;
+        }
+        return 0;
+    }
+    while (cmd->str[i])
+    {
+        char *equal_sign = ft_strchr(cmd->str[i], '=');
+        if (equal_sign)
+        {
+            char *key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
+            char *value = ft_strdup(equal_sign + 1);
+            t_env_var *current = tools->env_vars;
+            t_env_var *prev = NULL;
+            while (current)
+            {
+
+                if (ft_strncmp(current->key, key, ft_strlen(key)) == 0)
+                {
+                    free(current->value);
+                    current->value = value;
+                    free(key);
+                    break;
+                }
+                prev = current;
+                current = current->next;
+            }
+            if (!current)
+            {
+                t_env_var *new_var = malloc(sizeof(t_env_var));
+                new_var->key = key;
+                new_var->value = value;
+                new_var->next = NULL;
+                if (prev)
+                    prev->next = new_var;
+                else
+                    tools->env_vars = new_var;
+            }
+        }
+        else
+            printf("export: `%s`: not a valid identifier\n", cmd->str[i]);
+        i++;
+    }
+    return 0;
 }
 
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
@@ -38,16 +86,20 @@ int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
         return (1);
     }
     printf("%s\n", buff);
+    tools->working_dir_path = buff;
     free(buff);
     return (0); 
 }
 
 int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 {
-    (void) *tools;
-    (void) *cmd;
-    printf("exit cmd\n");
-     return(1);
+    (void)tools;
+
+    int exit_status = 0;
+
+    if (cmd->str[1] != NULL)
+        exit_status = ft_atoi(cmd->str[0]);
+    exit(exit_status);
 }
 
 int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
