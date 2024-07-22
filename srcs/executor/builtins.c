@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/22 12:14:41 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:37:40 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,26 @@ int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 
 int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
 {
-    (void) *tools;
-    (void) *cmd;
-    printf("unset cmd\n");
-     return(1);
+    t_env_var *current = tools->env_vars;
+    int i = 1;
+    
+    // while(cmd->str[i])
+    // {
+        while(current)
+        {
+            // printf("%s\n", current->key);
+            if(strcmp(current->key,cmd->str[i]))
+            {
+                delete_node_env(&(tools->env_vars), &tools->env_vars);
+                break ;
+            }
+           current = current->next; 
+           tools->env_vars = tools->env_vars->next;
+        }
+        // i++;
+    // }
+    
+    return(1);
 }
 
 int builtin_env(t_tools *tools, t_simple_cmds *cmd)

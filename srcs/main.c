@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/22 12:25:19 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:15:55 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ int	main(int ac, char **av, char **envp)
 	if (ac != 1)
 		exit(1);
 	tools = malloc(sizeof(t_tools));
-	init_env_vars(tools, envp);
+	get_env_vars(tools, envp);
 	while (1)
 	{
 		input = readline("minishell> ");
 		if (!input)
 			exit(1);
 		add_history(input);
-		input = validat_input(input);
+		// input = validat_input(input);
 		if (input == NULL)
 			continue ;
 		tokens = tokenize(input);
@@ -38,6 +38,7 @@ int	main(int ac, char **av, char **envp)
 		if (tokens == NULL)
 			continue ;
 		cmds = process_tokens(tokens);
+		// expand_vars(&cmds, tools);
 		execute_commands(cmds, &tools);
 		free(input);
 	}

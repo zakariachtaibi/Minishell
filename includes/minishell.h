@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/22 10:25:00 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:14:29 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,7 @@ int 			builtin_unset(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_env(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_exit(t_tools *tools, t_simple_cmds *cmd);
 void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools);
+void			get_env_vars(t_tools *tools, char **envp);
+char			*expand_vars(t_simple_cmds **cmds, t_tools *tools);
+void			delete_node_env(t_env_var **head, t_env_var *node_to_delete);
 #endif

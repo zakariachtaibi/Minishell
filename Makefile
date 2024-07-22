@@ -29,6 +29,8 @@ SRCS = srcs/main.c \
 		srcs/parser/builtins_checker.c\
 		srcs/executor/builtins.c\
 		srcs/executor/executor.c\
+		srcs/expander/expander.c\
+		srcs/executor/builtins_utils.c\
 
 
 

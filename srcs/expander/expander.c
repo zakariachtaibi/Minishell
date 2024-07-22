@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/07/22 12:26:09 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:15:39 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void init_env_vars(t_tools *tools, char **envp)
+void get_env_vars(t_tools *tools, char **envp)
 {
 	tools->env_vars = NULL;
 	t_env_var *head = NULL;
@@ -40,3 +40,23 @@ void init_env_vars(t_tools *tools, char **envp)
 		envp++;
 	}
 }
+
+// char *expand_vars(t_simple_cmds **cmds, t_tools *tools)
+// {
+// 	int i = 1;
+// 	int j = 0;
+// 	char *new_cmd;
+// 	while(*cmds)
+// 	{
+// 		while((*cmds)->str[i][j] && (*cmds)->str[i][j] != '$')
+// 			j++;
+// 		if((*cmds)->str[i][j] == '$')
+// 		{
+// 			while(tools->env_vars)
+// 			{
+// 				// ft_strchr(tools->env_vars->key, )
+// 			}
+// 		}
+		
+// 	}
+// }
