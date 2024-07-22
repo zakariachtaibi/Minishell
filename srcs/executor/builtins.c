@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/22 13:37:40 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/22 21:23:01 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,22 +107,20 @@ int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
     t_env_var *current = tools->env_vars;
     int i = 1;
     
-    // while(cmd->str[i])
-    // {
+    while(cmd->str[i])
+    {
+        current =  tools->env_vars;
         while(current)
         {
-            // printf("%s\n", current->key);
-            if(strcmp(current->key,cmd->str[i]))
+            if(!(strcmp(current->key,cmd->str[i])))
             {
-                delete_node_env(&(tools->env_vars), &tools->env_vars);
-                break ;
+                delete_node_env(&(tools->env_vars), current);
+               break ;
             }
            current = current->next; 
-           tools->env_vars = tools->env_vars->next;
         }
-        // i++;
-    // }
-    
+        i++;
+    }
     return(1);
 }
 

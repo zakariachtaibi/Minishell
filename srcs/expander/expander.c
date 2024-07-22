@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/07/22 13:15:39 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/22 21:37:44 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,17 @@ void get_env_vars(t_tools *tools, char **envp)
 	}
 }
 
-// char *expand_vars(t_simple_cmds **cmds, t_tools *tools)
-// {
-// 	int i = 1;
-// 	int j = 0;
-// 	char *new_cmd;
-// 	while(*cmds)
-// 	{
-// 		while((*cmds)->str[i][j] && (*cmds)->str[i][j] != '$')
-// 			j++;
-// 		if((*cmds)->str[i][j] == '$')
-// 		{
-// 			while(tools->env_vars)
-// 			{
-// 				// ft_strchr(tools->env_vars->key, )
-// 			}
-// 		}
-		
-// 	}
-// }
+char	*expand_vars(char *str, t_tools *tools)
+{
+	char		*value;
+	t_env_var	*current;
+	
+	current = tools->env_vars;
+	while(current)
+	{
+		if(!(strcmp(str,current->key)))
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
+}
