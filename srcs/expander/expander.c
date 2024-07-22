@@ -6,13 +6,13 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/07/22 21:37:44 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/22 22:53:00 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void get_env_vars(t_tools *tools, char **envp)
+void	get_env_vars(t_tools *tools, char **envp)
 {
 	tools->env_vars = NULL;
 	t_env_var *head = NULL;
@@ -41,17 +41,17 @@ void get_env_vars(t_tools *tools, char **envp)
 	}
 }
 
-char	*expand_vars(char *str, t_tools *tools)
-{
-	char		*value;
-	t_env_var	*current;
+// char	*expand_vars(char *str, t_tools *tools)
+// {
+// 	char		*value;
+// 	t_env_var	*current;
 	
-	current = tools->env_vars;
-	while(current)
-	{
-		if(!(strcmp(str,current->key)))
-			return (current->value);
-		current = current->next;
-	}
-	return (NULL);
-}
+// 	current = tools->env_vars;
+// 	while(current)
+// 	{
+// 		if(!(strcmp(str,current->key)))
+// 			return (current->value);
+// 		current = current->next;
+// 	}
+// 	return (NULL);
+// }

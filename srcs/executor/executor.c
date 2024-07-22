@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 16:16:43 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/22 22:43:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools)
     while (current_cmd != NULL) {
         if (current_cmd->builtin != NULL) {
             current_cmd->builtin(*tools, current_cmd);
-        } else {
-            // Code to execute non-builtin commands goes here
-        }
+        } 
+        // else {
+        //     // Code to execute non-builtin commands goes here
+        // }
         current_cmd = current_cmd->next;
     }
 }
