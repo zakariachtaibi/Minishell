@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/22 22:53:10 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/24 12:09:14 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
         t_env_var *current = tools->env_vars;
         while (current)
         {
-            printf("%s=\"%s\"\n", current->key, current->value);
+            printf("declare -x %s=\"%s\"\n", current->key, current->value);
             current = current->next;
         }
         return 0;
@@ -38,7 +38,6 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
             t_env_var *prev = NULL;
             while (current)
             {
-
                 if (ft_strncmp(current->key, key, ft_strlen(key)) == 0)
                 {
                     free(current->value);
@@ -126,10 +125,18 @@ int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
 
 int builtin_env(t_tools *tools, t_simple_cmds *cmd)
 {
-    (void) *tools;
-    (void) *cmd;
-    printf("env cmd\n");
-     return(1);
+    int i = 1;
+    if (cmd->str[i] == NULL)
+    {
+        t_env_var *current = tools->env_vars;
+        while (current)
+        {
+            printf("%s=\"%s\"\n", current->key, current->value);
+            current = current->next;
+        }
+        return (0);
+    }
+    return(1);
 }
 
 int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
@@ -163,5 +170,5 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
         
     }
     printf("%s\n", current->value);
-     return(1);
+    return(1);
 }

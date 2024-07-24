@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 11:29:46 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/24 21:46:40 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,53 @@ void	handle_redirections(t_lexical **temp, t_simple_cmds **current_cmd,
 	}
 }
 
-void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
+char	*check_vars(t_tools *tools, t_lexical *temp)
 {
-	int			word_count;
-	t_lexical	*word_temp;
-	char		*current_word;
-	char		*expanded_word;
-	size_t		len;
-	int			i;
 	size_t		j;
 	size_t		var_start;
 	size_t		var_len;
 	char		*var_name;
 	char		*var_value;
 	char		temp_str[2];
+	char		*expanded_word;
+	char		*current_word;
+	size_t		len;
+	current_word = temp->str;
+	expanded_word = ft_strdup("");
+	len = ft_strlen(current_word);
+	j = 0;
+		while(j < len)
+		{
+			if (current_word[j] == '$')
+			{
+                j++;  
+                var_start = j;
+                while (j < len && (ft_isalnum(current_word[j]) || current_word[j] == '_'))
+				{
+                    j++;
+                }
+                var_len = j - var_start;
+                var_name = ft_strndup(&current_word[var_start], var_len);
+                var_value = expand_vars(var_name, tools);
+                free(var_name);
+                expanded_word = ft_strjoin(expanded_word, var_value);
+            }
+			else
+			{
+				temp_str[0] = current_word[j];
+				temp_str[1] = '\0';
+                expanded_word = ft_strjoin(expanded_word, temp_str);
+				j++;
+            }
+		}
+	return(expanded_word);
+}
+
+void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
+{
+	int			word_count;
+	t_lexical	*word_temp;
+	int			i;
 
 	word_temp = *temp;
 	word_count = 0;
@@ -98,36 +131,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 	i = 0;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
-		current_word = (*temp)->str;
-		expanded_word = ft_strdup("");
-		len = ft_strlen(current_word);
-		j = 0;
-		while(j < len)
-		{
-			if (current_word[j] == '$')
-			{
-                j++;  
-                var_start = j;
-                while (j < len && (ft_isalnum(current_word[j]) || current_word[j] == '_'))
-				{
-                    j++;
-                }
-                 var_len = j - var_start;
-                var_name = strndup(&current_word[var_start], var_len);
-                var_value = expand_vars(var_name, tools);
-                free(var_name);
-                expanded_word = ft_strjoin(expanded_word, var_value);
-                // free(var_value);
-            }
-			else
-			{
-				temp_str[0] = current_word[j];
-				temp_str[1] = '\0';
-                expanded_word = ft_strjoin(expanded_word, temp_str);
-				j++;
-            }
-		}
-		current_cmd->str[i] = expanded_word;
+		current_cmd->str[i] = check_vars(tools, (*temp));
 		*temp = (*temp)->next;
 		i++;
 	}

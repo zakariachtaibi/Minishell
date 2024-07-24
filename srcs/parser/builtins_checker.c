@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:04:13 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 13:01:31 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/24 12:05:25 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_builtin	check_builtins_type(char *str)
 		return (BUILTIN_EXPORT);
 	if (strcmp(str, "unset") == 0)
 		return (BUILTIN_UNSET);
-	if (strcmp(str, " env") == 0)
+	if (strcmp(str, "env") == 0)
 		return (BUILTIN_ENV);
 	if (strcmp(str, "exit") == 0)
 		return (BUILTIN_EXIT);
