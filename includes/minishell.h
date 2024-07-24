@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/22 13:14:29 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/24 11:33:54 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char			*validat_input(char *input);
 t_lexical		*validate_syntax(t_lexical *tokens);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*tokenize(char *input);
-t_simple_cmds	*process_tokens(t_lexical *tokens);
+t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools);
 void			add_redirection(t_lexical **redirections, t_lexical		*redir_node);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*copy_node(t_lexical *src);
@@ -102,6 +102,7 @@ int 			builtin_env(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_exit(t_tools *tools, t_simple_cmds *cmd);
 void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools);
 void			get_env_vars(t_tools *tools, char **envp);
-char			*expand_vars(t_simple_cmds **cmds, t_tools *tools);
+char			*expand_vars(char *var_name, t_tools *tools);
 void			delete_node_env(t_env_var **head, t_env_var *node_to_delete);
+char			*ft_strndup(const char *src, size_t n) ;
 #endif

@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/22 21:46:29 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/24 11:33:32 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,16 @@ void	delete_node(t_lexical **head, t_lexical *node_to_delete)
 	free(node_to_delete);
 }
 
-// int	check_var_name(char *str)
-// {
-	
-// }
+char *ft_strndup(const char *src, size_t n) 
+{
+    size_t len = ft_strlen(src);
+    if (len > n) len = n;  
+
+    char *dup = (char *)malloc(len + 1);  
+    if (!dup) return NULL;  
+
+    ft_strlcpy(dup, src, len); 
+    dup[len] = '\0';  
+
+    return dup;
+}
