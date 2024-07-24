@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 11:33:54 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/24 21:07:22 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ typedef struct s_env_var
 typedef struct s_tools
 {
 	t_env_var *env_vars;
+	size_t		var_start;
+	size_t		var_len;
+	char		*var_name;
+	char		*var_value;
 	char *working_dir_path;
 }	t_tools;
 
@@ -74,8 +78,6 @@ typedef struct s_simple_cmds
 	struct s_simple_cmds	*next;
 	struct s_simple_cmds	*prev;
 }	t_simple_cmds;
-
-
 
 void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses);
 int				has_unclosed_quotes_or_parentheses(char *temp);

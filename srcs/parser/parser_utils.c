@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 11:33:32 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/24 21:47:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,11 @@ char *ft_strndup(const char *src, size_t n)
     if (len > n) len = n;  
 
     char *dup = (char *)malloc(len + 1);  
-    if (!dup) return NULL;  
+    if (!dup) 
+		return NULL;  
 
-    ft_strlcpy(dup, src, len); 
-    dup[len] = '\0';  
+    strncpy(dup, src, len); 
+    // dup[len] = '\0';  
 
     return dup;
 }

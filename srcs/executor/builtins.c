@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 21:27:54 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/24 22:02:15 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd) {
         if (equal_sign) {
             char *key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
             char *value = ft_strdup(equal_sign + 1);
-            // if (!key || !value) {
-            //     // Handle allocation failure
-            //     free(key);
-            //     free(value);
-            //     return 1;
-            // }
+            if (!key || !value) {
+                // Handle allocation failure
+                free(key);
+                free(value);
+                return 1;
+            }
 
             t_env_var *current = tools->env_vars;
             t_env_var *prev = NULL;
