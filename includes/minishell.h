@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/25 12:00:30 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/25 12:48:35 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,6 @@ void			get_env_vars(t_tools *tools, char **envp);
 char			*expand_vars(t_tools *tools, t_lexical *temp);
 void			delete_node_env(t_env_var **head, t_env_var *node_to_delete);
 char			*ft_strndup(const char *src, size_t n) ;
+void			print_sorted_env(t_tools *tools);
+
 #endif
