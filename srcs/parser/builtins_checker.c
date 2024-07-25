@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_checker.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:04:13 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 21:53:13 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:41:51 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_builtin	check_builtins_type(char *str)
 		return (BUILTIN_ECHO);
 	if (strcmp(str, "cd") == 0)
 		return (BUILTIN_CD);
-	if (strcmp(str, "pwd") == 0)
+	if (strcmp(str, "pwd") == 0 || strcmp(str, "(pwd)") == 0)
 		return (BUILTIN_PWD);
 	if (strcmp(str, "export") == 0)
 		return (BUILTIN_EXPORT);

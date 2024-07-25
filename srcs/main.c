@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 11:47:25 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/25 11:59:16 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 			exit(1);
 		add_history(input);
-		// input = validat_input(input);
-		if (input == NULL)
-			continue ;
+		validat_input(input);
+		// if (input == NULL)
+		// 	continue ;
 		tokens = tokenize(input);
 		tokens = validate_syntax(tokens);
 		if (tokens == NULL)

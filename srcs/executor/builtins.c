@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 22:02:15 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:57:46 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
     
     while(cmd->str[i])
     {
+        // printf("%s", cmd->str[i]);
         current =  tools->env_vars;
         while(current)
         {

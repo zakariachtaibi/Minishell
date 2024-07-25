@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 21:07:22 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/25 12:00:30 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_simple_cmds
 void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses);
 int				has_unclosed_quotes_or_parentheses(char *temp);
 int				has_invalid_redirections(t_lexical *tokens);
-char			*validat_input(char *input);
+void			validat_input(char *input);
 t_lexical		*validate_syntax(t_lexical *tokens);
 t_simple_cmds	*init_cmd(void);
 t_lexical		*tokenize(char *input);
@@ -104,7 +104,7 @@ int 			builtin_env(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_exit(t_tools *tools, t_simple_cmds *cmd);
 void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools);
 void			get_env_vars(t_tools *tools, char **envp);
-char			*expand_vars(char *var_name, t_tools *tools);
+char			*expand_vars(t_tools *tools, t_lexical *temp);
 void			delete_node_env(t_env_var **head, t_env_var *node_to_delete);
 char			*ft_strndup(const char *src, size_t n) ;
 #endif
