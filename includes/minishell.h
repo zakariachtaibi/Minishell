@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 21:07:22 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/07/25 11:58:37 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,6 @@ void			get_env_vars(t_tools *tools, char **envp);
 char			*expand_vars(char *var_name, t_tools *tools);
 void			delete_node_env(t_env_var **head, t_env_var *node_to_delete);
 char			*ft_strndup(const char *src, size_t n) ;
+void			print_sorted_env(t_tools *tools);
+
 #endif

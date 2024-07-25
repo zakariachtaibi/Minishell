@@ -6,79 +6,32 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 22:02:15 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:02:56 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void print_sorted_env(t_tools *tools) {
-    // Create a copy of the environment list
-    t_env_var *copy = NULL, *temp = tools->env_vars;
-    while (temp) {
-        t_env_var *new_node = malloc(sizeof(t_env_var));
-        new_node->key = ft_strdup(temp->key);
-        new_node->value = ft_strdup(temp->value);
-        new_node->next = copy;
-        copy = new_node;
-        temp = temp->next;
-    }
-
-    // Sort the copied list using while loop
-    t_env_var *i = copy;
-    while (i) {
-        t_env_var *j = i->next;
-        while (j) {
-            if (ft_strncmp(i->key, j->key, ft_strlen(i->key) + 1) > 0) {
-                // Swap key and value
-                char *temp_key = i->key;
-                char *temp_value = i->value;
-                i->key = j->key;
-                i->value = j->value;
-                j->key = temp_key;
-                j->value = temp_value;
-            }
-            j = j->next;
-        }
-        i = i->next;
-    }
-
-    // Print the sorted list
-    t_env_var *current = copy;
-    while (current) {
-        printf("declare -x %s=\"%s\"\n", current->key, current->value);
-        current = current->next;
-    }
-
-    // Free the copied list
-    while (copy) {
-        t_env_var *next = copy->next;
-        free(copy->key);
-        free(copy->value);
-        free(copy);
-        copy = next;
-    }
-}
-
-int builtin_export(t_tools *tools, t_simple_cmds *cmd) {
+int builtin_export(t_tools *tools, t_simple_cmds *cmd)
+{
     int i = 1;
-    if (cmd->str[i] == NULL) {
+    if (!cmd->str[i])
+    {
         print_sorted_env(tools);
         return 0;
     }
-
-    while (cmd->str[i]) {
+    while (cmd->str[i])
+    {
         char *equal_sign = ft_strchr(cmd->str[i], '=');
-        if (equal_sign) {
+        if (equal_sign)
+        {
             char *key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
             char *value = ft_strdup(equal_sign + 1);
-            if (!key || !value) {
-                // Handle allocation failure
-                free(key);
-                free(value);
-                return 1;
-            }
-
+            // if (!key || !value) {
+            //     free(key);
+            //     free(value);
+            //     return 1;
+            // }
             t_env_var *current = tools->env_vars;
             t_env_var *prev = NULL;
             while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) < 0)
@@ -87,12 +40,14 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd) {
                 current = current->next;
             }
 
-            if (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0) {
+            if (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
+            {
         
                 free(current->value);
                 current->value = value;
                 free(key);
-            } else {
+            } else
+            {
                 t_env_var *new_var = malloc(sizeof(t_env_var));
                 // if (!new_var) {
                 //     free(key);
@@ -103,15 +58,13 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd) {
                 new_var->value = value;
                 new_var->next = current;
 
-                if (prev) {
+                if (prev)
                     prev->next = new_var;
-                } else {
+                else
                     tools->env_vars = new_var;
-                }
             }
-        } else {
+        } else
             printf("export: `%s`: not a valid identifier\n", cmd->str[i]);
-        }
         i++;
     }
     return 0;
@@ -207,7 +160,9 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 
 int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
 {
-    (void)tools;
+    t_env_var *current;
+    t_env_var *old_pwd;
+
     if (cmd->str[1] == NULL)
     {
         write(2, "cd: missing argument\n", 22);
@@ -217,6 +172,36 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
     {
         printf("cd: %s: No such file or directory\n", cmd->str[1]);
         return (1);
+    }
+    char *new_pwd  = getcwd(NULL, 0);
+    if (!new_pwd)
+    {
+        perror("getcwd");
+        return (1);
+    }
+    current = tools->env_vars;
+    old_pwd = NULL;
+    while (current)
+    {
+        if (!ft_strncmp(current->key, "PWD", 3))
+        {
+            t_env_var *tmp = current;
+            current = tools->env_vars;
+            while (current)
+            {
+                if (!ft_strncmp(current->key, "OLDPWD", 3))
+                {
+                    free(current->value);
+                    current->value = ft_strdup(tmp->value);
+                    break;
+                }
+                current= current->next;
+            }
+            free(tmp->value);
+            tmp->value = new_pwd;
+            break;
+        }
+        current = current->next;
     }
     return (0);
 }
