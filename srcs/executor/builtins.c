@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/02 20:23:51 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/02 21:57:53 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
             ft_putchar_fd(' ',1);
 		j++;
 	}
+    
 	if (!flag)
         ft_putchar_fd('\n',1);
     return (0);
