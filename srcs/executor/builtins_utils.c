@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/25 12:08:06 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/02 20:18:27 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void print_sorted_env(t_tools *tools)
     // Print the sorted list
     t_env_var *current = copy;
     while (current) {
-        printf("declare -x %s=\"%s\"\n", current->key, current->value);
+        if (!ft_strncmp(current->value, "", 1))
+            printf("declare -x %s\n", current->key);
+        else
+            printf("declare -x %s=\"%s\"\n", current->key, current->value);
         current = current->next;
     }
 
@@ -84,6 +87,56 @@ void print_sorted_env(t_tools *tools)
         free(copy->key);
         free(copy->value);
         free(copy);
-        copy = next;
+        copy = next;    }
+}
+
+char *get_env_value(t_env_var *env_vars, const char *key)
+{
+    size_t key_len;
+    
+    key_len = ft_strlen(key);
+    while (env_vars)
+    {
+        if (!ft_strncmp(env_vars->key, key, key_len) && env_vars->key[key_len] == '\0')
+            return (env_vars->value);
+        env_vars = env_vars->next;
     }
+    return NULL;
+}
+
+void add_new_env_var(t_tools *tools, char *key, char *value, t_env_var *current, t_env_var *prev)
+{
+    t_env_var *new_var;
+
+    new_var = malloc(sizeof(t_env_var));
+    new_var->key = key;
+    new_var->value = value;
+    new_var->next = current;
+    if (prev)
+        prev->next = new_var;
+    else
+        tools->env_vars = new_var;
+}
+
+void handle_env_var(t_tools *tools, char *key, char *value)
+{
+    t_env_var *current;
+    t_env_var *prev;
+
+    current = tools->env_vars;
+    prev = NULL;
+    while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) < 0)
+    {
+        prev = current;
+        current = current->next;
+    }
+
+    if (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
+    {
+        free(current->value);
+        current->value = value;
+        free(key);
+    }
+    else
+        add_new_env_var(tools, key, value, current, prev);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_checker.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:04:13 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/25 12:41:51 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/02 11:10:26 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 t_builtin	check_builtins_type(char *str)
 {
-	if (strcmp(str, "echo") == 0)
+	if (!ft_strncmp(str, "echo", 5))
 		return (BUILTIN_ECHO);
-	if (strcmp(str, "cd") == 0)
+	if (!ft_strncmp(str, "cd", 3))
 		return (BUILTIN_CD);
-	if (strcmp(str, "pwd") == 0 || strcmp(str, "(pwd)") == 0)
+	if (!ft_strncmp(str, "pwd", 4) || !ft_strncmp(str, "(pwd)", 6))
 		return (BUILTIN_PWD);
-	if (strcmp(str, "export") == 0)
+	if (!ft_strncmp(str, "export", 7))
 		return (BUILTIN_EXPORT);
-	if (strcmp(str, "unset") == 0)
+	if (!ft_strncmp(str, "unset", 6))
 		return (BUILTIN_UNSET);
-	if (strcmp(str, "env") == 0)
+	if (!ft_strncmp(str, "env", 4))
 		return (BUILTIN_ENV);
-	if (strcmp(str, "exit") == 0)
+	if (!ft_strncmp(str, "exit", 5))
 		return (BUILTIN_EXIT);
 	else
 		return (BUILTIN_NONE);

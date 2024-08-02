@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/07/25 12:06:48 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/02 18:25:20 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ char	*expand_vars(t_tools *tools, t_lexical *temp)
 	expanded_word = ft_strdup("");
 	len = ft_strlen(current_word);
 	j = 0;
-		while (j < len)
-		{
+	while (j < len)
+	{
         if (current_word[j] == '\'')
 		{
             j++;  

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/25 12:48:04 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/02 20:23:51 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,60 +14,33 @@
 
 int builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
-    int i = 1;
+    int i;
+    char *key;
+    char *value;
+
+    i = 1;
     if (!cmd->str[i])
     {
         print_sorted_env(tools);
-        return 0;
+        return (0);
     }
     while (cmd->str[i])
     {
         char *equal_sign = ft_strchr(cmd->str[i], '=');
         if (equal_sign)
         {
-            char *key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
-            char *value = ft_strdup(equal_sign + 1);
-            // if (!key || !value) {
-            //     free(key);
-            //     free(value);
-            //     return 1;
-            // }
-            t_env_var *current = tools->env_vars;
-            t_env_var *prev = NULL;
-            while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) < 0)
-            {
-                prev = current;
-                current = current->next;
-            }
-
-            if (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
-            {
-        
-                free(current->value);
-                current->value = value;
-                free(key);
-            } else
-            {
-                t_env_var *new_var = malloc(sizeof(t_env_var));
-                // if (!new_var) {
-                //     free(key);
-                //     free(value);
-                //     return 1;
-                // }
-                new_var->key = key;
-                new_var->value = value;
-                new_var->next = current;
-
-                if (prev)
-                    prev->next = new_var;
-                else
-                    tools->env_vars = new_var;
-            }
-        } else
-            printf("export: `%s`: not a valid identifier\n", cmd->str[i]);
+            key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
+            value = ft_strdup(equal_sign + 1);
+        }
+        else
+        {
+            key = ft_substr(cmd->str[i], 0, ft_strlen(cmd->str[i]));
+            value = ft_strdup("");
+        }
+        handle_env_var(tools, key, value);
         i++;
     }
-    return 0;
+    return (0);
 }
 
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
@@ -98,9 +71,12 @@ int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
     (void)tools;
 
     int exit_status = 0;
-
     if (cmd->str[1] != NULL)
-        exit_status = ft_atoi(cmd->str[0]);
+    {
+        printf("exit\n");
+        printf("minishell: exit: %s: numeric argument required\n", cmd->str[1]);
+        exit_status = 1;
+    }
     exit(exit_status);
 }
 
@@ -111,7 +87,6 @@ int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
     
     while(cmd->str[i])
     {
-        // printf("%s", cmd->str[i]);
         current =  tools->env_vars;
         while(current)
         {
@@ -124,7 +99,7 @@ int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
         }
         i++;
     }
-    return(1);
+    return(0);
 }
 
 int builtin_env(t_tools *tools, t_simple_cmds *cmd)
@@ -137,7 +112,8 @@ int builtin_env(t_tools *tools, t_simple_cmds *cmd)
         t_env_var *current = tools->env_vars;
         while (current)
         {
-            printf("%s=\"%s\"\n", current->key, current->value);
+            if (ft_strncmp(current->value, "", 1))
+                printf("%s=%s\n", current->key, current->value);
             current = current->next;
         }
         return (0);
@@ -148,14 +124,25 @@ int builtin_env(t_tools *tools, t_simple_cmds *cmd)
 int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 {
     (void) *tools;
-	int j = 1;
+	int j;
+    int flag;
+    
+    j = 1;
+    flag = 0;
+    if (!ft_strncmp(cmd->str[j], "-n", 3))
+    {
+        j++;
+        flag = 1;
+    }
 	while(cmd->str[j])
 	{
 		ft_putstr_fd(cmd->str[j],1);
-		ft_putchar_fd(' ',1);
+		if (cmd->str[j + 1] != NULL)
+            ft_putchar_fd(' ',1);
 		j++;
 	}
-	printf("\n");
+	if (!flag)
+        ft_putchar_fd('\n',1);
     return (0);
 }
 
@@ -164,10 +151,19 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
     t_env_var *current;
     t_env_var *old_pwd;
 
+    if (cmd->str[2] != NULL)
+    {
+        printf("minishell: cd: too many arguments\n");
+        return (1);
+    }
     if (cmd->str[1] == NULL)
     {
-        write(2, "cd: missing argument\n", 22);
-        return (1);        
+        cmd->str[1] = get_env_value(tools->env_vars, "HOME");
+        if (cmd->str[1] == NULL)
+        {
+            write(2, "cd: HOME not set\n", 17);
+            return 1;
+        }        
     }
     if(chdir(cmd->str[1]) != 0)
     {

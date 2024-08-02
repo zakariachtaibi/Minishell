@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/25 11:01:23 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/02 18:14:38 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 	temp = tokens;
 	while (temp)
 	{
-		process_command(&temp, &current_cmd, &cmds_head);
 		handle_redirections(&temp, &current_cmd, tokens);
+		process_command(&temp, &current_cmd, &cmds_head);
 		handle_words(&temp, current_cmd, tools);
 		check_and_set_builtin(current_cmd);
 	}

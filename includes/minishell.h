@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/25 12:48:35 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/02 18:44:04 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ typedef struct s_env_var
 
 typedef struct s_tools
 {
-	t_env_var *env_vars;
+	t_env_var	*env_vars;
 	size_t		var_start;
 	size_t		var_len;
 	char		*var_name;
 	char		*var_value;
-	char *working_dir_path;
+	char		*working_dir_path;
 }	t_tools;
 
 typedef struct s_simple_cmds
@@ -108,5 +108,9 @@ char			*expand_vars(t_tools *tools, t_lexical *temp);
 void			delete_node_env(t_env_var **head, t_env_var *node_to_delete);
 char			*ft_strndup(const char *src, size_t n) ;
 void			print_sorted_env(t_tools *tools);
+char 			*get_env_value(t_env_var *env_vars, const char *key);
+void			handle_env_var(t_tools *tools, char *key, char *value);
+void 			add_new_env_var(t_tools *tools, char *key, char *value,
+			t_env_var *current, t_env_var *prev);
 
 #endif
