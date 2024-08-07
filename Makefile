@@ -19,6 +19,7 @@ SRCS = srcs/main.c \
 		libft/ft_atoi.c\
 		libft/ft_substr.c\
 		libft/ft_strchr.c\
+		libft/ft_itoa.c\
 		srcs/lexer/tokenizer.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\
@@ -40,7 +41,7 @@ SRCS = srcs/main.c \
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 LDFLAGS = -lreadline
 
 all: $(NAME)

@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/02 18:08:23 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:45:41 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,15 @@ int	main(int ac, char **av, char **envp)
 			exit(1);
 		add_history(input);
 		validat_input(input);
-		// if (input == NULL)
-		// 	continue ;
+		if (input == NULL)
+			continue ;
 		tokens = tokenize(input);
 		tokens = validate_syntax(tokens);
 		if (tokens == NULL)
 			continue ;
 		cmds = process_tokens(tokens, tools);
-		// expand_vars(&cmds, tools);
+		// expand_vars(&cmds, &tools);
+		// printf("---------%d------\n", cmds->fd_out);
 		execute_commands(cmds, &tools);
 		free(input);
 	}

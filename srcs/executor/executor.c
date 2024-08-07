@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/22 22:43:45 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/06 18:19:25 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools)
 {
     // (void) *tools;
     t_simple_cmds *current_cmd = cmds_head;
-    while (current_cmd != NULL) {
-        if (current_cmd->builtin != NULL) {
+    while (current_cmd != NULL)
+    {
+        if (current_cmd->builtin != NULL) 
+        {
             current_cmd->builtin(*tools, current_cmd);
         } 
         // else {

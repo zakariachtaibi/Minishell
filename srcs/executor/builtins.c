@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/02 21:57:53 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:25:56 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,24 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
     if (!cmd->str[i])
     {
         print_sorted_env(tools);
+        tools->exit_status = 0;
         return (0);
+    }
+    // if (has_unclosed_quotes_or_parentheses(cmd->str[i]))
+    // {
+    //     tools->exit_status = 1;
+    //     return (1);
+    // }
+    int j = 0;
+    while (cmd->str[i][j])
+    {
+        if (!ft_isalnum(cmd->str[i][j]))
+        {
+            printf("minishell: export: %s: not a valid identifier\n", cmd->str[i]);
+            tools->exit_status = 1;
+            return (1);
+        }
+        j++;
     }
     while (cmd->str[i])
     {
@@ -40,29 +57,32 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
         handle_env_var(tools, key, value);
         i++;
     }
+    tools->exit_status = 0;
     return (0);
 }
 
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 {
     (void)cmd;
-    (void)tools;
     char *buff;
     buff= malloc(1024 * sizeof(char));
     if (!buff)
     {
         perror("malloc");
+        tools->exit_status = 1;
         return (1);
     }
     if (getcwd(buff, 1024) == NULL)
     {
         perror("getcwd");
         free(buff);
+        tools->exit_status = 1;
         return (1);
     }
     printf("%s\n", buff);
     tools->working_dir_path = buff;
     free(buff);
+    tools->exit_status = 0;
     return (0); 
 }
 
@@ -129,21 +149,29 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
     
     j = 1;
     flag = 0;
-    if (!ft_strncmp(cmd->str[j], "-n", 3))
-    {
-        j++;
-        flag = 1;
-    }
+    // if (!ft_strncmp(cmd->str[j], "-n", 3))
+    // {
+    //     j++;
+    //     flag = 1;
+    // }
 	while(cmd->str[j])
 	{
-		ft_putstr_fd(cmd->str[j],1);
+		if (!ft_strncmp(cmd->str[j], "?", 2))
+        {
+            char *exit_status_str = ft_itoa(tools->exit_status);
+            ft_putstr_fd(exit_status_str, 1);
+            free(exit_status_str);
+        }
+        else
+            ft_putstr_fd(cmd->str[j], 1);
+
 		if (cmd->str[j + 1] != NULL)
             ft_putchar_fd(' ',1);
 		j++;
 	}
-    
 	if (!flag)
         ft_putchar_fd('\n',1);
+    tools->exit_status = 0;
     return (0);
 }
 
@@ -155,6 +183,7 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
     if (cmd->str[2] != NULL)
     {
         printf("minishell: cd: too many arguments\n");
+        tools->exit_status = 1;
         return (1);
     }
     if (cmd->str[1] == NULL)
@@ -163,18 +192,21 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
         if (cmd->str[1] == NULL)
         {
             write(2, "cd: HOME not set\n", 17);
-            return 1;
+            tools->exit_status = 1;
+            return (1);
         }        
     }
     if(chdir(cmd->str[1]) != 0)
     {
         printf("cd: %s: No such file or directory\n", cmd->str[1]);
+        tools->exit_status = 1;
         return (1);
     }
     char *new_pwd  = getcwd(NULL, 0);
     if (!new_pwd)
     {
         perror("getcwd");
+        tools->exit_status = 1;
         return (1);
     }
     current = tools->env_vars;
@@ -201,5 +233,6 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
         }
         current = current->next;
     }
+    tools->exit_status = 0;
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/02 18:44:04 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:06:37 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <sys/wait.h>
 
 typedef enum e_token
 {
@@ -66,6 +69,7 @@ typedef struct s_tools
 	char		*var_name;
 	char		*var_value;
 	char		*working_dir_path;
+	int			exit_status;
 }	t_tools;
 
 typedef struct s_simple_cmds
@@ -77,6 +81,8 @@ typedef struct s_simple_cmds
 	t_lexical				*redirections;
 	struct s_simple_cmds	*next;
 	struct s_simple_cmds	*prev;
+	int						fd_in;
+	int						fd_out;
 }	t_simple_cmds;
 
 void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses);
@@ -112,5 +118,7 @@ char 			*get_env_value(t_env_var *env_vars, const char *key);
 void			handle_env_var(t_tools *tools, char *key, char *value);
 void 			add_new_env_var(t_tools *tools, char *key, char *value,
 			t_env_var *current, t_env_var *prev);
+void			check_and_set_redirections(t_simple_cmds *current_cmd);
+void			execute_command(t_simple_cmds *cmd);
 
 #endif

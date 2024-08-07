@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/21 12:38:16 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/04 13:23:09 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ t_lexical	*validate_syntax(t_lexical *tokens)
 		else if ((tokens)->next == NULL)
 			printf(" syntax error near unexpected token 'newline' \n");
 		else
-			printf(" syntax error near unexpected token '%s'\n",
-				(tokens)->next->str);
+			printf(" syntax error near unexpected token '%s'\n", (tokens)->next->str);
 		return (NULL);
 	}
 	return (tokens);
