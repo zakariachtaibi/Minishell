@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/07 18:23:55 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/07 21:10:13 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	handle_redirections(t_lexical **temp, t_simple_cmds **current_cmd,
 		if (*temp && (*temp)->token == TOKEN_WORD)
 		{
 			if (redir->token == TOKEN_HEREDOC)
-				(*current_cmd)->hd_file_name = strdup((*temp)->str);
+				(*current_cmd)->hd_file_name = ft_strdup((*temp)->str);
 			else
 			{
 				filename = copy_node(*temp);
@@ -116,10 +116,10 @@ void	check_and_set_redirections(t_simple_cmds *current_cmd)
 			if (current_cmd->fd_out == -1)
 				perror("minishell");
 		}
+		
 		redir = redir->next;
 	}
 }
-
 
 t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 {
@@ -131,30 +131,18 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 	cmds_head = NULL;
 	current_cmd = NULL;
 	temp = tokens;
-	// int tmp = dup(STDOUT_FILENO);
 
 	while (temp)
 	{
-		handle_redirections(&temp, &current_cmd, tokens);
 		process_command(&temp, &current_cmd, &cmds_head);
-		handle_words(&temp, current_cmd, tools);
-		// check_and_set_redirections(current_cmd);
-		// if (current_cmd->fd_out != 0)
-		// {
-		// 	printf("---%d---\n", current_cmd->fd_out);
-		// 	dup2(current_cmd->fd_out, STDOUT_FILENO);
-		// }
-		printf("str: %s\n", current_cmd->str[0]);
-		printf("str: %s\n", current_cmd->str[1]);
-		while (current_cmd && current_cmd->redirections)
+		while (temp && !check_token(temp) && temp->token != TOKEN_PIPE)
+			handle_words(&temp, current_cmd, tools);
+		while (temp && check_token(temp))
 		{
-			printf("redirections: %s\n", current_cmd->redirections->str);
-			current_cmd->redirections = current_cmd->redirections->next;
+			handle_redirections(&temp, &current_cmd, tokens);
+			check_and_set_redirections(current_cmd);
 		}
-		printf("t3awd\n");
 		check_and_set_builtin(current_cmd);
-		// close(current_cmd->fd_out);
 	}
-	// dup2(STDOUT_FILENO,tmp);
 	return(cmds_head);
 }
