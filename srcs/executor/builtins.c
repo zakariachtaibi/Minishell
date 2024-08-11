@@ -6,17 +6,37 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/07 21:15:11 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/11 11:28:18 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+    // if (has_unclosed_quotes_or_parentheses(cmd->str[i]))
+    // {
+    //     tools->exit_status = 1;
+    //     return (1);
+    // }
+    // int j = 0;
+    // while (cmd->str[i][j])
+    // {
+    //     if (!ft_isalnum(cmd->str[i][j]))
+    //     {
+    //         printf("minishell: export: %s: not a valid identifier\n", cmd->str[i]);
+    //         tools->exit_status = 1;
+    //         return (1);
+    //     }
+    //     j++;
+    // }
+
 int builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
-    int i;
-    char *key;
-    char *value;
+    int     i;
+    char    *key;
+    char    *value;
+    char    *existing_value;
+    int     flag;
+    char    *temp;
 
     i = 1;
     if (!cmd->str[i])
@@ -25,34 +45,45 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
         tools->exit_status = 0;
         return (0);
     }
-    // if (has_unclosed_quotes_or_parentheses(cmd->str[i]))
-    // {
-    //     tools->exit_status = 1;
-    //     return (1);
-    // }
-    int j = 0;
-    while (cmd->str[i][j])
-    {
-        if (!ft_isalnum(cmd->str[i][j]))
-        {
-            printf("minishell: export: %s: not a valid identifier\n", cmd->str[i]);
-            tools->exit_status = 1;
-            return (1);
-        }
-        j++;
-    }
     while (cmd->str[i])
     {
-        char *equal_sign = ft_strchr(cmd->str[i], '=');
-        if (equal_sign)
+        flag = 0;
+        char *plus_equal_sign = ft_strnstr(cmd->str[i], "+=", ft_strlen(cmd->str[i]));
+        if (plus_equal_sign)
         {
-            key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
-            value = ft_strdup(equal_sign + 1);
+            flag = 1;
+            key = ft_substr(cmd->str[i], 0, plus_equal_sign - cmd->str[i]);
+            value = ft_strdup(plus_equal_sign + 2);
+            existing_value = get_env_value(tools->env_vars, key);
+            if (existing_value)
+            {
+                temp = ft_strjoin(existing_value, value);
+                free(value);
+                value = temp;
+            }
         }
         else
         {
-            key = ft_substr(cmd->str[i], 0, ft_strlen(cmd->str[i]));
-            value = ft_strdup("");
+            char *equal_sign = ft_strchr(cmd->str[i], '=');
+            if (equal_sign)
+            {
+                key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
+                value = ft_strdup(equal_sign + 1);
+            }
+            else
+            {
+                key = ft_substr(cmd->str[i], 0, ft_strlen(cmd->str[i]));
+                value = ft_strdup("");
+            }
+        }
+        while (cmd->str[i + 1] && (cmd->str[i + 1][0] != '=' && cmd->str[i + 1][0] != '-' && cmd->str[i + 1][0] != '+'))
+        {
+            temp = value;
+            value = ft_strjoin(value, " ");
+            free(temp);
+            temp = value;
+            value = ft_strjoin(value, cmd->str[++i]);
+            free(temp);
         }
         handle_env_var(tools, key, value);
         i++;
@@ -60,6 +91,7 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
     tools->exit_status = 0;
     return (0);
 }
+
 
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 {
@@ -86,17 +118,27 @@ int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
     return (0); 
 }
 
+
 int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 {
-    (void)tools;
+    int exit_status;
 
-    int exit_status = 0;
-    if (cmd->str[1] != NULL)
+    if (cmd->str[1] == NULL)
+        exit(tools->exit_status);
+    if (!is_numeric(cmd->str[1]))
     {
-        printf("exit\n");
+        ft_putstr_fd("exit\n", 2);
         printf("minishell: exit: %s: numeric argument required\n", cmd->str[1]);
-        exit_status = 1;
+        exit(2);
     }
+    if (cmd->str[2] != NULL)
+    {
+        ft_putstr_fd("exit\n", 2);
+        ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+        tools->exit_status = 1;
+        return (1);
+    }
+    exit_status = atoi(cmd->str[1]);
     exit(exit_status);
 }
 
@@ -149,11 +191,7 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
     
     j = 1;
     flag = 0;
-    // if (!ft_strncmp(cmd->str[j], "-n", 3))
-    // {
-    //     j++;
-    //     flag = 1;
-    // }
+    search_for_argn(cmd, &flag, &j);
 	while(cmd->str[j])
 	{
 		if (!ft_strncmp(cmd->str[j], "?", 2))
@@ -163,7 +201,7 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
             free(exit_status_str);
         }
         else
-            ft_putstr_fd(cmd->str[j], 1);
+            ft_putstr_fd(cmd->str[j], cmd->fd_out);
 
 		if (cmd->str[j + 1] != NULL)
             ft_putchar_fd(' ',1);
@@ -182,7 +220,7 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
 
     if (cmd->str[2] != NULL)
     {
-        printf("minishell: cd: too many arguments\n");
+        ft_putstr_fd("minishell: cd: too many arguments\n", 2);
         tools->exit_status = 1;
         return (1);
     }
@@ -191,7 +229,7 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
         cmd->str[1] = get_env_value(tools->env_vars, "HOME");
         if (cmd->str[1] == NULL)
         {
-            write(2, "cd: HOME not set\n", 17);
+            ft_putstr_fd("cd: HOME not set\n", 2);
             tools->exit_status = 1;
             return (1);
         }        

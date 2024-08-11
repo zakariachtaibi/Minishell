@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/08 14:02:13 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/09 13:58:40 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,5 +120,8 @@ void 			add_new_env_var(t_tools *tools, char *key, char *value,
 			t_env_var *current, t_env_var *prev);
 void			check_and_set_redirections(t_simple_cmds *current_cmd);
 void			execute_command(t_simple_cmds *cmd);
+void 			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools);
+void			search_for_argn(t_simple_cmds *cmd, int *flag, int *j);
+int				is_numeric(char *str);
 
 #endif

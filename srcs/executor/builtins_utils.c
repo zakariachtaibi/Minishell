@@ -6,11 +6,32 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/02 20:18:27 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/09 13:58:20 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void search_for_argn(t_simple_cmds *cmd, int *flag, int *j)
+{
+    int i;
+
+    while (cmd->str[*j] && cmd->str[*j][0] == '-')
+    {
+        i = 1;
+        if (cmd->str[*j][1] == '\0')
+            break;
+        while (cmd->str[*j][i] == 'n')
+            i++;
+        if (cmd->str[*j][i] == '\0')
+        {
+            *flag = 1;
+            *j += 1;
+        }
+        else
+            break;
+    }
+}
 
 void	delete_node_env(t_env_var **head, t_env_var *node_to_delete)
 {
@@ -139,4 +160,18 @@ void handle_env_var(t_tools *tools, char *key, char *value)
     }
     else
         add_new_env_var(tools, key, value, current, prev);
+}
+
+int is_numeric(char *str)
+{
+    int i = 0;
+    if (str[i] == '-' || str[i] == '+')
+        i++;
+    while (str[i])
+    {
+        if (!isdigit(str[i]))
+            return (0);
+        i++;
+    }
+    return (1);
 }
