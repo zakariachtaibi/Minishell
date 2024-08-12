@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/08 23:21:57 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/12 19:18:11 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 void	check_and_set_redirections(t_simple_cmds *current_cmd)
 {
 	t_lexical	*redir;
+	int	std_out;
+	std_out = 1;
 	
 	redir = current_cmd->redirections;
 	while (redir)
@@ -113,6 +115,8 @@ void	check_and_set_redirections(t_simple_cmds *current_cmd)
 		{
 			redir = redir->next;
 			current_cmd->fd_out = open(redir->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			dup2(current_cmd->fd_out, std_out);
+			close(current_cmd->fd_out);
 			if (current_cmd->fd_out == -1)
 				perror("minishell");
 		}
@@ -131,7 +135,6 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 	cmds_head = NULL;
 	current_cmd = NULL;
 	temp = tokens;
-
 	while (temp)
 	{
 		process_command(&temp, &current_cmd, &cmds_head);

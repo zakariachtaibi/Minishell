@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/08 23:22:37 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/12 19:26:59 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	main(int ac, char **av, char **envp)
 	char			*input;
 	t_simple_cmds	*cmds;
 	t_tools			*tools;
-
+	int				std_out;
+	std_out = dup(1);
 	(void)av;
 	if (ac != 1)
 		exit(1);
@@ -38,8 +39,8 @@ int	main(int ac, char **av, char **envp)
 		if (tokens == NULL)
 			continue ;
 		cmds = process_tokens(tokens, tools);
-		// expand_vars(&cmds, &tools);
 		execute_commands(cmds, &tools);
+		dup2(std_out, 1);
 		free(input);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/11 11:46:46 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/11 13:07:55 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
         }
         return;
     }
-    
     env_var = (*tools)->env_vars;
     while (env_var)
     {
@@ -86,7 +85,6 @@ void execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
         }
         env_var = env_var->next;
     }
-
     if (split)
     {
         int i = 0;
@@ -125,7 +123,6 @@ void execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
     ft_putstr_fd(current_cmd->str[0], 2);
     ft_putstr_fd(": command not found\n", 2);
 }
-
 
 void execute_commands(t_simple_cmds *cmds_head, t_tools **tools)
 {

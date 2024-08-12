@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/11 11:28:18 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/11 11:55:14 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
     return (0);
 }
 
-
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 {
     (void)cmd;
@@ -117,7 +116,6 @@ int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
     tools->exit_status = 0;
     return (0); 
 }
-
 
 int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 {
