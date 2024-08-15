@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/12 19:18:11 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/15 13:26:42 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@ int	check_token(t_lexical *temp)
 		return (0);
 }
 
-void	handle_redirections(t_lexical **temp, t_simple_cmds **current_cmd,
+int	handle_redirections(t_tools **tools ,t_lexical **temp, t_simple_cmds **current_cmd,
 								t_lexical *token)
 {
 	t_lexical	*redir;
 	t_lexical	*filename;
+	int			flag = 0;
+	// t_lexical	*expanded_filename;
 
+	// expanded_filename = NULL;
 	if (check_token(*temp))
 	{
 		redir = copy_node(*temp);
@@ -64,12 +67,17 @@ void	handle_redirections(t_lexical **temp, t_simple_cmds **current_cmd,
 			else
 			{
 				filename = copy_node(*temp);
+				filename->str= expand_vars((*tools), filename);
 				add_redirection((&(*current_cmd)->redirections), filename);
+				if(ft_strchr(filename->str, 32))
+				flag = 1;
 			}
+			
 			delete_node(&token, *temp);
 			*temp = (*temp)->next;
 		}
 	}
+	return (flag);
 }
 
 void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
@@ -130,19 +138,26 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 	t_simple_cmds	*cmds_head;
 	t_simple_cmds	*current_cmd;
 	t_lexical		*temp;
-	(void )*tools;
+	int flag = 0;
 
 	cmds_head = NULL;
 	current_cmd = NULL;
 	temp = tokens;
 	while (temp)
 	{
+		// expand_vars(tools, temp);
 		process_command(&temp, &current_cmd, &cmds_head);
 		while (temp && !check_token(temp) && temp->token != TOKEN_PIPE)
 			handle_words(&temp, current_cmd, tools);
 		while (temp && check_token(temp))
 		{
-			handle_redirections(&temp, &current_cmd, tokens);
+			flag = handle_redirections(&tools ,&temp, &current_cmd, tokens);
+			if(flag == 1)
+			{
+				printf("$filename: ambiguous redirect\n");
+				tools->exit_status = 1;
+				return(NULL);
+			}
 			check_and_set_redirections(current_cmd);
 		}
 		check_and_set_builtin(current_cmd);

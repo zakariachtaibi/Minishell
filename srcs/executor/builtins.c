@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/11 11:55:14 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/15 11:52:52 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
             free(exit_status_str);
         }
         else
-            ft_putstr_fd(cmd->str[j], cmd->fd_out);
+            ft_putstr_fd(cmd->str[j], 1);
 
 		if (cmd->str[j + 1] != NULL)
             ft_putchar_fd(' ',1);

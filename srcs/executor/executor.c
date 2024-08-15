@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/11 13:07:55 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/15 13:18:05 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
     }
     ft_putstr_fd(current_cmd->str[0], 2);
     ft_putstr_fd(": command not found\n", 2);
+     (*tools)->exit_status = 127;
 }
 
 void execute_commands(t_simple_cmds *cmds_head, t_tools **tools)
