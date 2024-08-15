@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/12 19:26:59 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/15 16:01:17 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int	main(int ac, char **av, char **envp)
 	t_simple_cmds	*cmds;
 	t_tools			*tools;
 	int				std_out;
+	int				std_in;
 	std_out = dup(1);
+	std_in = dup(0);
 	(void)av;
 	if (ac != 1)
 		exit(1);
@@ -41,6 +43,7 @@ int	main(int ac, char **av, char **envp)
 		cmds = process_tokens(tokens, tools);
 		execute_commands(cmds, &tools);
 		dup2(std_out, 1);
+		dup2(std_in, 0);
 		free(input);
 	}
 }
