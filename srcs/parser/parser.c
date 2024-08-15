@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/15 16:55:46 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/15 17:00:02 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,47 +143,41 @@ void	check_and_set_redirections(t_simple_cmds *current_cmd)
 			if (current_cmd->fd_out == -1)
 				perror("minishell");
 		}
-	// 	else if (redir->token == TOKEN_HEREDOC)
-	// 	{
-	// 		char *input;
-	// 		input = readline("");
-	// 		while(strcmp(input, current_cmd->hd_file_name))
-	// 			input = readline("");
-	// 	}
-	else if (redir->token == TOKEN_HEREDOC)
-{
-    char *input;
-    int fd;
-    fd = open(current_cmd->hd_file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1) {
-        perror("minishell: open");
-        return;
-    }
+	
+		else if (redir->token == TOKEN_HEREDOC)
+		{		
+			char *input;
+			int fd;
+			fd = open(current_cmd->hd_file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd == -1) {
+				perror("minishell: open");
+				return;
+			}
 
-    while (1)
-    {
-        input = readline("> "); 
-        if (!input || strcmp(input, current_cmd->hd_file_name) == 0)  
-		   break;
-        write(fd, input, strlen(input));
-        write(fd, "\n", 1); 
-        free(input);  
-    }
+			while (1)
+			{
+				input = readline("> "); 
+				if (!input || strcmp(input, current_cmd->hd_file_name) == 0)  
+				break;
+				write(fd, input, strlen(input));
+				write(fd, "\n", 1); 
+				free(input);  
+			}
 
-    free(input);  
-    close(fd);   
+			free(input);  
+			close(fd);   
 
-    fd = open(current_cmd->hd_file_name, O_RDONLY);
-    if (fd == -1) {
-        perror("minishell: open");
-        return;
-    }
-    current_cmd->fd_in = fd;  
-	// close(fd);
-	dup2(current_cmd->fd_in, 0);
-	close(current_cmd->fd_in);
-	remove(current_cmd->hd_file_name);
-}
+			fd = open(current_cmd->hd_file_name, O_RDONLY);
+			if (fd == -1) {
+				perror("minishell: open");
+				return;
+			}
+			current_cmd->fd_in = fd;  
+			// close(fd);
+			dup2(current_cmd->fd_in, 0);
+			close(current_cmd->fd_in);
+			remove(current_cmd->hd_file_name);
+		}
 		redir = redir->next;
 	}
 }
