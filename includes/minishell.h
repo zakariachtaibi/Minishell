@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/09 13:58:40 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:06:06 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/history.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include <string.h>
 # include <sys/wait.h>
 
 typedef enum e_token
@@ -117,11 +118,12 @@ void			print_sorted_env(t_tools *tools);
 char 			*get_env_value(t_env_var *env_vars, const char *key);
 void			handle_env_var(t_tools *tools, char *key, char *value);
 void 			add_new_env_var(t_tools *tools, char *key, char *value,
-			t_env_var *current, t_env_var *prev);
+t_env_var		*current, t_env_var *prev);
 void			check_and_set_redirections(t_simple_cmds *current_cmd);
 void			execute_command(t_simple_cmds *cmd);
 void 			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools);
 void			search_for_argn(t_simple_cmds *cmd, int *flag, int *j);
 int				is_numeric(char *str);
+void			process_export(t_tools *tools, char **str, int *i);
 
 #endif

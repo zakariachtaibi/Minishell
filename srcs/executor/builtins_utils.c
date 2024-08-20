@@ -169,7 +169,7 @@ int is_numeric(char *str)
         i++;
     while (str[i])
     {
-        if (!isdigit(str[i]))
+        if (!ft_isdigit(str[i]))
             return (0);
         i++;
     }

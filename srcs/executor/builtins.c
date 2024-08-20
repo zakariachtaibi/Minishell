@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/15 11:52:52 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/20 13:12:17 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,27 @@
     //     j++;
     // }
 
+// int builtin_export(t_tools *tools, t_simple_cmds *cmd)
+// {
+//     int i = 1;
+
+//     if (!cmd->str[i])
+//     {
+//         print_sorted_env(tools);
+//         tools->exit_status = 0;
+//         return 0;
+//     }
+
+//     while (cmd->str[i])
+//     {
+//         process_export(tools, cmd->str, &i);
+//         i++;
+//     }
+
+//     tools->exit_status = 0;
+//     return 0;
+// }
+
 int builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
     int     i;
@@ -37,6 +58,8 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
     char    *existing_value;
     int     flag;
     char    *temp;
+    char    *plus_equal_sign;
+    char    *equal_sign;
 
     i = 1;
     if (!cmd->str[i])
@@ -48,7 +71,7 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
     while (cmd->str[i])
     {
         flag = 0;
-        char *plus_equal_sign = ft_strnstr(cmd->str[i], "+=", ft_strlen(cmd->str[i]));
+        plus_equal_sign = ft_strnstr(cmd->str[i], "+=", ft_strlen(cmd->str[i]));
         if (plus_equal_sign)
         {
             flag = 1;
@@ -64,7 +87,7 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
         }
         else
         {
-            char *equal_sign = ft_strchr(cmd->str[i], '=');
+            equal_sign = ft_strchr(cmd->str[i], '=');
             if (equal_sign)
             {
                 key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
@@ -127,7 +150,7 @@ int builtin_exit(t_tools *tools, t_simple_cmds *cmd)
     {
         ft_putstr_fd("exit\n", 2);
         printf("minishell: exit: %s: numeric argument required\n", cmd->str[1]);
-        exit(2);
+        exit(255);
     }
     if (cmd->str[2] != NULL)
     {

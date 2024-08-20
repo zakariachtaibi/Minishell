@@ -34,6 +34,8 @@ SRCS = srcs/main.c \
 		srcs/executor/builtins_utils.c\
 		libft/ft_isalnum.c\
 		libft/ft_isalpha.c\
+		srcs/executor/export_utils.c
+
 
 
 
