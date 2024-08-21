@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/09 13:58:20 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/21 10:17:33 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,33 +52,34 @@ void	delete_node_env(t_env_var **head, t_env_var *node_to_delete)
 	free(node_to_delete);
 }
 
-void print_sorted_env(t_tools *tools)
+t_env_var *copy_env_vars(t_env_var *env_vars)
 {
-    // Create a copy of the environment list
-    t_env_var *copy;
-    t_env_var *temp;
+    t_env_var *copy = NULL;
+    t_env_var *temp = env_vars;
 
-    copy = NULL;
-    temp = tools->env_vars;
     while (temp)
     {
-        t_env_var *new_node;
-        
-        new_node= malloc(sizeof(t_env_var));
+        t_env_var *new_node = malloc(sizeof(t_env_var));
         new_node->key = ft_strdup(temp->key);
         new_node->value = ft_strdup(temp->value);
         new_node->next = copy;
         copy = new_node;
         temp = temp->next;
     }
+    return copy;
+}
 
-    // Sort the copied list using while loop
+void sort_env_vars(t_env_var *copy)
+{
     t_env_var *i = copy;
+
     while (i)
     {
         t_env_var *j = i->next;
-        while (j) {
-            if (ft_strncmp(i->key, j->key, ft_strlen(i->key) + 1) > 0) {
+        while (j)
+        {
+            if (ft_strncmp(i->key, j->key, ft_strlen(i->key) + 1) > 0)
+            {
                 // Swap key and value
                 char *temp_key = i->key;
                 char *temp_value = i->value;
@@ -91,24 +92,40 @@ void print_sorted_env(t_tools *tools)
         }
         i = i->next;
     }
+}
 
-    // Print the sorted list
+void print_env_vars(t_env_var *copy)
+{
     t_env_var *current = copy;
-    while (current) {
+
+    while (current)
+    {
         if (!ft_strncmp(current->value, "", 1))
             printf("declare -x %s\n", current->key);
         else
             printf("declare -x %s=\"%s\"\n", current->key, current->value);
         current = current->next;
     }
+}
 
-    // Free the copied list
-    while (copy) {
+void free_env_vars(t_env_var *copy)
+{
+    while (copy)
+    {
         t_env_var *next = copy->next;
         free(copy->key);
         free(copy->value);
         free(copy);
-        copy = next;    }
+        copy = next;
+    }
+}
+
+void print_sorted_env(t_tools *tools)
+{
+    t_env_var *copy = copy_env_vars(tools->env_vars);
+    sort_env_vars(copy);
+    print_env_vars(copy);
+    free_env_vars(copy);
 }
 
 char *get_env_value(t_env_var *env_vars, const char *key)

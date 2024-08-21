@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/20 13:12:17 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/21 09:56:33 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,90 +29,25 @@
     //     j++;
     // }
 
-// int builtin_export(t_tools *tools, t_simple_cmds *cmd)
-// {
-//     int i = 1;
-
-//     if (!cmd->str[i])
-//     {
-//         print_sorted_env(tools);
-//         tools->exit_status = 0;
-//         return 0;
-//     }
-
-//     while (cmd->str[i])
-//     {
-//         process_export(tools, cmd->str, &i);
-//         i++;
-//     }
-
-//     tools->exit_status = 0;
-//     return 0;
-// }
-
 int builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
-    int     i;
-    char    *key;
-    char    *value;
-    char    *existing_value;
-    int     flag;
-    char    *temp;
-    char    *plus_equal_sign;
-    char    *equal_sign;
+    int i = 1;
 
-    i = 1;
     if (!cmd->str[i])
     {
         print_sorted_env(tools);
         tools->exit_status = 0;
-        return (0);
+        return 0;
     }
+
     while (cmd->str[i])
     {
-        flag = 0;
-        plus_equal_sign = ft_strnstr(cmd->str[i], "+=", ft_strlen(cmd->str[i]));
-        if (plus_equal_sign)
-        {
-            flag = 1;
-            key = ft_substr(cmd->str[i], 0, plus_equal_sign - cmd->str[i]);
-            value = ft_strdup(plus_equal_sign + 2);
-            existing_value = get_env_value(tools->env_vars, key);
-            if (existing_value)
-            {
-                temp = ft_strjoin(existing_value, value);
-                free(value);
-                value = temp;
-            }
-        }
-        else
-        {
-            equal_sign = ft_strchr(cmd->str[i], '=');
-            if (equal_sign)
-            {
-                key = ft_substr(cmd->str[i], 0, equal_sign - cmd->str[i]);
-                value = ft_strdup(equal_sign + 1);
-            }
-            else
-            {
-                key = ft_substr(cmd->str[i], 0, ft_strlen(cmd->str[i]));
-                value = ft_strdup("");
-            }
-        }
-        while (cmd->str[i + 1] && (cmd->str[i + 1][0] != '=' && cmd->str[i + 1][0] != '-' && cmd->str[i + 1][0] != '+'))
-        {
-            temp = value;
-            value = ft_strjoin(value, " ");
-            free(temp);
-            temp = value;
-            value = ft_strjoin(value, cmd->str[++i]);
-            free(temp);
-        }
-        handle_env_var(tools, key, value);
+        process_export(tools, cmd->str, &i);
         i++;
     }
+
     tools->exit_status = 0;
-    return (0);
+    return 0;
 }
 
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
@@ -223,7 +158,6 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
         }
         else
             ft_putstr_fd(cmd->str[j], 1);
-
 		if (cmd->str[j + 1] != NULL)
             ft_putchar_fd(' ',1);
 		j++;
@@ -236,62 +170,14 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 
 int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
 {
-    t_env_var *current;
-    t_env_var *old_pwd;
+    if (check_cd_arguments(tools, cmd))
+        return (1);
 
-    if (cmd->str[2] != NULL)
-    {
-        ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-        tools->exit_status = 1;
+    if (change_directory(tools, cmd))
         return (1);
-    }
-    if (cmd->str[1] == NULL)
-    {
-        cmd->str[1] = get_env_value(tools->env_vars, "HOME");
-        if (cmd->str[1] == NULL)
-        {
-            ft_putstr_fd("cd: HOME not set\n", 2);
-            tools->exit_status = 1;
-            return (1);
-        }        
-    }
-    if(chdir(cmd->str[1]) != 0)
-    {
-        printf("cd: %s: No such file or directory\n", cmd->str[1]);
-        tools->exit_status = 1;
-        return (1);
-    }
-    char *new_pwd  = getcwd(NULL, 0);
-    if (!new_pwd)
-    {
-        perror("getcwd");
-        tools->exit_status = 1;
-        return (1);
-    }
-    current = tools->env_vars;
-    old_pwd = NULL;
-    while (current)
-    {
-        if (!ft_strncmp(current->key, "PWD", 3))
-        {
-            t_env_var *tmp = current;
-            current = tools->env_vars;
-            while (current)
-            {
-                if (!ft_strncmp(current->key, "OLDPWD", 3))
-                {
-                    free(current->value);
-                    current->value = ft_strdup(tmp->value);
-                    break;
-                }
-                current= current->next;
-            }
-            free(tmp->value);
-            tmp->value = new_pwd;
-            break;
-        }
-        current = current->next;
-    }
+
+    update_pwd_variables(tools);
+    
     tools->exit_status = 0;
     return (0);
 }

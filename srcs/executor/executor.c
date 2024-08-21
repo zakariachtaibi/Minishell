@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/15 13:18:05 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/21 10:28:17 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,14 @@
 
 char **convert_env_vars_to_array(t_env_var *env_vars)
 {
-    int         count;
-    t_env_var   *temp;
-    int         i;
-    char        *temp_value;
-    char        **envp;
+    int count = count_env_vars(env_vars);
+    char **envp = allocate_envp_array(count);
 
-    count = 0;
-    temp = env_vars;
-    i = -1;
-    while (temp)
-    {
-        count++;
-        temp = temp->next;
-    }
-    envp = malloc((count + 1) * sizeof(char *));
     if (!envp)
         return NULL;
 
-    temp = env_vars;
-    while (++i < count)
-    {
-        envp[i] = ft_strjoin(temp->key, "=");
-        temp_value = envp[i];
-        envp[i] = ft_strjoin(envp[i], temp->value);
-        free(temp_value);
-        temp = temp->next;
-    }
-    envp[count] = NULL;
-    return (envp);
+    fill_envp_array(envp, env_vars, count);
+    return envp;
 }
 
 void execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)

@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/20 13:06:06 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/21 10:27:52 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,5 +125,11 @@ void 			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools);
 void			search_for_argn(t_simple_cmds *cmd, int *flag, int *j);
 int				is_numeric(char *str);
 void			process_export(t_tools *tools, char **str, int *i);
+int				check_cd_arguments(t_tools *tools, t_simple_cmds *cmd);
+int 			change_directory(t_tools *tools, t_simple_cmds *cmd);
+void			update_pwd_variables(t_tools *tools);
+int count_env_vars(t_env_var *env_vars);
+char **allocate_envp_array(int count);
+void fill_envp_array(char **envp, t_env_var *env_vars, int count);
 
 #endif
