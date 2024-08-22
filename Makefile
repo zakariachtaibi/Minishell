@@ -32,11 +32,13 @@ SRCS = srcs/main.c \
 		srcs/executor/executor.c\
 		srcs/expander/expander.c\
 		srcs/executor/builtins_utils.c\
+		srcs/executor/builtins_utils1.c\
 		libft/ft_isalnum.c\
 		libft/ft_isalpha.c\
 		srcs/executor/export_utils.c\
 		srcs/executor/cd_utils.c\
 		srcs/executor/executor_utils.c\
+		srcs/expander/expander_utils.c\
 
 
 

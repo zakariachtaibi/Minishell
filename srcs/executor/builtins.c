@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/21 09:56:33 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/22 11:52:04 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,6 @@
     //     }
     //     j++;
     // }
-
-int builtin_export(t_tools *tools, t_simple_cmds *cmd)
-{
-    int i = 1;
-
-    if (!cmd->str[i])
-    {
-        print_sorted_env(tools);
-        tools->exit_status = 0;
-        return 0;
-    }
-
-    while (cmd->str[i])
-    {
-        process_export(tools, cmd->str, &i);
-        i++;
-    }
-
-    tools->exit_status = 0;
-    return 0;
-}
 
 int builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 {
@@ -168,16 +147,3 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
     return (0);
 }
 
-int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
-{
-    if (check_cd_arguments(tools, cmd))
-        return (1);
-
-    if (change_directory(tools, cmd))
-        return (1);
-
-    update_pwd_variables(tools);
-    
-    tools->exit_status = 0;
-    return (0);
-}

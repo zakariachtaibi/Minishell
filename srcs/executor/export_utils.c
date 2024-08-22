@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/21 10:43:54 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/22 11:46:03 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,33 @@ void process_export(t_tools *tools, char **str, int *i)
         in++;
     }
     handle_env_var(tools, key, value);
+}
+
+void print_sorted_env(t_tools *tools)
+{
+    t_env_var *copy = copy_env_vars(tools->env_vars);
+    sort_env_vars(copy);
+    print_env_vars(copy);
+    free_env_vars(copy);
+}
+
+int builtin_export(t_tools *tools, t_simple_cmds *cmd)
+{
+    int i = 1;
+
+    if (!cmd->str[i])
+    {
+        print_sorted_env(tools);
+        tools->exit_status = 0;
+        return 0;
+    }
+
+    while (cmd->str[i])
+    {
+        process_export(tools, cmd->str, &i);
+        i++;
+    }
+
+    tools->exit_status = 0;
+    return 0;
 }

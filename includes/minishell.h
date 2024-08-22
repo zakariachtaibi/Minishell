@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/21 10:42:15 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/22 12:26:01 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,22 +86,19 @@ typedef struct s_simple_cmds
 	int						fd_out;
 }	t_simple_cmds;
 
-void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses);
-int				has_unclosed_quotes_or_parentheses(char *temp);
-int				has_invalid_redirections(t_lexical *tokens);
-void			validat_input(char *input);
-t_lexical		*validate_syntax(t_lexical *tokens);
-t_simple_cmds	*init_cmd(void);
-t_lexical		*tokenize(char *input);
-t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools);
-void			add_redirection(t_lexical **redirections, t_lexical		*redir_node);
-t_simple_cmds	*init_cmd(void);
-t_lexical		*copy_node(t_lexical *src);
-void			delete_node(t_lexical **head, t_lexical *node_to_delete);
-char			*remove_enclosing_chars(char *input);
-t_builtin		check_builtins_type(char *str);
-void			check_and_set_builtin(t_simple_cmds *cmd);
 int				(*get_builtin_func(t_builtin type))(t_tools *tools, t_simple_cmds *cmds);
+void			get_env_vars(t_tools *tools, char **envp);
+char 			*get_env_value(t_env_var *env_vars, const char *key);
+char			**get_path_dirs(t_env_var *env_vars);
+char			*get_env_value(t_env_var *env_vars, const char *key);
+char			*get_vars_value(char *str, t_tools *tools);
+t_simple_cmds	*init_cmd(void);
+char			**allocate_envp_array(int count);
+void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools);
+void 			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools);
+int				execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools);
+void			execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools);
+int				execute_from_path(char **split, t_simple_cmds *current_cmd, t_tools **tools);
 int				builtin_echo(t_tools *tools, t_simple_cmds *cmd);
 int				builtin_cd(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_pwd(t_tools *tools, t_simple_cmds *cmd);
@@ -109,33 +106,39 @@ int 			builtin_export(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_unset(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_env(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_exit(t_tools *tools, t_simple_cmds *cmd);
-void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools);
-void			get_env_vars(t_tools *tools, char **envp);
-char			*expand_vars(t_tools *tools, t_lexical *temp);
-void			delete_node_env(t_env_var **head, t_env_var *node_to_delete);
-char			*ft_strndup(const char *src, size_t n) ;
-void			print_sorted_env(t_tools *tools);
-char 			*get_env_value(t_env_var *env_vars, const char *key);
-void			handle_env_var(t_tools *tools, char *key, char *value);
-void 			add_new_env_var(t_tools *tools, char *key, char *value,
-t_env_var		*current, t_env_var *prev);
+t_builtin		check_builtins_type(char *str);
+void			check_and_set_builtin(t_simple_cmds *cmd);
 void			check_and_set_redirections(t_simple_cmds *current_cmd);
-void			execute_command(t_simple_cmds *cmd);
-void 			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools);
-void			search_for_argn(t_simple_cmds *cmd, int *flag, int *j);
-int				is_numeric(char *str);
-void			process_export(t_tools *tools, char **str, int *i);
 int				check_cd_arguments(t_tools *tools, t_simple_cmds *cmd);
+void			validat_input(char *input);
+t_lexical		*validate_syntax(t_lexical *tokens);
+int				has_unclosed_quotes_or_parentheses(char *temp);
+int				has_invalid_redirections(t_lexical *tokens);
+int				is_numeric(char *str);
+void			add_redirection(t_lexical **redirections, t_lexical		*redir_node);
+void 			add_new_env_var(t_tools *tools, char *key, char *value,
+				t_env_var		*current, t_env_var *prev);
+t_lexical		*copy_node(t_lexical *src);
+t_env_var 		*copy_env_vars(t_env_var *env_vars);
+void			delete_node(t_lexical **head, t_lexical *node_to_delete);
+void			delete_node_env(t_env_var **head, t_env_var *node_to_delete);
+char			*remove_enclosing_chars(char *input);
+t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools);		
+void			process_export(t_tools *tools, char **str, int *i);
+void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parentheses);
+int				count_env_vars(t_env_var *env_vars);
+void			print_sorted_env(t_tools *tools);
+void			print_env_vars(t_env_var *copy);
+void			handle_env_var(t_tools *tools, char *key, char *value);
+void			handle_command_not_found(t_simple_cmds *current_cmd, t_tools **tools);
+t_lexical		*tokenize(char *input);
+char			*expand_vars(t_tools *tools, t_lexical *temp);	
+char			*ft_strndup(const char *src, size_t n) ;
+void			search_for_argn(t_simple_cmds *cmd, int *flag, int *j);
 int 			change_directory(t_tools *tools, t_simple_cmds *cmd);
 void			update_pwd_variables(t_tools *tools);
-int				count_env_vars(t_env_var *env_vars);
-char			**allocate_envp_array(int count);
 void			fill_envp_array(char **envp, t_env_var *env_vars, int count);
-char			**get_path_dirs(t_env_var *env_vars);
 char			**convert_env_vars_to_array(t_env_var *env_vars);
-int				execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools);
-void			execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools);
-int				execute_from_path(char **split, t_simple_cmds *current_cmd, t_tools **tools);
-void			handle_command_not_found(t_simple_cmds *current_cmd, t_tools **tools);
-
+void 			sort_env_vars(t_env_var *copy);	
+void			free_env_vars(t_env_var *copy);
 #endif

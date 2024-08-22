@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/21 10:06:53 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/22 11:52:14 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,18 @@ void update_pwd_variables(t_tools *tools)
         free(pwd->value);
         pwd->value = new_pwd;
     }
+}
+
+int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
+{
+    if (check_cd_arguments(tools, cmd))
+        return (1);
+
+    if (change_directory(tools, cmd))
+        return (1);
+
+    update_pwd_variables(tools);
+    
+    tools->exit_status = 0;
+    return (0);
 }
