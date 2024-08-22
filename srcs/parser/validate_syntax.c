@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/04 13:23:09 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:33:06 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	has_invalid_redirections(t_lexical *tokens)
+{
+	while ((tokens))
+	{
+		if ((tokens)->token != 5)
+		{
+			if ((tokens)->token == 0)
+			{
+				if ((tokens)->prev == NULL)
+					return (10);
+			}
+			if (((tokens)->next == NULL ) || (((tokens)->next)->token != 5))
+				return (1);
+		}
+		(tokens) = (tokens)->next;
+	}
+	return (0);
+}
 
 t_lexical	*validate_syntax(t_lexical *tokens)
 {

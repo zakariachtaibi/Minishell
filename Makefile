@@ -23,7 +23,6 @@ SRCS = srcs/main.c \
 		srcs/lexer/tokenizer.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\
-		srcs/parser/syntax_errors.c\
 		srcs/lexer/errors_checker.c\
 		srcs/lexer/validate_input.c\
 		srcs/parser/validate_syntax.c\
@@ -39,6 +38,7 @@ SRCS = srcs/main.c \
 		srcs/executor/cd_utils.c\
 		srcs/executor/executor_utils.c\
 		srcs/expander/expander_utils.c\
+		srcs/parser/redirections_checker.c\
 
 
 

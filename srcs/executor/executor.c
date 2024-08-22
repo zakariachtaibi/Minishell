@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 11:53:29 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/22 20:47:37 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools)
     t_simple_cmds *current_cmd;
 
     current_cmd = cmds_head;
+    if (current_cmd->str == NULL)
+        return ;
     while (current_cmd != NULL)
     {
         if (current_cmd->builtin != NULL) 

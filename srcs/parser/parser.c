@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/15 17:00:02 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/22 12:31:08 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ int	handle_redirections(t_tools **tools ,t_lexical **temp, t_simple_cmds **curre
 	t_lexical	*redir;
 	t_lexical	*filename;
 	int			flag = 0;
-	// t_lexical	*expanded_filename;
-
-	// expanded_filename = NULL;
+	
 	if (check_token(*temp))
 	{
 		redir = copy_node(*temp);
@@ -102,84 +100,6 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 		i++;
 	}
 	current_cmd->str[i] = NULL;
-}
-
-void	check_and_set_redirections(t_simple_cmds *current_cmd)
-{
-	t_lexical	*redir;
-	int	std_out;
-	int	std_in;
-	std_out = 1;
-	std_in = 0;
-	
-	redir = current_cmd->redirections;
-	while (redir)
-	{
-		if (redir->token == TOKEN_REDIRECT_IN)
-		{
-			redir = redir->next;
-			current_cmd->fd_in = open(redir->str, O_RDONLY);
-			
-			dup2(current_cmd->fd_in, std_in);
-				close(current_cmd->fd_in);
-				if (current_cmd->fd_in == -1)
-				perror("minishell");
-		}
-		else if (redir->token == TOKEN_REDIRECT_OUT)
-		{
-			redir = redir->next;
-			current_cmd->fd_out = open(redir->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2(current_cmd->fd_out, std_out);
-			close(current_cmd->fd_out);
-			if (current_cmd->fd_out == -1)
-				perror("minishell");
-		}
-		else if (redir->token == TOKEN_APPEND)
-		{
-			redir = redir->next;
-			current_cmd->fd_out = open(redir->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(current_cmd->fd_out, std_out);
-			close(current_cmd->fd_out);
-			if (current_cmd->fd_out == -1)
-				perror("minishell");
-		}
-	
-		else if (redir->token == TOKEN_HEREDOC)
-		{		
-			char *input;
-			int fd;
-			fd = open(current_cmd->hd_file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1) {
-				perror("minishell: open");
-				return;
-			}
-
-			while (1)
-			{
-				input = readline("> "); 
-				if (!input || strcmp(input, current_cmd->hd_file_name) == 0)  
-				break;
-				write(fd, input, strlen(input));
-				write(fd, "\n", 1); 
-				free(input);  
-			}
-
-			free(input);  
-			close(fd);   
-
-			fd = open(current_cmd->hd_file_name, O_RDONLY);
-			if (fd == -1) {
-				perror("minishell: open");
-				return;
-			}
-			current_cmd->fd_in = fd;  
-			// close(fd);
-			dup2(current_cmd->fd_in, 0);
-			close(current_cmd->fd_in);
-			remove(current_cmd->hd_file_name);
-		}
-		redir = redir->next;
-	}
 }
 
 t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
