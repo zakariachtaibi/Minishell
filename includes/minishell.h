@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/21 10:27:52 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/21 10:42:15 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,14 @@ void			process_export(t_tools *tools, char **str, int *i);
 int				check_cd_arguments(t_tools *tools, t_simple_cmds *cmd);
 int 			change_directory(t_tools *tools, t_simple_cmds *cmd);
 void			update_pwd_variables(t_tools *tools);
-int count_env_vars(t_env_var *env_vars);
-char **allocate_envp_array(int count);
-void fill_envp_array(char **envp, t_env_var *env_vars, int count);
+int				count_env_vars(t_env_var *env_vars);
+char			**allocate_envp_array(int count);
+void			fill_envp_array(char **envp, t_env_var *env_vars, int count);
+char			**get_path_dirs(t_env_var *env_vars);
+char			**convert_env_vars_to_array(t_env_var *env_vars);
+int				execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools);
+void			execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools);
+int				execute_from_path(char **split, t_simple_cmds *current_cmd, t_tools **tools);
+void			handle_command_not_found(t_simple_cmds *current_cmd, t_tools **tools);
 
 #endif

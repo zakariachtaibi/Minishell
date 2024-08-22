@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/15 16:01:17 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/21 20:27:22 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ int	main(int ac, char **av, char **envp)
 		input = readline("minishell> ");
 		if (!input)
 			exit(1);
-		add_history(input);
+		if(strcmp(input,"") && strcmp(input, "/n"))
+			add_history(input);
 		validat_input(input);
-		if (input == NULL)
+		if (input == NULL) 
 			continue ;
 		tokens = tokenize(input);
 		tokens = validate_syntax(tokens);

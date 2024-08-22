@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/20 17:22:53 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/21 10:43:54 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,6 @@ void handle_equal(char *str, char **key, char **value)
     *value = ft_strdup(equal_sign + 1);
 }
 
-// void concatenate_values(char **str, int *i, char **value)
-// {
-//     char *temp;
-
-//     while (str[*i + 1] && (str[*i + 1][0] != '=' && str[*i + 1][0] != '-' && str[*i + 1][0] != '+'))
-//     {
-//         temp = *value;
-//         *value = ft_strjoin(*value, " ");
-//         free(temp);
-
-//         temp = *value;
-//         *value = ft_strjoin(*value, str[++(*i)]);
-//         free(temp);
-//     }
-// }
-
 void process_export(t_tools *tools, char **str, int *i)
 {
     char *key;
@@ -80,6 +64,5 @@ void process_export(t_tools *tools, char **str, int *i)
         }
         in++;
     }
-    // concatenate_values(str, i, &value);
     handle_env_var(tools, key, value);
 }
