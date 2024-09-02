@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 11:46:03 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/31 22:34:20 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,11 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
         tools->exit_status = 0;
         return 0;
     }
-
     while (cmd->str[i])
     {
         process_export(tools, cmd->str, &i);
         i++;
     }
-
     tools->exit_status = 0;
     return 0;
 }

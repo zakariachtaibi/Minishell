@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:42:32 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 11:47:07 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/30 22:25:00 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,14 @@ char *get_env_value(t_env_var *env_vars, const char *key)
     key_len = ft_strlen(key);
     while (env_vars)
     {
+        // Check if the current node's key matches the provided key
         if (!ft_strncmp(env_vars->key, key, key_len) && env_vars->key[key_len] == '\0')
             return (env_vars->value);
         env_vars = env_vars->next;
     }
     return NULL;
 }
+
 
 int is_numeric(char *str)
 {

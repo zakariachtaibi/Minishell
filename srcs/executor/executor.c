@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 20:47:37 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/01 15:43:37 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ void execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
         exit(1);
     }
     else if (pid < 0)
-    {
         perror("fork");
-    }
     else
     {
         waitpid(pid, &status, 0);
@@ -72,7 +70,6 @@ int execute_from_path(char **split, t_simple_cmds *current_cmd, t_tools **tools)
         full_cmd = ft_strjoin(split[i], "/");
         cmd_path = ft_strjoin(full_cmd, current_cmd->str[0]);
         free(full_cmd);
-
         if (access(cmd_path, X_OK) == 0)
         {
             execute(cmd_path, current_cmd, tools);
@@ -89,11 +86,9 @@ void execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 {
     if (execute_if_absolute_path(current_cmd, tools))
         return;
-
     char **split = get_path_dirs((*tools)->env_vars);
     if (split && execute_from_path(split, current_cmd, tools))
         return;
-
     handle_command_not_found(current_cmd, tools);
 }
 

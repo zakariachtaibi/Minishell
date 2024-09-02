@@ -3,19 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 11:52:14 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/30 22:26:33 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../includes/minishell.h"
 
 int check_cd_arguments(t_tools *tools, t_simple_cmds *cmd)
 {
-    
     if (cmd->str[1] == NULL)
     {
         cmd->str[1] = get_env_value(tools->env_vars, "HOME");
@@ -25,15 +23,23 @@ int check_cd_arguments(t_tools *tools, t_simple_cmds *cmd)
             tools->exit_status = 1;
             return (1);
         }
+    } else if (cmd->str[2] != NULL)
+    {
+        fprintf(stderr, "minishell: cd: too many arguments\n");
+        tools->exit_status = 1;
+        return (1);
     }
     return (0);
 }
 
 int change_directory(t_tools *tools, t_simple_cmds *cmd)
 {
-    if (chdir(cmd->str[1]) != 0)
+    if (strcmp(cmd->str[1], "~") == 0)
+        chdir("/nfs/homes/zchtaibi");
+    else if (chdir(cmd->str[1]) != 0)
     {
         printf("cd: %s: No such file or directory\n", cmd->str[1]);
+        printf("%s",cmd->str[2]);
         tools->exit_status = 1;
         return (1);
     }
