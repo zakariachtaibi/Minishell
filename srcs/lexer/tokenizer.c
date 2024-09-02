@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/02 11:03:24 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/08/31 22:34:05 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,29 +42,44 @@ t_lexical	*check_node(char *str, int i)
 
 t_lexical	*tokenize(char *input)
 {
-	char		**word;
 	t_lexical	*head;
 	t_lexical	*current;
 	t_lexical	*node;
 	int			i;
+	int			j;
+	char		token[1024];
 
-	word = ft_split(input, ' ');
-	head = NULL;
+	head 	= NULL;
 	current = NULL;
-	i = 0;
-	if (!word)
-		return (NULL);
-	while (word[i])
+	i		= 0;
+	j 		= 0;
+	while (input[i])
 	{
-		node = check_node(word[i], i);
-		node->prev = current;
-		if (current)
-			current->next = node;
-		else
-			head = node;
-		current = node;
-		i++;
+		while (input[i] == ' ')
+			i++;
+		j = 0;
+		while (input[i] && (input[i] != ' ' || (input[i] == ' ' && input[i - 1] == '\\')))
+		{
+			if (input[i] == '\\')
+				i++;
+			token[j++] = input[i++];
+		}
+		token[j] = '\0';
+		if (j > 0)
+		{
+			node = check_node(token, i);
+			node->prev = current;
+			if (current)
+				current->next = node;
+			else
+				head = node;
+			current = node;
+		}
 	}
-	free(word);
 	return (head);
 }
+
+
+
+
+

@@ -1,0 +1,12 @@
+
+absolute path in cd  cd $HOME/Documents
+$
+echo bonjour >>> test
+:echo bonjour > $test ambiguous redirect // houda
+$var 
+export var ="cat Makefile | grep >"
+minishell not in ./
+echo "
+echo "\"  escape char
+export "HI= hi"
+export "HI =hi"
