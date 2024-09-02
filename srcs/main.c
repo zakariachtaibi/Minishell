@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/21 20:27:22 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/30 09:35:44 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int ac, char **av, char **envp)
 			exit(1);
 		if(strcmp(input,"") && strcmp(input, "/n"))
 			add_history(input);
-		validat_input(input);
+		input = validat_input(input);
 		if (input == NULL) 
 			continue ;
 		tokens = tokenize(input);

@@ -1,7 +1,5 @@
-handling ;
-echo bonjour > test\ 1
-absolute path in cd  cd $HOME/Documents
-cho test > file test1
+
+echo test >  file test1
 $
 echo bonjour >>> test
 cat < test
@@ -10,11 +8,9 @@ $var
 export var ="cat Makefile | grep >"
 echo bonjour > $test w/ t
 minishell not in ./
-echo "
-echo "\"  escape char
-echo ;;
 cd ~
-cd  b c d j
 export "HI= hi"
 export "HI =hi"
  echo > a hello world!
+ execv
+export $var

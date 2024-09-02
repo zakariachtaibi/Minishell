@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:36:42 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 12:29:05 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/30 09:40:43 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,14 @@ char	*remove_enclosing_chars(char *input)
 	}
 	new_input[j] = '\0';
 	return (new_input);
+}
+
+int has_semicolon(char *input)
+{
+	if((strchr(input, ';')) || (strchr(input, '\\')))
+	{
+		printf("Error: invalid input\n");
+		return (1);
+	}	
+	return(0);
 }

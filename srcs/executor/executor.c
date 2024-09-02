@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 20:47:37 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/30 14:36:34 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 
         if (pid == 0)
         {
-            execve(current_cmd->str[0], current_cmd->str, convert_env_vars_to_array((*tools)->env_vars));
+            execve(current_cmd->str[0], current_cmd->str, NULL);
             perror("execve");
             exit(1);
         }

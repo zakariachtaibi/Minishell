@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 12:26:01 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/08/30 09:39:14 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,11 @@ t_builtin		check_builtins_type(char *str);
 void			check_and_set_builtin(t_simple_cmds *cmd);
 void			check_and_set_redirections(t_simple_cmds *current_cmd);
 int				check_cd_arguments(t_tools *tools, t_simple_cmds *cmd);
-void			validat_input(char *input);
+char			*validat_input(char *input);
 t_lexical		*validate_syntax(t_lexical *tokens);
 int				has_unclosed_quotes_or_parentheses(char *temp);
 int				has_invalid_redirections(t_lexical *tokens);
+int				has_semicolon(char *input);
 int				is_numeric(char *str);
 void			add_redirection(t_lexical **redirections, t_lexical		*redir_node);
 void 			add_new_env_var(t_tools *tools, char *key, char *value,
@@ -141,4 +142,5 @@ void			fill_envp_array(char **envp, t_env_var *env_vars, int count);
 char			**convert_env_vars_to_array(t_env_var *env_vars);
 void 			sort_env_vars(t_env_var *copy);	
 void			free_env_vars(t_env_var *copy);
+
 #endif

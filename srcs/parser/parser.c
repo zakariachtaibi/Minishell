@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/22 12:31:08 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/02 14:34:37 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ int	handle_redirections(t_tools **tools ,t_lexical **temp, t_simple_cmds **curre
 	return (flag);
 }
 
-void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
+void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools, int *i)
 {
 	int			word_count;
 	t_lexical	*word_temp;
-	int			i;
+	// int			i;
 
 	word_temp = *temp;
 	word_count = 0;
@@ -92,14 +92,14 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 		word_temp = word_temp->next;
 	}
 	current_cmd->str = malloc(sizeof(char *) * (word_count + 1));
-	i = 0;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
-		current_cmd->str[i] = expand_vars(tools, (*temp));
+		current_cmd->str[*i] = expand_vars(tools, (*temp));
 		*temp = (*temp)->next;
-		i++;
+		printf("------------%s\n", current_cmd->str[*i]);
+		(*i)++;
 	}
-	current_cmd->str[i] = NULL;
+	
 }
 
 t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
@@ -108,6 +108,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 	t_simple_cmds	*current_cmd;
 	t_lexical		*temp;
 	int flag = 0;
+	int i = 0;
 
 	cmds_head = NULL;
 	current_cmd = NULL;
@@ -117,18 +118,22 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 		// expand_vars(tools, temp);
 		process_command(&temp, &current_cmd, &cmds_head);
 		while (temp && !check_token(temp) && temp->token != TOKEN_PIPE)
-			handle_words(&temp, current_cmd, tools);
+			handle_words(&temp, current_cmd, tools, &i);
+		// printf("--------%s\n", current_cmd->str[1]);
 		while (temp && check_token(temp))
 		{
 			flag = handle_redirections(&tools ,&temp, &current_cmd, tokens);
 			if(flag == 1)
 			{
 				printf("$filename: ambiguous redirect\n");
-				tools->exit_status = 1;
+				tools->exit_status = 127;
 				return(NULL);
 			}
 			check_and_set_redirections(current_cmd);
 		}
+		printf("**********%s\n", temp->str);
+		while (temp && temp->token != TOKEN_PIPE)
+			handle_words(&temp, current_cmd, tools, &i);
 		check_and_set_builtin(current_cmd);
 	}
 	return(cmds_head);
