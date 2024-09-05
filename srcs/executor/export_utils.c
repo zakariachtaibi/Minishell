@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/31 22:34:20 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/03 11:26:10 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ void handle_equal(char *str, char **key, char **value)
     char *equal_sign = ft_strchr(str, '=');
 
     *key = ft_substr(str, 0, equal_sign - str);
-    *value=ft_strdup(" ");
-    *value = ft_strdup(equal_sign + 1);
+    if (*(equal_sign + 1) == '\0')
+        *value = ft_strdup(" ");
+    else
+        *value = ft_strdup(equal_sign + 1);
 }
 
 void process_export(t_tools *tools, char **str, int *i)
@@ -53,11 +55,11 @@ void process_export(t_tools *tools, char **str, int *i)
     else
     {
         key = ft_substr(str[*i], 0, ft_strlen(str[*i]));
-        value = ft_strdup("");
+        value = NULL;
     }
     while(key[in] != '\0')
     {
-        if(!(ft_isalpha(key[in])))
+        if(!(ft_isalpha(key[in])) || key[in] == 32)
         {
             printf("minishell : export: not a valid identifier\n");
             return ;

@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:42:32 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/30 22:25:00 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/03 10:58:45 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,24 @@ void print_env_vars(t_env_var *copy)
 
     while (current)
     {
-        if (!ft_strncmp(current->value, "", 1))
+        // if (current->value[0] == '\0')
+        //     printf("declare -x %s=\"\"\n", current->key);
+         if (current->value == NULL)
             printf("declare -x %s\n", current->key);
+        // else if (current->value[0] == '\0')  // Case when the value is an empty string `""` (e.g., export hello="")
+        //     printf("declare -x %s=\"\"\n", current->key);
         else
-            printf("declare -x %s=\"%s\"\n", current->key, current->value);
+        {
+            if (current->value[0] == '\0')
+                printf("declare -x %s\n", current->key);
+            else
+                printf("declare -x %s=\"%s\"\n", current->key, current->value);
+        } // General case where value is non-empty
+
         current = current->next;
     }
 }
+
 
 void free_env_vars(t_env_var *copy)
 {

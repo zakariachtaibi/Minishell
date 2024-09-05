@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/31 22:34:05 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/03 11:42:55 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ t_lexical	*check_node(char *str, int i)
 	if (!node->str)
 		exit(1);
 	node->i = i;
-	if (!ft_strncmp(str, "|", 2))
+	if (!strcmp(str, "|"))
 		node->token = TOKEN_PIPE;
-	else if (!ft_strncmp(str, "<", 2))
+	else if (!strcmp(str, "<"))
 		node->token = TOKEN_REDIRECT_IN;
-	else if (!ft_strncmp(str, "<<", 2))
+	else if (!strcmp(str, "<<"))
 		node->token = TOKEN_HEREDOC;
-	else if (!ft_strncmp(str, ">", 2))
+	else if (!strcmp(str, ">"))
 		node->token = TOKEN_REDIRECT_OUT;
-	else if (!ft_strncmp(str, ">>", 2))
+	else if (!strcmp(str, ">>"))
 		node->token = TOKEN_APPEND;
 	else
 		node->token = TOKEN_WORD;
@@ -47,22 +47,36 @@ t_lexical	*tokenize(char *input)
 	t_lexical	*node;
 	int			i;
 	int			j;
+	int			in_quotes;
 	char		token[1024];
+	char		quote_char;
 
-	head 	= NULL;
+	head = NULL;
 	current = NULL;
-	i		= 0;
-	j 		= 0;
+	i = 0;
+	j = 0;
+	in_quotes = 0;
+	quote_char = 0;
 	while (input[i])
 	{
 		while (input[i] == ' ')
 			i++;
 		j = 0;
-		while (input[i] && (input[i] != ' ' || (input[i] == ' ' && input[i - 1] == '\\')))
+		while (input[i] && (in_quotes || (input[i] != ' ' && input[i] != '\t')))
 		{
-			if (input[i] == '\\')
-				i++;
-			token[j++] = input[i++];
+			if (input[i] == '"' || input[i] == '\'')
+			{
+				if (!in_quotes)
+				{
+					in_quotes = 1;
+					quote_char = input[i];
+				}
+				else if (in_quotes && input[i] == quote_char)
+					in_quotes = 0;
+			}
+			else
+				token[j++] = input[i];
+			i++;
 		}
 		token[j] = '\0';
 		if (j > 0)
@@ -78,6 +92,7 @@ t_lexical	*tokenize(char *input)
 	}
 	return (head);
 }
+
 
 
 
