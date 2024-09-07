@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/03 13:33:32 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:46:59 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,21 +91,100 @@ void execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
         return;
     handle_command_not_found(current_cmd, tools);
 }
-
-void execute_commands(t_simple_cmds *cmds_head, t_tools **tools)
+void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *tokens)
 {
-    t_simple_cmds *current_cmd;
+    int             fd[2];
+    pid_t           pid;
+    int             in_fd;
+    int             status;
+    int             has_pipe;
+    t_lexical       *curr_token;
+    t_simple_cmds   *current_cmd;
 
-    current_cmd = cmds_head;
-    if (current_cmd->str == NULL)
-        return ;
-    while (current_cmd != NULL)
+    in_fd = 0;
+    has_pipe = 0;
+    curr_token = tokens;
+    while (curr_token)
     {
-        if (current_cmd->builtin != NULL) 
-            current_cmd->builtin(*tools, current_cmd);
-        else
-            execute_cmd(current_cmd, tools);
-        current_cmd = current_cmd->next;
+        if (curr_token->token == TOKEN_PIPE)
+        {
+            has_pipe = 1;
+            break;
+        }
+        curr_token = curr_token->next;
+    }
+    current_cmd = cmds_head;
+    if (has_pipe)
+    {
+        dup2((*tools)->std_out, 1);
+		dup2((*tools)->std_in, 0);
+        while (current_cmd)
+        {
+            if (current_cmd->next != NULL)
+            {
+                if (pipe(fd) == -1)
+                {
+                    perror("pipe");
+                    exit(EXIT_FAILURE);
+                }
+                pid = fork();
+                if (pid == 0)
+                {
+                    if (in_fd != 0)
+                        dup2(in_fd, STDIN_FILENO);
+                    dup2(fd[1], STDOUT_FILENO);
+                    close(fd[0]);
+                    close(fd[1]);
+                    execute_cmd(current_cmd, tools);
+                    exit(0);
+                }
+                else if (pid < 0)
+                {
+                    perror("fork");
+                    exit(EXIT_FAILURE);
+                }
+                close(fd[1]);
+                in_fd = fd[0];
+                waitpid(pid, &status, 0);
+                (*tools)->exit_status = WEXITSTATUS(status);
+                current_cmd = current_cmd->next;
+            }
+            else
+            {
+                pid = fork();
+                if (pid == 0)
+                {
+                    if (in_fd != 0)
+                        dup2(in_fd, STDIN_FILENO);
+                    execute_cmd(current_cmd, tools);
+                    exit(0);
+                }
+                else if (pid < 0)
+                {
+                    perror("fork");
+                    exit(EXIT_FAILURE);
+                }
+                waitpid(pid, &status, 0);
+                (*tools)->exit_status = WEXITSTATUS(status);
+                current_cmd = current_cmd->next;
+            }
+        }
+    }
+    else
+    {
+        while (current_cmd)
+        {
+            if (current_cmd->builtin != NULL)
+                current_cmd->builtin(*tools, current_cmd);
+            else
+                execute_cmd(current_cmd, tools);
+            current_cmd = current_cmd->next;
+        }
     }
 }
+
+
+
+
+
 

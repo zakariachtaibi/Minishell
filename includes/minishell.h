@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/03 23:17:35 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/06 12:25:38 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ typedef struct s_tools
 	char		*var_value;
 	char		*working_dir_path;
 	int			exit_status;
+	int			std_out;
+	int			std_in;
 }	t_tools;
 
 typedef struct s_simple_cmds
@@ -94,7 +96,7 @@ char			*get_env_value(t_env_var *env_vars, const char *key);
 char			*get_vars_value(char *str, t_tools *tools);
 t_simple_cmds	*init_cmd(void);
 char			**allocate_envp_array(int count);
-void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools);
+void 			execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *tokens);
 void 			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools);
 int				execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools);
 void			execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools);

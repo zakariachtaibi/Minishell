@@ -8,6 +8,3 @@ minishell not in ./
 export "HI =hi"
 execv
 export $var
-
-
-

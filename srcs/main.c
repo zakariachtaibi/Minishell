@@ -6,22 +6,38 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/03 23:17:32 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/06 12:00:38 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+t_tools	*init_tools(void)
+{
+	t_tools	*new_tool ;
+
+	new_tool = malloc(sizeof(t_tools));
+	new_tool->env_vars = NULL;
+	new_tool->var_start = 0;
+	new_tool->var_len = 0;
+	new_tool->var_name = NULL;
+	new_tool->var_value = NULL;
+	new_tool->working_dir_path = NULL;
+	new_tool->exit_status = 0;
+	new_tool->std_out = 0;
+	new_tool->std_in = 0;
+	return (new_tool);
+}
 int	main(int ac, char **av, char **envp)
 {
 	t_lexical		*tokens;
 	char			*input;
 	t_simple_cmds	*cmds;
 	t_tools			*tools;
-	int				std_out;
-	int				std_in;
-	std_out = dup(1);
-	std_in = dup(0);
+	
+	tools = init_tools();
+	tools->std_out = dup(1);
+	tools->std_in = dup(0);
 	(void)av;
 	if (ac != 1)
 		exit(1);
@@ -42,9 +58,9 @@ int	main(int ac, char **av, char **envp)
 		if (tokens == NULL)
 			continue ;
 		cmds = process_tokens(tokens, tools);
-		execute_commands(cmds, &tools);
-		dup2(std_out, 1);
-		dup2(std_in, 0);
+		execute_commands(cmds, &tools, tokens);
+		dup2(tools->std_out, 1);
+		dup2(tools->std_in, 0);
 		free(input);
 	}
 }
