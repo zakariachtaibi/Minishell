@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/03 11:26:10 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/06 12:46:25 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void process_export(t_tools *tools, char **str, int *i)
     {
         if(!(ft_isalpha(key[in])) || key[in] == 32)
         {
-            printf("minishell : export: not a valid identifier\n");
+            printf("minishell : export: not a valid idenllltifier\n");
             return ;
         }
         in++;

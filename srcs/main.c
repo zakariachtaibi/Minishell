@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/06 12:00:38 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:49:27 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,11 @@ int	main(int ac, char **av, char **envp)
 	tools->std_in = dup(0);
 	(void)av;
 	if (ac != 1)
+	{
+		printf("wrong number of args");
 		exit(1);
+	}
+		
 	tools = malloc(sizeof(t_tools));
 	get_env_vars(tools, envp);
 	while (1)
