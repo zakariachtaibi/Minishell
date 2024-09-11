@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/07 18:46:59 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/11 19:53:29 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,10 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
                     dup2(fd[1], STDOUT_FILENO);
                     close(fd[0]);
                     close(fd[1]);
-                    execute_cmd(current_cmd, tools);
+                    if (current_cmd->builtin != NULL)
+                        current_cmd->builtin(*tools, current_cmd);
+                    else
+                        execute_cmd(current_cmd, tools);
                     exit(0);
                 }
                 else if (pid < 0)
@@ -156,7 +159,10 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
                 {
                     if (in_fd != 0)
                         dup2(in_fd, STDIN_FILENO);
-                    execute_cmd(current_cmd, tools);
+                    if (current_cmd->builtin != NULL)
+                        current_cmd->builtin(*tools, current_cmd);
+                    else
+                         execute_cmd(current_cmd, tools);
                     exit(0);
                 }
                 else if (pid < 0)
