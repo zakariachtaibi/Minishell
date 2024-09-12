@@ -6,12 +6,24 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/06 12:48:23 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/12 13:45:35 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/minishell.h"
+
+int is_space(char *str)
+{
+    int i =0;
+    while (str[i]!= '\0')
+    {
+        if(str[i] == ' ')
+            return(1);
+        i++;
+    }
+    return(0);
+}
 
 void	process_command(t_lexical **temp, t_simple_cmds **current_cmd,
 							t_simple_cmds **cmds_head)
@@ -69,6 +81,7 @@ int handle_redirections(t_tools **tools, t_lexical **temp, t_simple_cmds **curre
     t_lexical *redir;
     t_lexical *filename;
 	char	*unescaped;
+    int flag = 0;
 
     if (check_token(*temp))
     {
@@ -81,7 +94,7 @@ int handle_redirections(t_tools **tools, t_lexical **temp, t_simple_cmds **curre
         if (*temp && (*temp)->token == TOKEN_WORD)
         {
             filename = copy_node(*temp);
-            filename->str = expand_vars((*tools), filename);
+            filename->str = expand_vars((*tools), filename, &flag);
             unescaped = unescape_spaces(filename->str);
             if (!unescaped)
             {
@@ -98,7 +111,6 @@ int handle_redirections(t_tools **tools, t_lexical **temp, t_simple_cmds **curre
     return 0;  // No ambiguity detected
 }
 
-
 int ft_strlen_array(char **array)
 {
     int i = 0;
@@ -106,6 +118,7 @@ int ft_strlen_array(char **array)
         i++;
     return i;
 }
+
 void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 {
 	int			word_count;
@@ -113,6 +126,10 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 	int			i;
 	int			count_str;
 	char		**new_str;
+    char    *expanded;
+    int flag = 0;
+    char **tmp;
+    int in = 0;
 
 	word_temp = *temp;
 	word_count = 0;
@@ -142,9 +159,25 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 	i = count_str;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
-		current_cmd->str[i] = expand_vars(tools, (*temp));
+        expanded = expand_vars(tools, (*temp), &flag);
+        if (flag == 1 && (is_space(expanded) == 1))
+        {   
+            in = 0;
+            tmp = ft_split(expanded, ' ');
+            while(tmp[in])
+            {
+                current_cmd->str[i] = tmp[in];
+                in++;
+                i++;
+            }
+        }
+        else
+        {
+            current_cmd->str[i] = expanded;
+            i++;
+        }
 		*temp = (*temp)->next;
-        i++;
+        
 	}
 	current_cmd->str[i]= NULL;
 }

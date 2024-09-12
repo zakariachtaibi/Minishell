@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/03 11:42:55 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/12 10:22:41 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ t_lexical	*tokenize(char *input)
 				}
 				else if (in_quotes && input[i] == quote_char)
 					in_quotes = 0;
+				token[j++] = input[i];
 			}
 			else
 				token[j++] = input[i];

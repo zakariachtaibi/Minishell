@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/09/05 16:00:27 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:21:02 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char *expand_variable(t_tools *tools, const char *current_word, size_t *j)
     size_t var_len = *j - var_start;
     char *var_name = ft_strndup(&current_word[var_start], var_len);
     char *var_value = get_vars_value(var_name, tools);
+   
     free(var_name);
     if(!var_value)
         return(NULL);
@@ -84,7 +85,7 @@ char *expand_plain_text(const char *current_word, size_t *j)
     return ft_strdup(temp_str);
 }
 
-char *expand_vars(t_tools *tools, t_lexical *temp)
+char *expand_vars(t_tools *tools, t_lexical *temp, int *flag)
 {
     size_t j = 0;
     char *expanded_word = ft_strdup("");
@@ -95,16 +96,26 @@ char *expand_vars(t_tools *tools, t_lexical *temp)
     {
         char *new_expansion = NULL;
         if (current_word[j] == '\'')
-            new_expansion = expand_single_quote(current_word, &j);
+           { new_expansion = expand_single_quote(current_word, &j);
+            *flag = 0;}
         else if (current_word[j] == '"')
         {
             j++;
             new_expansion = expand_double_quote(tools, current_word, &j);
+            *flag = 0;
         }
         else if (current_word[j] == '$')
-            new_expansion = expand_variable(tools, current_word, &j);
+        {
+        new_expansion = expand_variable(tools, current_word, &j);
+         *flag = 1;
+        }
+            
         else
+        {
             new_expansion = expand_plain_text(current_word, &j);
+            *flag = 0;
+        }
+            
 
         char *temp_word = ft_strjoin(expanded_word, new_expansion);
         // free(expanded_word);
