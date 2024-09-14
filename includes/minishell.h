@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/12 11:14:48 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/14 14:48:10 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <signal.h>
 
 typedef enum e_token
 {
@@ -144,5 +145,6 @@ void			fill_envp_array(char **envp, t_env_var *env_vars, int count);
 char			**convert_env_vars_to_array(t_env_var *env_vars);
 void 			sort_env_vars(t_env_var *copy);	
 void			free_env_vars(t_env_var *copy);
+void			setup_signal_handling(void);
 
 #endif

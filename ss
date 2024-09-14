@@ -1,0 +1,10 @@
+dsfsd
+in
+includes
+libft
+Makefile
+minishell
+notes
+out
+srcs
+ss

@@ -40,6 +40,7 @@ SRCS = srcs/main.c \
 		srcs/executor/executor_utils.c\
 		srcs/expander/expander_utils.c\
 		srcs/parser/redirections_checker.c\
+		srcs/signals/signals.c\
 
 
 

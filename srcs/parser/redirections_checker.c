@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/14 12:20:53 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/14 12:54:07 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 
 void	redir_in(t_simple_cmds **current_cmd, t_lexical **redir)
 {
-	int	std_in;
-	std_in = 0;
-	*redir = (*redir)->next;
+	*redir =(*redir)->next;
+	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
+		close((*current_cmd)->fd_in);
 	(*current_cmd)->fd_in = open((*redir)->str, O_RDONLY);
-	dup2((*current_cmd)->fd_in, std_in);
-	close((*current_cmd)->fd_in);
 	if ((*current_cmd)->fd_in == -1)
 		perror("minishell");
 }
@@ -31,7 +29,6 @@ void	redir_out(t_simple_cmds **current_cmd, t_lexical **redir)
 	if ((*current_cmd)->fd_out != 1 && (*current_cmd)->fd_out != -1)
 		close((*current_cmd)->fd_out);
 	(*current_cmd)->fd_out = open((*redir)->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	// printf("(*current_cmd)->fd_out : %d\n", (*current_cmd)->fd_out);
 	if ((*current_cmd)->fd_out == -1)
 		perror("minishell");
 }
@@ -70,17 +67,16 @@ void	redir_heredoc(t_simple_cmds **current_cmd)
 	
 }
 
-void	redir_append(t_simple_cmds **current_cmd, t_lexical **redir)
+void redir_append(t_simple_cmds **current_cmd, t_lexical **redir)
 {
-	int	std_out;
-	std_out = 1;
-	*redir = (*redir)->next;
-	(*current_cmd)->fd_out = open((*redir)->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	dup2((*current_cmd)->fd_out, std_out);
-	close((*current_cmd)->fd_out);
-	if ((*current_cmd)->fd_out == -1)
-		perror("minishell");
+    *redir = (*redir)->next;
+    if ((*current_cmd)->fd_out != 1 && (*current_cmd)->fd_out != -1)
+        close((*current_cmd)->fd_out);
+    (*current_cmd)->fd_out = open((*redir)->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if ((*current_cmd)->fd_out == -1)
+        perror("minishell");
 }
+
 
 void	check_and_set_redirections(t_simple_cmds *current_cmd)
 {
