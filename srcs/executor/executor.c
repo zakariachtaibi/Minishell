@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/11 19:53:29 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/14 11:10:31 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
     current_cmd = cmds_head;
     if (has_pipe)
     {
-        dup2((*tools)->std_out, 1);
-		dup2((*tools)->std_in, 0);
+        // dup2((*tools)->std_out, 1);
+		// dup2((*tools)->std_in, 0);
         while (current_cmd)
         {
             if (current_cmd->next != NULL)
