@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/14 11:10:31 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/14 12:40:13 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,11 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
 {
     int             fd[2];
     pid_t           pid;
-    int             in_fd;
     int             status;
     int             has_pipe;
     t_lexical       *curr_token;
     t_simple_cmds   *current_cmd;
-
-    in_fd = 0;
+    
     has_pipe = 0;
     curr_token = tokens;
     while (curr_token)
@@ -116,70 +114,66 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
     current_cmd = cmds_head;
     if (has_pipe)
     {
-        // dup2((*tools)->std_out, 1);
-		// dup2((*tools)->std_in, 0);
         while (current_cmd)
         {
-            if (current_cmd->next != NULL)
+            if (current_cmd->next != NULL) // There is a next command, create a pipe
             {
                 if (pipe(fd) == -1)
                 {
                     perror("pipe");
                     exit(EXIT_FAILURE);
                 }
-                pid = fork();
-                if (pid == 0)
-                {
-                    if (in_fd != 0)
-                        dup2(in_fd, STDIN_FILENO);
-                    dup2(fd[1], STDOUT_FILENO);
-                    close(fd[0]);
-                    close(fd[1]);
-                    if (current_cmd->builtin != NULL)
-                        current_cmd->builtin(*tools, current_cmd);
-                    else
-                        execute_cmd(current_cmd, tools);
-                    exit(0);
-                }
-                else if (pid < 0)
-                {
-                    perror("fork");
-                    exit(EXIT_FAILURE);
-                }
-                close(fd[1]);
-                in_fd = fd[0];
-                waitpid(pid, &status, 0);
-                (*tools)->exit_status = WEXITSTATUS(status);
-                current_cmd = current_cmd->next;
             }
-            else
+            pid = fork();
+            if (pid == 0) // Child process
             {
-                pid = fork();
-                if (pid == 0)
+                if (current_cmd->fd_in != STDIN_FILENO) // Redirect input
                 {
-                    if (in_fd != 0)
-                        dup2(in_fd, STDIN_FILENO);
-                    if (current_cmd->builtin != NULL)
-                        current_cmd->builtin(*tools, current_cmd);
-                    else
-                         execute_cmd(current_cmd, tools);
-                    exit(0);
+                    dup2(current_cmd->fd_in, STDIN_FILENO);
+                    close(current_cmd->fd_in);
                 }
-                else if (pid < 0)
+                if (current_cmd->next != NULL) // If there is a next command, redirect output to the pipe
                 {
-                    perror("fork");
-                    exit(EXIT_FAILURE);
+                    dup2(fd[1], STDOUT_FILENO);
+                    close(fd[1]);
                 }
-                waitpid(pid, &status, 0);
-                (*tools)->exit_status = WEXITSTATUS(status);
-                current_cmd = current_cmd->next;
+                if (current_cmd->fd_out != STDOUT_FILENO) // Redirect output
+                {
+                    dup2(current_cmd->fd_out, STDOUT_FILENO);
+                    close(current_cmd->fd_out);
+                }
+                close(fd[0]); // Close the unused reading end of the pipe in the child process
+                if (current_cmd->builtin != NULL)
+                    current_cmd->builtin(*tools, current_cmd);
+                else
+                    execute_cmd(current_cmd, tools);
+                exit(0); // Ensure the child process exits after executing
             }
+            else if (pid < 0)
+            {
+                perror("fork");
+                exit(EXIT_FAILURE);
+            }
+            // Parent process
+            waitpid(pid, &status, 0);
+            (*tools)->exit_status = WEXITSTATUS(status);
+            close(fd[1]); // Close the writing end of the pipe in the parent process
+            if (current_cmd->next != NULL)
+            {
+                // Set the next command's input to the reading end of the current pipe
+                current_cmd->next->fd_in = fd[0];
+            }
+            current_cmd = current_cmd->next;
         }
     }
     else
     {
         while (current_cmd)
         {
+            if (current_cmd->fd_in != 0)
+                dup2(current_cmd->fd_in, STDIN_FILENO);
+            if (current_cmd->fd_out != 1)
+                dup2(current_cmd->fd_out, STDOUT_FILENO);
             if (current_cmd->builtin != NULL)
                 current_cmd->builtin(*tools, current_cmd);
             else
@@ -188,9 +182,3 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         }
     }
 }
-
-
-
-
-
-

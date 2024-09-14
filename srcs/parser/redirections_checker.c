@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/14 10:57:59 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/14 12:20:53 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,11 @@ void	redir_in(t_simple_cmds **current_cmd, t_lexical **redir)
 
 void	redir_out(t_simple_cmds **current_cmd, t_lexical **redir)
 {
-	int	std_out;
-	std_out = 1;
 	*redir =(*redir)->next;
+	if ((*current_cmd)->fd_out != 1 && (*current_cmd)->fd_out != -1)
+		close((*current_cmd)->fd_out);
 	(*current_cmd)->fd_out = open((*redir)->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	dup2((*current_cmd)->fd_out, std_out);
-	close((*current_cmd)->fd_out);
+	// printf("(*current_cmd)->fd_out : %d\n", (*current_cmd)->fd_out);
 	if ((*current_cmd)->fd_out == -1)
 		perror("minishell");
 }

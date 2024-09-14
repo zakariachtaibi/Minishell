@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/07/24 21:47:45 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/14 11:46:49 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_simple_cmds	*init_cmd(void)
 	new_cmd->num_redirections = 0;
 	new_cmd->hd_file_name = NULL;
 	new_cmd->redirections = NULL;
+	new_cmd->fd_in = 0;
+	new_cmd->fd_out = 1;
 	return (new_cmd);
 }
 
