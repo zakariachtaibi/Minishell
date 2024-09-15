@@ -1,1 +1,8 @@
-cat < Makefile
+ls > $eeee (ambiguous redirect)
+
+ls > "" (no such)
+
+ls | << ziko (heredoc must be opened, not display syntax error, he works correctly when it's just one cmd like (<< ziko)) , but with a pipe before no
+
+heredoc , should not expand the filename in this case
+        example : cat << $USER, test it in bash to understand

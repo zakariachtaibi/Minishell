@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/14 15:42:25 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/15 22:26:31 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int ac, char **av, char **envp)
 	tools->std_out = dup(1);
 	tools->std_in = dup(0);
 	(void)av;
-	// setup_signal_handling();
+	// setup_signal();
 	if (ac != 1)
 	{
 		printf("wrong number of args");

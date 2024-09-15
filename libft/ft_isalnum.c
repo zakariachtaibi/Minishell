@@ -12,7 +12,14 @@
 
 #include "libft.h"
 
+int	ft_isdigit_nmbr(int c)
+{
+	if ((c >= '0' && c <= '9'))
+		return (1);
+	return (0);
+}
+
 int	ft_isalnum(int c)
 {
-	return (ft_isalpha(c) || ft_isdigit(c));
+	return (ft_isalpha(c) || ft_isdigit_nmbr(c));
 }

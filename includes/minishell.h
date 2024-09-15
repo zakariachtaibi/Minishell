@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/14 14:48:10 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/15 22:26:43 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,6 @@ void			fill_envp_array(char **envp, t_env_var *env_vars, int count);
 char			**convert_env_vars_to_array(t_env_var *env_vars);
 void 			sort_env_vars(t_env_var *copy);	
 void			free_env_vars(t_env_var *copy);
-void			setup_signal_handling(void);
+void			setup_signal(void);
 
 #endif

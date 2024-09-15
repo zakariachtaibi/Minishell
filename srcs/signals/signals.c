@@ -7,7 +7,7 @@ void handle_sigint(int sig)
     write(1, "\n", 1);
     write(1, "minishell> ", 11);
 }
-void setup_signal_handling(void)
+void setup_signal(void)
 {
     struct sigaction sa;
 

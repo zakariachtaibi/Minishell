@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/14 18:42:03 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/15 15:03:32 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
                 exit(current_cmd->builtin(*tools, current_cmd));
             else
                 execute_cmd(current_cmd, tools);
-            exit(1);  // Should not reach here
+            exit(1);
         }
         else if (pid < 0)
         {
@@ -206,7 +206,6 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
                     (*tools)->exit_status = WTERMSIG(status) + 128;
             }
         }
-
         current_cmd = current_cmd->next;
     }
     while (wait(NULL) > 0);

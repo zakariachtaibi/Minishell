@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:55:58 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/13 14:51:35 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/15 22:24:53 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	get_env_vars(t_tools *tools, char **envp)
 
 char	*get_vars_value(char *str, t_tools *tools)
 {
-	// char		*value;
 	t_env_var	*current;
 	
 	current = tools->env_vars;
