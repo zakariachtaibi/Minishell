@@ -1,0 +1,12 @@
+total 136
+drwxr-xr-x 7 zchtaibi 2019  4096 Sep 16 16:19 .
+drwxr-xr-x 6 zchtaibi 2019  4096 Sep  3 12:44 ..
+drwxr-xr-x 8 zchtaibi 2019  4096 Sep 15 22:33 .git
+drwxr-xr-x 2 zchtaibi 2019  4096 Sep 15 22:30 includes
+drwxr-xr-x 2 zchtaibi 2019  4096 Sep 15 22:36 libft
+-rw-r--r-- 1 zchtaibi 2019  1369 Sep 14 14:48 Makefile
+-rwxr-xr-x 1 zchtaibi 2019 95240 Sep 16 16:18 minishell
+-rw-r--r-- 1 zchtaibi 2019   353 Sep 16 13:42 notes
+drwxr-xr-x 7 zchtaibi 2019  4096 Sep 16 16:18 srcs
+drwxr-xr-x 2 zchtaibi 2019  4096 Aug 29 22:48 .vscode
+-rw-r--r-- 1 zchtaibi 2019     0 Sep 16  2024 wiko
