@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/03 22:23:49 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/16 17:42:31 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,25 @@ int	has_invalid_redirections(t_lexical *tokens)
 	return (0);
 }
 
-t_lexical	*validate_syntax(t_lexical *tokens)
+t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 {
 	if (has_invalid_redirections(tokens))
 	{
 		if (has_invalid_redirections(tokens) == 10)
+		{
 			printf(" syntax error near unexpected token '%s'\n", (tokens)->str);
+			tools->exit_status = 2;
+		}
 		else if ((tokens)->next == NULL)
+		{
 			printf(" syntax error near unexpected token 'newline' \n");
+			tools->exit_status = 2;
+		}
 		else
+		{
 			printf(" syntax error near unexpected token '%s'\n", (tokens)->next->str);
+			tools->exit_status = 2;
+		}
 		return (NULL);
 	}
 	return (tokens);

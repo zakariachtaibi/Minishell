@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/15 15:03:32 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:08:21 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
                 exit(current_cmd->builtin(*tools, current_cmd));
             else
                 execute_cmd(current_cmd, tools);
-            exit(1);
+            exit((*tools)->exit_status);
         }
         else if (pid < 0)
         {
