@@ -13,10 +13,6 @@ export $var=test (i found that export created declare -x ="test") -> bash: expor
 
 export "" test=a -> (bash: export: `': not a valid identifier) and exit-status must be 1, not 0
 
-export "" test=a and i execute env -> env segv
-
-export "" -> i found that export has created this variable
-
 echo ~ -> must print $HOME
 
 . -> exit-status must be 2, not 1

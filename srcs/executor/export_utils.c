@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/14 18:30:22 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:48:03 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,44 @@ void handle_equal(char *str, char **key, char **value)
 
 void process_export(t_tools *tools, char **str, int *i)
 {
-    char *key;
-    char *value;
-    char *plus_equal_sign = ft_strnstr(str[*i], "+=", ft_strlen(str[*i]));
-    char *equal_sign = ft_strchr(str[*i], '=');
-    int in = 0;
+    char    *key;
+    char    *value;
+    char    *plus_equal_sign;
+    char    *equal_sign;
+    int     in;
 
+    plus_equal_sign = ft_strnstr(str[*i], "+=", ft_strlen(str[*i]));
+    equal_sign = ft_strchr(str[*i], '=');
+    in = 0;
+    if (str[*i][0] == '\0')
+        return;
     if (plus_equal_sign)
         handle_plus_equal(tools, str[*i], &key, &value);
     else if (equal_sign)
         handle_equal(str[*i], &key, &value);
     else
     {
-        key = ft_substr(str[*i], 0, ft_strlen(str[*i]));
+        key = ft_strdup(str[*i]);
         value = NULL;
     }
-    while(key[in] != '\0')
+    while (key[in] != '\0')
     {
-        if(!(ft_isalpha(key[in])) || key[in] == 32)
+        if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in]))) || key[in] == 32)
         {
-            printf("minishell : export: not a valid idenllltifier\n");
-            return ;
+            printf("minishell: export: `%s': not a valid identifier\n", str[*i]);
+            free(key);
+            free(value);
+            return;
         }
         in++;
     }
-    handle_env_var(tools, key, value);
+    if (key[0] != '\0')
+        handle_env_var(tools, key, value);
+    else
+    {
+        free(key);
+        free(value);
+    }
 }
 
 void print_sorted_env(t_tools *tools)
