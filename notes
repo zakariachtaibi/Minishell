@@ -1,8 +1,14 @@
-ls > $eeee (ambiguous redirect)
+ls > $eeee (ambiguous redirect) //fixed//
+expander of $var with quotes //fixed//
 
-ls > "" (no such)
+ls > "" (no such) //fixed//
 
-ls | << ziko (heredoc must be opened, not display syntax error, he works correctly when it's just one cmd like (<< ziko)) , but with a pipe before no
+ls | << ziko (heredoc must be opened, not display syntax error, he works correctly when it's just one cmd like (<< ziko)) , 
+but with a pipe before no // fixed//
 
 heredoc , should not expand the filename in this case
         example : cat << $USER, test it in bash to understand
+
+$HOME 
+//error messages that should be changed 
+ls: : No such file or directory should be : ls: pp: No such file or directory input :export hh="ls pp"

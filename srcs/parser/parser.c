@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/12 13:45:35 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/16 13:07:45 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ char *unescape_spaces(char *str)
         return (NULL);
     while (str[i])
     {
-        if (str[i] == '\\' && str[i + 1] == ' ')
-            i++;
+        if (str[i] == ' ')
+            return(NULL);
         result[j++] = str[i++];
     }
     result[j] = '\0';
@@ -96,10 +96,10 @@ int handle_redirections(t_tools **tools, t_lexical **temp, t_simple_cmds **curre
             filename = copy_node(*temp);
             filename->str = expand_vars((*tools), filename, &flag);
             unescaped = unescape_spaces(filename->str);
-            if (!unescaped)
+            if (!unescaped && flag == 1)
             {
-                fprintf(stderr, "Memory allocation error\n");
-                exit(1);
+                // printf("%s : ambiguous redirect\n",(*temp)->str );
+                return(1);
             }
             free(filename->str);
             filename->str = unescaped;
@@ -203,11 +203,17 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
             flag = handle_redirections(&tools, &temp, &current_cmd, tokens);
             if (flag == 1)
             {
-                printf("$filename: ambiguous redirect\n");
+                 printf("%s : ambiguous redirect\n",(temp)->str );
                 tools->exit_status = 1;
                 return NULL;
             }
             check_and_set_redirections(current_cmd);
+            if ((current_cmd)->fd_out == -1 || (current_cmd)->fd_in == -1)
+            {
+	            perror("minishell");
+                tools->exit_status = 1;
+                return NULL;
+            }
         }
         while (temp && !check_token(temp) && temp->token != TOKEN_PIPE)
             handle_words(&temp, current_cmd, tools);
