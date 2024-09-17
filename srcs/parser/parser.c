@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/16 13:07:45 by mac              ###   ########.fr       */
+/*   Updated: 2024/09/17 11:07:31 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,18 @@ void	process_command(t_lexical **temp, t_simple_cmds **current_cmd,
 	}
 }
 
-int	check_token(t_lexical *temp)
+int	check_token(t_lexical *temp, int *heredoc_flag)
 {
+    
 	if ((temp)->token == TOKEN_REDIRECT_IN
 		|| (temp)->token == TOKEN_REDIRECT_OUT
 		|| (temp)->token == TOKEN_HEREDOC
 		|| (temp)->token == TOKEN_APPEND)
-		return (1);
+        {
+            if ((temp)->token == TOKEN_HEREDOC)
+                *heredoc_flag = 1;
+            return (1);      
+        }
 	else
 		return (0);
 }
@@ -82,8 +87,10 @@ int handle_redirections(t_tools **tools, t_lexical **temp, t_simple_cmds **curre
     t_lexical *filename;
 	char	*unescaped;
     int flag = 0;
+    int heredoc_flag = 0;
+    // int j = 0 ;
 
-    if (check_token(*temp))
+    if (check_token(*temp, &heredoc_flag))
     {
         redir = copy_node(*temp);
         add_redirection((&(*current_cmd)->redirections), redir);
@@ -94,7 +101,7 @@ int handle_redirections(t_tools **tools, t_lexical **temp, t_simple_cmds **curre
         if (*temp && (*temp)->token == TOKEN_WORD)
         {
             filename = copy_node(*temp);
-            filename->str = expand_vars((*tools), filename, &flag);
+            filename->str = expand_vars((*tools), filename, &flag, heredoc_flag);
             unescaped = unescape_spaces(filename->str);
             if (!unescaped && flag == 1)
             {
@@ -130,6 +137,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
     int flag = 0;
     char **tmp;
     int in = 0;
+    int heredoc_flag = 0;
 
 	word_temp = *temp;
 	word_count = 0;
@@ -159,7 +167,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 	i = count_str;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
-        expanded = expand_vars(tools, (*temp), &flag);
+        expanded = expand_vars(tools, (*temp), &flag, heredoc_flag);
         if (flag == 1 && (is_space(expanded) == 1))
         {   
             in = 0;
@@ -189,6 +197,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
     t_simple_cmds	*current_cmd;
     t_lexical		*temp;
     int				flag = 0;
+    int             h_flag = 0;
 
     cmds_head = NULL;
     current_cmd = NULL;
@@ -196,9 +205,9 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
     while (temp)
     {
         process_command(&temp, &current_cmd, &cmds_head);
-        while (temp && !check_token(temp) && temp->token != TOKEN_PIPE)
+        while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
             handle_words(&temp, current_cmd, tools);
-        while (temp && check_token(temp))
+        while (temp && check_token(temp, &h_flag))
         {
             flag = handle_redirections(&tools, &temp, &current_cmd, tokens);
             if (flag == 1)
@@ -215,7 +224,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
                 return NULL;
             }
         }
-        while (temp && !check_token(temp) && temp->token != TOKEN_PIPE)
+        while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
             handle_words(&temp, current_cmd, tools);
         check_and_set_builtin(current_cmd);
     }

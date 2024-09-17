@@ -7,7 +7,7 @@ ls | << ziko (heredoc must be opened, not display syntax error, he works correct
 but with a pipe before no // fixed//
 
 heredoc , should not expand the filename in this case
-        example : cat << $USER, test it in bash to understand
+        example : cat << $USER, test it in bash to understand ///fixed///
 
 $HOME 
 //error messages that should be changed 

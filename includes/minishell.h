@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/15 22:26:43 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/17 11:04:34 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void			print_env_vars(t_env_var *copy);
 void			handle_env_var(t_tools *tools, char *key, char *value);
 void			handle_command_not_found(t_simple_cmds *current_cmd, t_tools **tools);
 t_lexical		*tokenize(char *input);
-char			*expand_vars(t_tools *tools, t_lexical *temp, int *flag);	
+char			*expand_vars(t_tools *tools, t_lexical *temp, int *flag, int heredoc_flag);	
 char			*ft_strndup(const char *src, size_t n) ;
 void			search_for_argn(t_simple_cmds *cmd, int *flag, int *j);
 int 			change_directory(t_tools *tools, t_simple_cmds *cmd);
