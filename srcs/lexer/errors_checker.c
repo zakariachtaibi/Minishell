@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:36:42 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/02 15:52:54 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/16 18:33:07 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	count_quotes_and_parentheses(char c, int *quote, int *dquote,
 		(*parentheses)--;
 }
 
-int	has_unclosed_quotes_or_parentheses(char *temp)
+int	has_unclosed_quotes_or_parentheses(char *temp, t_tools *tools)
 {
 	int	i;
 	int	quote;
@@ -44,6 +44,7 @@ int	has_unclosed_quotes_or_parentheses(char *temp)
 	if ((quote % 2 != 0) || (dquote % 2 != 0) || (parentheses != 0))
 	{
 		printf("Error: Unclosed quotes or parentheses\n");
+		tools->exit_status = 2;
 		return (1);
 	}
 	return (0);
@@ -91,11 +92,12 @@ char	*remove_enclosing_chars(char *input)
 	return (new_input);
 }
 
-int has_semicolon(char *input)
+int has_semicolon(char *input, t_tools *tools)
 {
 	if((strchr(input, ';')) || (strchr(input, '\\')))
 	{
 		printf("Error: invalid input\n");
+		tools->exit_status = 2;
 		return (1);
 	}	
 	return(0);

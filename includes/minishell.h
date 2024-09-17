@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/17 11:04:34 by mac              ###   ########.fr       */
+/*   Updated: 2024/09/17 11:48:03 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,11 @@ t_builtin		check_builtins_type(char *str);
 void			check_and_set_builtin(t_simple_cmds *cmd);
 void			check_and_set_redirections(t_simple_cmds *current_cmd);
 int				check_cd_arguments(t_tools *tools, t_simple_cmds *cmd);
-char			*validat_input(char *input);
-t_lexical		*validate_syntax(t_lexical *tokens);
-int				has_unclosed_quotes_or_parentheses(char *temp);
+char			*validat_input(char *input, t_tools *tools);
+t_lexical		*validate_syntax(t_lexical *tokens, t_tools *tools);
+int				has_unclosed_quotes_or_parentheses(char *temp, t_tools *tools);
 int				has_invalid_redirections(t_lexical *tokens);
-int				has_semicolon(char *input);
+int				has_semicolon(char *input, t_tools *tools);
 int				is_numeric(char *str);
 void			add_redirection(t_lexical **redirections, t_lexical		*redir_node);
 void 			add_new_env_var(t_tools *tools, char *key, char *value,

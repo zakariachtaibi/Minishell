@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/15 22:26:31 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/16 17:45:08 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ int	main(int ac, char **av, char **envp)
 			exit(1);
 		if(strcmp(input,"") && strcmp(input, "/n"))
 			add_history(input);
-		input = validat_input(input);
+		input = validat_input(input , tools);
 		if (input == NULL) 
 			continue ;
 		tokens = tokenize(input);
-		tokens = validate_syntax(tokens);
+		tokens = validate_syntax(tokens, tools);
 		if (tokens == NULL)
 			continue ;
 		cmds = process_tokens(tokens, tools);

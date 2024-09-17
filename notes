@@ -12,3 +12,6 @@ heredoc , should not expand the filename in this case
 $HOME 
 //error messages that should be changed 
 ls: : No such file or directory should be : ls: pp: No such file or directory input :export hh="ls pp"
+
+minishell> ls > "fila name"
+minishell: Bad address

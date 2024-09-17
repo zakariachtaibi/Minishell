@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/02 15:53:22 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/16 16:23:11 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int change_directory(t_tools *tools, t_simple_cmds *cmd)
     else if (chdir(cmd->str[1]) != 0)
     {
         printf("cd: %s: No such file or directory\n", cmd->str[1]);
-        printf("%s",cmd->str[2]);
         tools->exit_status = 1;
         return (1);
     }
