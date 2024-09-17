@@ -6,12 +6,18 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/16 18:08:21 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:47:02 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+void sig_handler(int test)
+{
+    (void)test;
+    printf("Quit (core dumped)\n");
+    return ;
+}
 int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 {
     if (access(current_cmd->str[0], X_OK) == 0)
@@ -147,6 +153,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         pid = fork();
         if (pid == 0)
         {
+            signal(SIGQUIT ,sig_handler);
             if (prev_pipe_read != STDIN_FILENO)
             {
                 dup2(prev_pipe_read, STDIN_FILENO);

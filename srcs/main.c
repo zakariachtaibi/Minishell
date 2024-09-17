@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/16 17:45:08 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:30:18 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int ac, char **av, char **envp)
 	tools->std_out = dup(1);
 	tools->std_in = dup(0);
 	(void)av;
-	// setup_signal();
+	setup_signal();
 	if (ac != 1)
 	{
 		printf("wrong number of args");
@@ -51,7 +51,10 @@ int	main(int ac, char **av, char **envp)
 	{
 		input = readline("minishell> ");
 		if (!input)
+		{
+			printf("exit\n");
 			exit(1);
+		}
 		if(strcmp(input,"") && strcmp(input, "/n"))
 			add_history(input);
 		input = validat_input(input , tools);
