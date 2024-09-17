@@ -15,3 +15,30 @@ ls: : No such file or directory should be : ls: pp: No such file or directory in
 
 minishell> ls > "fila name"
 minishell: Bad address
+
+
+export var=a ; export $var=test ; echo $var $a (sometimes works , sometimes not)
+
+export $var=test (i found that export created declare -x ="test") -> bash: export: `=test': not a valid identifier
+
+export "" test=a -> (bash: export: `': not a valid identifier) and exit-status must be 1, not 0
+
+echo ~ -> must print $HOME
+
+. -> exit-status must be 2, not 1
+
+.. -> exit-status must be 127, not 1
+
+"" -> command not found, and exit-status is 127 not 1
+
+echo "\s", echo "\\s" -> should print \s
+
+echo "12\"" -> should print 12"
+
+echo "bip | bip ; coyotte > < \" " -> not like bash
+
+echo bonjour > $test -> ambigue redire , exit-status must be 1 
+
+echo \>
+
+echo $USER$var\$USER$USER\$USERtest$USER -> not like bash
