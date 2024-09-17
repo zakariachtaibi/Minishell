@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/16 17:42:31 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:03:21 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,9 @@ int	has_invalid_redirections(t_lexical *tokens)
 {
 	while ((tokens))
 	{
-		if ((tokens)->token != 5)
+		
+		if ((tokens)->token != 5 && (tokens)->token != 0 )
 		{
-			if ((tokens)->token == 0)
-			{
-				if ((tokens)->prev == NULL)
-					return (10);
-			}
 			if (((tokens)->next == NULL ) || (((tokens)->next)->token != 5))
 				return (1);
 		}

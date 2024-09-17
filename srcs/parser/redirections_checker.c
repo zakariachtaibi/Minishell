@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_checker.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/15 22:20:13 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:34:13 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	redir_in(t_simple_cmds **current_cmd, t_lexical **redir)
 	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
 		close((*current_cmd)->fd_in);
 	(*current_cmd)->fd_in = open((*redir)->str, O_RDONLY);
-	if ((*current_cmd)->fd_in == -1)
-		perror("minishell");
 }
 
 void	redir_out(t_simple_cmds **current_cmd, t_lexical **redir)
@@ -28,11 +26,6 @@ void	redir_out(t_simple_cmds **current_cmd, t_lexical **redir)
 	if ((*current_cmd)->fd_out != 1 && (*current_cmd)->fd_out != -1)
 		close((*current_cmd)->fd_out);
 	(*current_cmd)->fd_out = open((*redir)->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if ((*current_cmd)->fd_out == -1)
-    {
-	    perror("minishell");
-        return ;
-    }
 }
 
 void redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir)
@@ -43,6 +36,7 @@ void redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir)
     *redir = (*redir)->next;
     
     (*current_cmd)->hd_file_name = ft_strdup((*redir)->str);
+    // printf("heeeeeeere %s\n",(*current_cmd)->hd_file_name  );
     if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
         close((*current_cmd)->fd_in);
     fd = open((*current_cmd)->hd_file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);

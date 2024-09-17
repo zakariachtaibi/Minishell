@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/09/15 21:49:16 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/17 11:19:19 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char *expand_single_quote(const char *current_word, size_t *j)
     return expanded_word;
 }
 
-char *expand_double_quote(t_tools *tools, const char *current_word, size_t *j)
+char *expand_double_quote(t_tools *tools, const char *current_word, size_t *j, int heredoc_flag)
 {
     char    *expanded_word;
     char    *pid_str;
@@ -43,7 +43,7 @@ char *expand_double_quote(t_tools *tools, const char *current_word, size_t *j)
     expanded_word = ft_strdup("");
     while (current_word[*j] && current_word[*j] != '"')
     {
-        if (current_word[*j] == '$')
+        if (current_word[*j] == '$' && heredoc_flag == 0)
         {
             (*j)++;
             if (current_word[*j] == '$')
@@ -136,7 +136,7 @@ char *expand_plain_text(const char *current_word, size_t *j)
     return ft_strdup(temp_str);
 }
 
-char *expand_vars(t_tools *tools, t_lexical *temp, int *flag)
+char *expand_vars(t_tools *tools, t_lexical *temp, int *flag, int heredoc_flag)
 {
     size_t  j;
     char    *expanded_word;
@@ -159,10 +159,10 @@ char *expand_vars(t_tools *tools, t_lexical *temp, int *flag)
         else if (current_word[j] == '"')
         {
             j++;
-            new_expansion = expand_double_quote(tools, current_word, &j);
+            new_expansion = expand_double_quote(tools, current_word, &j, heredoc_flag);
             *flag = 0;
         }
-        else if (current_word[j] == '$')
+        else if (current_word[j] == '$' && heredoc_flag == 0)
         {
             if (j + 1 < len && current_word[j + 1] == '$')
             {

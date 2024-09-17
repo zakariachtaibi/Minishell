@@ -1,11 +1,21 @@
-ls > $eeee (ambiguous redirect)
+ls > $eeee (ambiguous redirect) //fixed//
+expander of $var with quotes //fixed//
 
-ls > "" (must return prompt after display error msg)
+ls > "" (no such) //fixed//
 
-ls | << ziko (heredoc must be opened, not display syntax error, he works correctly when it's just one cmd like (<< ziko)) , but with a pipe before no
+ls | << ziko (heredoc must be opened, not display syntax error, he works correctly when it's just one cmd like (<< ziko)) , 
+but with a pipe before no // fixed//
 
 heredoc , should not expand the filename in this case
-        example : cat << $USER, test it in bash to understand
+        example : cat << $USER, test it in bash to understand ///fixed///
+
+$HOME 
+//error messages that should be changed 
+ls: : No such file or directory should be : ls: pp: No such file or directory input :export hh="ls pp"
+
+minishell> ls > "fila name"
+minishell: Bad address
+
 
 export var=a ; export $var=test ; echo $var $a (sometimes works , sometimes not)
 
@@ -32,6 +42,3 @@ echo bonjour > $test -> ambigue redire , exit-status must be 1
 echo \>
 
 echo $USER$var\$USER$USER\$USERtest$USER -> not like bash
-
-cat << test << test1 << test2 << test3 << test4 << test5 << test6 << test7 << test8 << test9 << test10 << test11 << test12 << test13 << test14 << test15 << test16 << test17 
--> maximum here-document count exceeded is 17
