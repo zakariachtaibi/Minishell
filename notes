@@ -1,29 +1,14 @@
-ls > $eeee (ambiguous redirect) //fixed//
-expander of $var with quotes //fixed//
+ls > $eeee (ambiguous redirect) ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
-ls > "" (no such) //fixed//
+echo $? after ls | << kk ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
-ls | << ziko (heredoc must be opened, not display syntax error, he works correctly when it's just one cmd like (<< ziko)) , 
-but with a pipe before no // fixed//
+$HOME
 
-heredoc , should not expand the filename in this case
-        example : cat << $USER, test it in bash to understand ///fixed///
-
-$HOME 
-//error messages that should be changed 
-ls: : No such file or directory should be : ls: pp: No such file or directory input :export hh="ls pp"
-
-minishell> ls > "fila name"
-minishell: Bad address
-
-
-export var=a ; export $var=test ; echo $var $a (sometimes works , sometimes not)
-
-export $var=test (i found that export created declare -x ="test") -> bash: export: `=test': not a valid identifier
+export var=a ; export $var=test ; echo $var $a (sometimes works , sometimes not) 
 
 export "" test=a -> (bash: export: `': not a valid identifier) and exit-status must be 1, not 0
 
-echo ~ -> must print $HOME
+echo ~ -> must print $HOME ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
 . -> exit-status must be 2, not 1
 
@@ -31,14 +16,26 @@ echo ~ -> must print $HOME
 
 "" -> command not found, and exit-status is 127 not 1
 
-echo "\s", echo "\\s" -> should print \s
+to do : 
 
-echo "12\"" -> should print 12"
+SHLVL ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
-echo "bip | bip ; coyotte > < \" " -> not like bash
+env in ./minishell
 
-echo bonjour > $test -> ambigue redire , exit-status must be 1 
+zchtaibi@c4r4p6:~/Desktop/Minishell$ cat << l""             
+> khsdgf
+> $PWD
+> SDFDS
+> l
+khsdgf
+$PWD
+SDFDS
 
-echo \>
-
-echo $USER$var\$USER$USER\$USERtest$USER -> not like bash
+zchtaibi@c4r4p6:~/Desktop/Minishell$ cat << l
+> kk
+> oo
+> $PWD
+> l
+kk
+oo
+/nfs/homes/zchtaibi/Desktop/Minishell

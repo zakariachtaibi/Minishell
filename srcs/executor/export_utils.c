@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/16 18:48:03 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:33:27 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void process_export(t_tools *tools, char **str, int *i)
     }
     while (key[in] != '\0')
     {
-        if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in]))) || key[in] == 32)
+        if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in]))) || key[in] == 32 )
         {
             printf("minishell: export: `%s': not a valid identifier\n", str[*i]);
             free(key);
@@ -77,8 +77,10 @@ void process_export(t_tools *tools, char **str, int *i)
         handle_env_var(tools, key, value);
     else
     {
+        printf("minishell: export: `%s': not a valid identifier\n", str[*i]);
         free(key);
         free(value);
+        tools->exit_status = 1;
     }
 }
 
@@ -105,6 +107,6 @@ int builtin_export(t_tools *tools, t_simple_cmds *cmd)
         process_export(tools, cmd->str, &i);
         i++;
     }
-    tools->exit_status = 0;
-    return 0;
+    // tools->exit_status = 0;
+    return (tools->exit_status);
 }
