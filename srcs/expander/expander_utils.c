@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:55:58 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/15 22:24:53 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:11:13 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,22 @@ char	*get_vars_value(char *str, t_tools *tools)
 	t_env_var	*current;
 	
 	current = tools->env_vars;
+	if(ft_strchr(str, '~'))
+	{
+		while(current)
+		{
+			if(!(strcmp("HOME",current->key)))
+				return (current->value);
+			current = current->next;
+		}
+	}
+	current = tools->env_vars;
 	while(current)
 	{
 		if(!(strcmp(str,current->key)))
 			return (current->value);
 		current = current->next;
 	}
+
 	return (NULL);
 }

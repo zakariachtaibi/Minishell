@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/18 12:02:32 by mac              ###   ########.fr       */
+/*   Updated: 2024/09/18 15:59:28 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <signal.h>
-
 typedef enum e_token
 {
 	TOKEN_PIPE,

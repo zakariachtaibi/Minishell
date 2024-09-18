@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/18 10:36:03 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:51:04 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+// int exit_code = 0;
 t_tools	*init_tools(void)
 {
 	t_tools	*new_tool ;

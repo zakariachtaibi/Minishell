@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_checker.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/17 16:25:54 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:56:54 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir)
         perror("minishell");
     if (unlink((*current_cmd)->hd_file_name) == -1)
         perror("minishell: failed to remove heredoc temp file");
+    // evar = 300;
 }
 
 

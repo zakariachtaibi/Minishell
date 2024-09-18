@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/17 17:47:20 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/18 12:33:31 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ char *unescape_spaces(char *str, int flag)
 
     result = malloc(sizeof(char) * (ft_strlen(str) + 1));
     if (!result)
+        return (NULL);
+ 
+    if (!str || str[0]=='\0')
         return (NULL);
     while (str[i])
     {
@@ -218,11 +221,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
             check_and_set_redirections(current_cmd);
             if ((((current_cmd)->fd_out == -1) || ((current_cmd)->fd_in == -1)))
             {
-                printf("====%d\n", flag);
-                if (flag == 0)
-                    printf("%s : ambiguous redirect\n", *current_cmd->str);
-                else
-	                perror("minishell");
+	            perror("minishell");
                 tools->exit_status = 1;
                 return NULL;
             }

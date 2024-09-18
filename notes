@@ -1,14 +1,11 @@
-ls > $eeee (ambiguous redirect) ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
 echo $? after ls | << kk ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
-$HOME
 
 export var=a ; export $var=test ; echo $var $a (sometimes works , sometimes not) 
 
 export "" test=a -> (bash: export: `': not a valid identifier) and exit-status must be 1, not 0
 
-echo ~ -> must print $HOME ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
 . -> exit-status must be 2, not 1
 

@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/09/17 11:19:19 by mac              ###   ########.fr       */
+/*   Updated: 2024/09/18 16:42:19 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,14 @@ char *expand_vars(t_tools *tools, t_lexical *temp, int *flag, int heredoc_flag)
                 j++;
                 *flag = 0;
             }
+        }
+        else if(current_word[j] == '~')
+        {
+            new_expansion = ft_strdup(get_vars_value("~", tools));
+            if (!new_expansion)
+                return ft_strdup("");
+            j++;
+            *flag = 0;
         }
         else
         {
