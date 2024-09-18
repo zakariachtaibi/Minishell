@@ -3,35 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/17 15:03:21 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/18 12:07:29 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	has_invalid_redirections(t_lexical *tokens)
+int	has_invalid_redirections(t_lexical **tokens)
 {
-	while ((tokens))
+	while ((*tokens))
 	{
 		
-		if ((tokens)->token != 5 && (tokens)->token != 0 )
+		if ((*tokens)->token != 5 && (*tokens)->token != 0 )
 		{
-			if (((tokens)->next == NULL ) || (((tokens)->next)->token != 5))
+			if (((*tokens)->next == NULL ) || (((*tokens)->next)->token != 5))
 				return (1);
 		}
-		(tokens) = (tokens)->next;
+		else if((*tokens)->token == 0)
+		{
+			if (((*tokens)->next == NULL ) || (((*tokens)->next)->token == 0) || ((*tokens)->prev == NULL ))
+				return(10);
+		}
+		(*tokens) = (*tokens)->next;
 	}
 	return (0);
 }
 
 t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 {
-	if (has_invalid_redirections(tokens))
+	t_lexical *temp = tokens;
+	
+	if (has_invalid_redirections(&tokens))
 	{
-		if (has_invalid_redirections(tokens) == 10)
+		if (has_invalid_redirections(&tokens) == 10)
 		{
 			printf(" syntax error near unexpected token '%s'\n", (tokens)->str);
 			tools->exit_status = 2;
@@ -48,5 +55,5 @@ t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 		}
 		return (NULL);
 	}
-	return (tokens);
+	return (temp);
 }

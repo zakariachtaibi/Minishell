@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/17 11:48:03 by mac              ###   ########.fr       */
+/*   Updated: 2024/09/18 12:02:32 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int				check_cd_arguments(t_tools *tools, t_simple_cmds *cmd);
 char			*validat_input(char *input, t_tools *tools);
 t_lexical		*validate_syntax(t_lexical *tokens, t_tools *tools);
 int				has_unclosed_quotes_or_parentheses(char *temp, t_tools *tools);
-int				has_invalid_redirections(t_lexical *tokens);
+int				has_invalid_redirections(t_lexical **tokens);
 int				has_semicolon(char *input, t_tools *tools);
 int				is_numeric(char *str);
 void			add_redirection(t_lexical **redirections, t_lexical		*redir_node);
