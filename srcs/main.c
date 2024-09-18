@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/18 15:51:04 by mac              ###   ########.fr       */
+/*   Updated: 2024/09/18 18:45:31 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_tools	*init_tools(void)
 	new_tool->std_in = 0;
 	return (new_tool);
 }
+
 int	main(int ac, char **av, char **envp)
 {
 	t_lexical		*tokens;
@@ -40,7 +41,7 @@ int	main(int ac, char **av, char **envp)
 	tools->std_out = dup(1);
 	tools->std_in = dup(0);
 	(void)av;
-	setup_signal();
+	// setup_signal();
 	if (ac != 1)
 	{
 		printf("wrong number of args");
@@ -50,6 +51,8 @@ int	main(int ac, char **av, char **envp)
 	get_env_vars(tools, envp);
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, handle_sigint);
 		input = readline("minishell> ");
 		if (!input)
 		{
@@ -64,10 +67,10 @@ int	main(int ac, char **av, char **envp)
 		tokens = tokenize(input);
 		tokens = validate_syntax(tokens, tools);
 		if (tokens == NULL)
-		{
 			continue ;
-		}
 		cmds = process_tokens(tokens, tools);
+        signal(SIGQUIT ,sig_handler1);
+		signal(SIGINT, sigint2);
 		execute_commands(cmds, &tools, tokens);
 		dup2(tools->std_out, 1);
 		dup2(tools->std_in, 0);

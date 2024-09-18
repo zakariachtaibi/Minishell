@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/18 15:59:28 by mac              ###   ########.fr       */
+/*   Updated: 2024/09/18 19:19:21 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <signal.h>
+
 typedef enum e_token
 {
 	TOKEN_PIPE,
@@ -145,5 +146,8 @@ char			**convert_env_vars_to_array(t_env_var *env_vars);
 void 			sort_env_vars(t_env_var *copy);	
 void			free_env_vars(t_env_var *copy);
 void			setup_signal(void);
+void			handle_sigint(int sig);
+void			sigint2();
+void			sig_handler1(int test);
 
 #endif

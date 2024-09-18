@@ -6,18 +6,25 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/17 15:16:34 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/18 18:53:07 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void sig_handler(int test)
+void setup_parent_signals(void)
 {
-    (void)test;
-    printf("Quit (core dumped)\n");
-    return ;
+    signal(SIGINT, handle_sigint);
+    signal(SIGQUIT, SIG_IGN);
 }
+
+void setup_child_signals(void)
+{
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+}
+
+
 int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 {
     if (access(current_cmd->str[0], X_OK) == 0)
@@ -153,7 +160,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         pid = fork();
         if (pid == 0)
         {
-            signal(SIGQUIT ,sig_handler);
+            setup_child_signals();
             if (prev_pipe_read != STDIN_FILENO)
             {
                 dup2(prev_pipe_read, STDIN_FILENO);
@@ -195,6 +202,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         else
         {
             // Parent process
+            setup_parent_signals();
             if (prev_pipe_read != STDIN_FILENO)
                 close(prev_pipe_read);
 

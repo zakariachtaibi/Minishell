@@ -5,17 +5,21 @@ void handle_sigint(int sig)
     (void)sig;
 
     printf("\n");
-    // rl_on_new_line();
-    // rl_replace_line("", 0);
-    // rl_redisplay();
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
+    return ;
 }
-void setup_signal(void)
-{
-    struct sigaction sa;
 
-    sa.sa_handler = &handle_sigint;
-    sa.sa_flags = SA_RESTART;
-    sigemptyset(&sa.sa_mask);
-    sigaction(SIGINT, &sa, NULL);
-    signal(SIGQUIT, SIG_IGN);
+
+void sig_handler1(int test)
+{
+    (void)test;
+    printf("Quit (core dumped)\n");
+    return ;
+}
+
+void sigint2()
+{
+	write(1, "\n", 1);
 }

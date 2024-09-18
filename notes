@@ -1,11 +1,17 @@
 
-echo $? after ls | << kk ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
+echo $? after ls | << kk
 
+./srcs/
 
-export var=a ; export $var=test ; echo $var $a (sometimes works , sometimes not) 
+exit_status global
 
-export "" test=a -> (bash: export: `': not a valid identifier) and exit-status must be 1, not 0
+exit-status 
 
+export var=a ; export $var=test ; echo $var $a (sometimes works , sometimes not)-----huda 
+
+export "" test=a -> (bash: export: `': not a valid identifier) and exit-status must be 1, not 0-----huda
+
+herdoc 16
 
 . -> exit-status must be 2, not 1
 
