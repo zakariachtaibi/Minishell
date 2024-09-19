@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/18 18:53:07 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/19 13:21:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
         {
             execve(current_cmd->str[0], current_cmd->str, NULL);
             perror("execve");
-            exit(1);
+            exit(126);
         }
         else if (pid < 0)
         {
@@ -61,7 +61,7 @@ void execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
     {
         execve(cmd_path, current_cmd->str, convert_env_vars_to_array((*tools)->env_vars));
         perror("execve");
-        exit(1);
+        exit(126);
     }
     else if (pid < 0)
         perror("fork");
@@ -129,6 +129,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
     pid_t           pid;
     (void)          tokens;
 
+    // int exit_status = 0;
     current_cmd = cmds_head;
 
     while (current_cmd)

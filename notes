@@ -3,13 +3,13 @@ echo $? after ls | << kk
 
 ./srcs/
 
-exit_status global
+
 
 exit-status 
 
-export var=a ; export $var=test ; echo $var $a (sometimes works , sometimes not)-----huda 
 
-export "" test=a -> (bash: export: `': not a valid identifier) and exit-status must be 1, not 0-----huda
+
+
 
 herdoc 16
 
@@ -42,3 +42,6 @@ zchtaibi@c4r4p6:~/Desktop/Minishell$ cat << l
 kk
 oo
 /nfs/homes/zchtaibi/Desktop/Minishell
+
+
+ env shouldprintf  such file or dir or too many args

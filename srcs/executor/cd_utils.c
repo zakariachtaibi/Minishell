@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/16 16:23:11 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/19 13:06:04 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int check_cd_arguments(t_tools *tools, t_simple_cmds *cmd)
 {
+    // int *exit_status = 0;
     if (cmd->str[1] == NULL)
     {
         cmd->str[1] = get_env_value(tools->env_vars, "HOME");
@@ -88,12 +89,8 @@ int builtin_cd(t_tools *tools, t_simple_cmds *cmd)
 {
     if (check_cd_arguments(tools, cmd))
         return (1);
-
     if (change_directory(tools, cmd))
         return (1);
-
     update_pwd_variables(tools);
-    
-    tools->exit_status = 0;
     return (0);
 }
