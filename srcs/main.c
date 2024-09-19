@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/19 12:02:54 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/19 14:40:20 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,50 +29,48 @@ t_tools	*init_tools(void)
 	return (new_tool);
 }
 
-int	main(int ac, char **av, char **envp)
+int main(int ac, char **av, char **envp)
 {
-	t_lexical		*tokens;
-	char			*input;
-	t_simple_cmds	*cmds;
-	t_tools			*tools;
-	
-	tools = init_tools();
-	tools->std_out = dup(1);
-	tools->std_in = dup(0);
-	(void)av;
-	// setup_signal();
-	if (ac != 1)
-	{
-		printf("wrong number of args");
-		exit(1);
-	}
-	tools = malloc(sizeof(t_tools));
-	get_env_vars(tools, envp);
-	while (1)
-	{
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, handle_sigint);
-		input = readline("minishell> ");
-		if (!input)
-		{
-			printf("exit\n");
-			exit(1);
-		}
-		if(strcmp(input,"") && strcmp(input, "/n"))
-			add_history(input);
-		input = validat_input(input , tools);
-		if (input == NULL) 
-			continue ;
-		tokens = tokenize(input);
-		tokens = validate_syntax(tokens, tools);
-		if (tokens == NULL)
-			continue ;
-		cmds = process_tokens(tokens, tools);
-        signal(SIGQUIT ,sig_handler1);
-		signal(SIGINT, sigint2);
-		execute_commands(cmds, &tools, tokens);
-		dup2(tools->std_out, 1);
-		dup2(tools->std_in, 0);
-		free(input);
-	}
+    t_lexical       *tokens;
+    char            *input;
+    t_simple_cmds   *cmds;
+    t_tools         *tools;
+    
+    tools = init_tools();
+    tools->std_out = dup(1);
+    tools->std_in = dup(0);
+    (void)av;
+    if (ac != 1)
+    {
+        printf("wrong number of args");
+        exit(1);
+    }
+    get_env_vars(tools, envp);
+    while (1)
+    {
+        signal(SIGQUIT, SIG_IGN);
+        signal(SIGINT, handle_sigint);
+        input = readline("minishell> ");
+        if (!input)
+        {
+            printf("exit\n");
+            tools->exit_status = 130;
+            break;
+        }
+        if(strcmp(input,"") && strcmp(input, "\n"))
+            add_history(input);
+        input = validat_input(input , tools);
+        if (input == NULL)
+            continue;
+        tokens = tokenize(input);
+        tokens = validate_syntax(tokens, tools);
+        if (tokens == NULL)
+            continue;
+        cmds = process_tokens(tokens, tools);
+        execute_commands(cmds, &tools, tokens);
+        dup2(tools->std_out, 1);
+        dup2(tools->std_in, 0);
+        free(input);
+    }
+    return tools->exit_status;
 }

@@ -8,18 +8,16 @@ void handle_sigint(int sig)
     rl_on_new_line();
     rl_replace_line("", 0);
     rl_redisplay();
-    return ;
 }
-
 
 void sig_handler1(int test)
 {
     (void)test;
     printf("Quit (core dumped)\n");
-    return ;
 }
 
-void sigint2()
+void sigint2(int sig)
 {
-	write(1, "\n", 1);
+    (void)sig;
+    write(1, "\n", 1);
 }

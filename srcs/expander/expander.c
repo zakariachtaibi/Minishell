@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/09/19 13:33:35 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/19 13:45:15 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ char *expand_variable(t_tools *tools, const char *current_word, size_t *j)
         (*j)++;
     var_len = *j - var_start;
     var_name = ft_strndup(&current_word[var_start], var_len);
-    var_name[var_len] = '\0'; //the prb is here;
     var_value = get_vars_value(var_name, tools);
     free(var_name);
     if (!var_value)

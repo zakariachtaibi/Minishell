@@ -3,13 +3,9 @@ echo $? after ls | << kk
 
 ./srcs/
 
+exit-status
 
-
-exit-status 
-
-
-
-
+$HOME 
 
 herdoc 16
 
@@ -25,7 +21,7 @@ SHLVL ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
 env in ./minishell
 
-zchtaibi@c4r4p6:~/Desktop/Minishell$ cat << l""             
+zchtaibi@c4r4p6:~/Desktop/Minishell$ cat << l""            
 > khsdgf
 > $PWD
 > SDFDS

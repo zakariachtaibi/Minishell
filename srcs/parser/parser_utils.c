@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/14 11:46:49 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/19 13:45:07 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char *ft_strndup(const char *src, size_t n)
 		return NULL;  
 
     strncpy(dup, src, len); 
-    // dup[len] = '\0';  
+    dup[len] = '\0';  
 
     return dup;
 }

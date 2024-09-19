@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/19 13:21:45 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/19 14:51:45 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,23 @@ void setup_parent_signals(void)
     signal(SIGQUIT, SIG_IGN);
 }
 
+void handle_sigint_child(int sig)
+{
+    (void)sig;
+    exit(130);
+}
+
+void handle_sigaquit_child(int test)
+{
+    (void)test;
+    printf("Quit (core dumped)\n");
+    exit(131);
+}
+
 void setup_child_signals(void)
 {
-    signal(SIGINT, SIG_DFL);
-    signal(SIGQUIT, SIG_DFL);
+    signal(SIGINT, handle_sigint_child);
+    signal(SIGQUIT, handle_sigaquit_child);
 }
 
 
@@ -34,14 +47,13 @@ int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 
         if (pid == 0)
         {
+            printf("%s\n", current_cmd->str[0]);
             execve(current_cmd->str[0], current_cmd->str, NULL);
             perror("execve");
             exit(126);
         }
         else if (pid < 0)
-        {
             perror("fork");
-        }
         else
         {
             waitpid(pid, &status, 0);
@@ -224,5 +236,11 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         }
         current_cmd = current_cmd->next;
     }
-    while (wait(NULL) > 0);
+    while (wait(&status) > 0)
+    {
+        if (WIFEXITED(status))
+            (*tools)->exit_status = WEXITSTATUS(status);
+        else if (WIFSIGNALED(status))
+            (*tools)->exit_status = WTERMSIG(status) + 128;
+    }
 }
