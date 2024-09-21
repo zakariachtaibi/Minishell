@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/19 14:51:45 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/20 17:26:58 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void setup_parent_signals(void)
 void handle_sigint_child(int sig)
 {
     (void)sig;
+    printf("\n");
     exit(130);
 }
 
@@ -44,7 +45,13 @@ int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
     {
         pid_t pid = fork();
         int status;
+        struct stat statbuf;
 
+        stat(current_cmd->str[0], &statbuf);
+        if (S_ISDIR(statbuf.st_mode))
+        {
+            
+        }
         if (pid == 0)
         {
             printf("%s\n", current_cmd->str[0]);
@@ -215,7 +222,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         else
         {
             // Parent process
-            setup_parent_signals();
+            // setup_parent_signals();
             if (prev_pipe_read != STDIN_FILENO)
                 close(prev_pipe_read);
 

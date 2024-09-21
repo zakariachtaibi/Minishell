@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/19 12:02:44 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/20 17:09:48 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@
 // minishell.h
 
 
-
-# include "../libft/libft.h"
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
-# include <unistd.h>
 # include <string.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+
+# include "../libft/libft.h"
 
 typedef enum e_token
 {

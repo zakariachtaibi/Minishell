@@ -1,6 +1,8 @@
 
 echo $? after ls | << kk
 
+signal int in heredoc
+
 ./srcs/
 
 exit-status
@@ -38,6 +40,5 @@ zchtaibi@c4r4p6:~/Desktop/Minishell$ cat << l
 kk
 oo
 /nfs/homes/zchtaibi/Desktop/Minishell
-
 
  env shouldprintf  such file or dir or too many args
