@@ -1,0 +1,13 @@
+total 152
+drwxr-xr-x  12 zchtaibi  2019    408 Sep 24 15:48 .
+drwxr-xr-x   7 zchtaibi  2019    238 Sep 24 15:15 ..
+-rw-r--r--   1 zchtaibi  2019   6148 Sep 21 14:21 .DS_Store
+drwxr-xr-x  14 zchtaibi  2019    476 Sep 22 18:40 .git
+drwxr-xr-x   3 zchtaibi  2019    102 Sep 21 14:21 .vscode
+-rw-r--r--   1 zchtaibi  2019   1369 Sep 21 14:21 Makefile
+-rw-r--r--   1 zchtaibi  2019      0 Sep 24 15:48 dd
+drwxr-xr-x   3 zchtaibi  2019    102 Sep 21 18:29 includes
+drwxr-xr-x  48 zchtaibi  2019   1632 Sep 24 15:47 libft
+-rwxr-xr-x   1 zchtaibi  2019  58532 Sep 24 15:47 minishell
+-rw-r--r--   1 zchtaibi  2019    671 Sep 22 18:27 notes
+drwxr-xr-x   9 zchtaibi  2019    306 Sep 24 15:47 srcs

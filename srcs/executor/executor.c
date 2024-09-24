@@ -6,17 +6,11 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/20 17:26:58 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:58:22 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void setup_parent_signals(void)
-{
-    signal(SIGINT, handle_sigint);
-    signal(SIGQUIT, SIG_IGN);
-}
 
 void handle_sigint_child(int sig)
 {
@@ -41,33 +35,47 @@ void setup_child_signals(void)
 
 int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 {
-    if (access(current_cmd->str[0], X_OK) == 0)
-    {
-        pid_t pid = fork();
-        int status;
-        struct stat statbuf;
+    struct stat statbuf;
 
-        stat(current_cmd->str[0], &statbuf);
+    if (stat(current_cmd->str[0], &statbuf) == 0)
+    {
         if (S_ISDIR(statbuf.st_mode))
         {
-            
+            write(2, "minishell: ", 12);
+            write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+            write(2, ": is a directory\n", 17);
+            (*tools)->exit_status = 126;
+            return 1;
         }
-        if (pid == 0)
+        else if (access(current_cmd->str[0], X_OK) == 0)
         {
-            printf("%s\n", current_cmd->str[0]);
-            execve(current_cmd->str[0], current_cmd->str, NULL);
-            perror("execve");
-            exit(126);
+            pid_t pid = fork();
+            int status;
+
+            if (pid == 0)
+            {
+                execve(current_cmd->str[0], current_cmd->str, NULL);
+                perror("execve");
+                exit(126);
+            }
+            else if (pid < 0)
+                perror("fork");
+            else
+            {
+                waitpid(pid, &status, 0);
+                (*tools)->exit_status = WEXITSTATUS(status);
+            }
+            return 1;
         }
-        else if (pid < 0)
-            perror("fork");
-        else
-        {
-            waitpid(pid, &status, 0);
-            (*tools)->exit_status = WEXITSTATUS(status);
-        }
-        return 1;
-    }
+    } 
+    // else if (stat(current_cmd->str[0], &statbuf) == -1)
+    // {
+    //     write(2, "minishell: ", 12);
+    //     write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+    //     write(2, ": No such file or directory\n", 28);
+    //     (*tools)->exit_status = 126;
+    //     return 1;
+    // }
     return 0;
 }
 
@@ -222,7 +230,6 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         else
         {
             // Parent process
-            // setup_parent_signals();
             if (prev_pipe_read != STDIN_FILENO)
                 close(prev_pipe_read);
 

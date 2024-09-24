@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/20 17:31:12 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:30:10 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ int main(int ac, char **av, char **envp)
     get_env_vars(tools, envp);
     while (1)
     {
-        signal(SIGINT, handle_sigint);
-        signal(SIGQUIT, SIG_IGN);
+        // signal(SIGINT, handle_sigint);
+        // signal(SIGQUIT, SIG_IGN);
         input = readline("minishell> ");
-        signal(SIGINT, SIG_IGN);
+        // signal(SIGINT, SIG_IGN);
         if (!input)
         {
             printf("exit\n");

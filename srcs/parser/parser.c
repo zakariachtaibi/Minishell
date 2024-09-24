@@ -217,7 +217,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
                 tools->exit_status = 1;
                 return NULL;
             }
-            check_and_set_redirections(current_cmd);
+            check_and_set_redirections(current_cmd, &tools);
             if ((((current_cmd)->fd_out == -1) || ((current_cmd)->fd_in == -1)))
             {
 	            perror("minishell");

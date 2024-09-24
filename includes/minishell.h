@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/20 17:09:48 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/21 19:05:21 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_simple_cmds
 	int                     (*builtin)(t_tools *, struct s_simple_cmds *);
 	int						num_redirections;
 	char					*hd_file_name;
+	int     				count_heredocs;
 	t_lexical				*redirections;
 	struct s_simple_cmds	*next;
 	struct s_simple_cmds	*prev;
@@ -116,7 +117,7 @@ int 			builtin_env(t_tools *tools, t_simple_cmds *cmd);
 int 			builtin_exit(t_tools *tools, t_simple_cmds *cmd);
 t_builtin		check_builtins_type(char *str);
 void			check_and_set_builtin(t_simple_cmds *cmd);
-void			check_and_set_redirections(t_simple_cmds *current_cmd);
+void			check_and_set_redirections(t_simple_cmds *current_cmd, t_tools **tools);
 int				check_cd_arguments(t_tools *tools, t_simple_cmds *cmd);
 char			*validat_input(char *input, t_tools *tools);
 t_lexical		*validate_syntax(t_lexical *tokens, t_tools *tools);

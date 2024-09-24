@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_checker.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/18 15:56:54 by mac              ###   ########.fr       */
+/*   Updated: 2024/09/21 19:07:07 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ void redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir)
     int fd;
 
     *redir = (*redir)->next;
-    
     (*current_cmd)->hd_file_name = ft_strdup((*redir)->str);
-    // printf("heeeeeeere %s\n",(*current_cmd)->hd_file_name  );
     if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
         close((*current_cmd)->fd_in);
     fd = open((*current_cmd)->hd_file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -65,7 +63,6 @@ void redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir)
         perror("minishell");
     if (unlink((*current_cmd)->hd_file_name) == -1)
         perror("minishell: failed to remove heredoc temp file");
-    // evar = 300;
 }
 
 
@@ -79,21 +76,36 @@ void redir_append(t_simple_cmds **current_cmd, t_lexical **redir)
         perror("minishell");
 }
 
+#define MAX_HEREDOCS 16
 
-void	check_and_set_redirections(t_simple_cmds *current_cmd)
+void check_and_set_redirections(t_simple_cmds *current_cmd, t_tools **tools)
 {
-	t_lexical	*redir;
-	redir = current_cmd->redirections;
-	while (redir)
-	{
-		if (redir->token == TOKEN_REDIRECT_IN)
-			redir_in(&current_cmd, &redir);
-		else if (redir->token == TOKEN_REDIRECT_OUT)
-			redir_out(&current_cmd, &redir);
-		else if (redir->token == TOKEN_APPEND)
-			redir_append(&current_cmd, &redir);
-		else if (redir->token == TOKEN_HEREDOC)
-			redir_heredoc(&current_cmd, &redir);
-		redir = redir->next;
-	}
+    t_lexical *redir;
+    // int heredoc_count = 0;
+    (void)tools;
+
+    redir = current_cmd->redirections;
+    while (redir)
+    {
+        // if (redir->token == TOKEN_HEREDOC)
+        // {
+        //     heredoc_count++;
+        //     if (heredoc_count > MAX_HEREDOCS)
+        //     {
+        //         write(2, "bash: maximum here-document count exceeded\n", 43);
+        //         (*tools)->exit_status = 2;
+        //         return;
+        //     }
+        // }
+        if (redir->token == TOKEN_REDIRECT_IN)
+            redir_in(&current_cmd, &redir);
+        else if (redir->token == TOKEN_REDIRECT_OUT)
+            redir_out(&current_cmd, &redir);
+        else if (redir->token == TOKEN_APPEND)
+            redir_append(&current_cmd, &redir);
+        else if (redir->token == TOKEN_HEREDOC)
+            redir_heredoc(&current_cmd, &redir);
+
+        redir = redir->next;
+    }
 }
