@@ -3,12 +3,6 @@ echo $? after ls | << kk
 
 signal int in heredoc
 
-exit-status
-
-$HOME 
-
-herdoc 16 : cat << t1 << t2 << t3 << t4 << t5 << t6 << t7 << t8 << t9 << t10 << t11 << t12 << t13 << t14 << t15 << t16 << t17
-
 . -> exit-status must be 2, not 1
 
 .. -> exit-status must be 127, not 1
@@ -20,24 +14,6 @@ to do :
 SHLVL ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
 
 env in ./minishell
-
-zchtaibi@c4r4p6:~/Desktop/Minishell$ cat << l""            
-> khsdgf
-> $PWD
-> SDFDS
-> l
-khsdgf
-$PWD
-SDFDS
-
-zchtaibi@c4r4p6:~/Desktop/Minishell$ cat << l
-> kk
-> oo
-> $PWD
-> l
-kk
-oo
-/nfs/homes/zchtaibi/Desktop/Minishell
 
 env shouldprintf  such file or dir or too many args
 

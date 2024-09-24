@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/18 20:10:08 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/24 17:32:26 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,19 +97,20 @@ int handle_redirections(t_tools **tools, t_lexical **temp, t_simple_cmds **curre
         redir = copy_node(*temp);
         add_redirection((&(*current_cmd)->redirections), redir);
         (*current_cmd)->num_redirections++;
+        if(heredoc_flag == 1)
+            (*current_cmd)->num_redirections_heredoc++;
         delete_node(&token, *temp);
         *temp = (*temp)->next;
 
         if (*temp && (*temp)->token == TOKEN_WORD)
         {
             filename = copy_node(*temp);
-            filename->str = expand_vars((*tools), filename, &flag, heredoc_flag);
+            if(!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str, '\'')))
+                filename->filename_flag = 2;
+            filename->str = expand_vars((*tools), filename->str, &flag, heredoc_flag);
             unescaped = unescape_spaces(filename->str, flag);
             if (!unescaped)
-            {
-                // printf("%s : ambiguous redirect\n",(*temp)->str );
                 return(1);
-            }
             free(filename->str);
             filename->str = unescaped;
             add_redirection((&(*current_cmd)->redirections), filename);
@@ -169,7 +170,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 	i = count_str;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
-        expanded = expand_vars(tools, (*temp), &flag, heredoc_flag);
+        expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
         if (flag == 1 && (is_space(expanded) == 1))
         {   
             in = 0;
@@ -217,14 +218,14 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
                 tools->exit_status = 1;
                 return NULL;
             }
-            check_and_set_redirections(current_cmd, &tools);
-            if ((((current_cmd)->fd_out == -1) || ((current_cmd)->fd_in == -1)))
+        }
+        check_and_set_redirections(current_cmd, &tools);
+         if ((((current_cmd)->fd_out == -1) || ((current_cmd)->fd_in == -1)))
             {
 	            perror("minishell");
                 tools->exit_status = 1;
                 return NULL;
             }
-        }
         while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
             handle_words(&temp, current_cmd, tools);
         check_and_set_builtin(current_cmd);

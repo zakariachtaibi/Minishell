@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/09/19 13:45:15 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:05:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,17 +136,17 @@ char *expand_plain_text(const char *current_word, size_t *j)
     return ft_strdup(temp_str);
 }
 
-char *expand_vars(t_tools *tools, t_lexical *temp, int *flag, int heredoc_flag)
+char *expand_vars(t_tools *tools, char *current_word, int *flag, int heredoc_flag)
 {
     size_t  j;
     char    *expanded_word;
-    char    *current_word;
+    // char    *current_word;
     size_t  len;
     char    *new_expansion;
 
     j = 0;
     expanded_word = ft_strdup("");
-    current_word = temp->str;
+    // current_word = temp->str;
     len = ft_strlen(current_word);
     while (j < len)
     {
@@ -188,12 +188,12 @@ char *expand_vars(t_tools *tools, t_lexical *temp, int *flag, int heredoc_flag)
             if (!new_expansion)
                 return ft_strdup("");
             j++;
-            *flag = 0;
+            *flag = 2;
         }
         else
         {
             new_expansion = expand_plain_text(current_word, &j);
-            *flag = 0;
+            *flag = 2;
         }
         if (new_expansion)
         {
