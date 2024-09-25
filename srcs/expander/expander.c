@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/09/24 17:05:45 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/25 21:35:32 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ char *expand_variable(t_tools *tools, const char *current_word, size_t *j)
     var_value = get_vars_value(var_name, tools);
     free(var_name);
     if (!var_value)
-        return ft_strdup("");
+        return NULL;
     return ft_strdup(var_value);
 }
 
@@ -178,6 +178,7 @@ char *expand_vars(t_tools *tools, char *current_word, int *flag, int heredoc_fla
             else
             {
                 new_expansion = ft_strdup("$");
+                
                 j++;
                 *flag = 0;
             }
@@ -202,6 +203,8 @@ char *expand_vars(t_tools *tools, char *current_word, int *flag, int heredoc_fla
             free(new_expansion);
             expanded_word = temp_word;
         }
+        else
+            return NULL;
     }
     return expanded_word;
 }

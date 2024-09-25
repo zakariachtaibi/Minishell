@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/21 18:58:22 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/09/25 21:49:08 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 
             if (pid == 0)
             {
-                execve(current_cmd->str[0], current_cmd->str, NULL);
+                execve(current_cmd->str[0], current_cmd->str,  convert_env_vars_to_array((*tools)->env_vars));
                 perror("execve");
                 exit(126);
             }
@@ -87,8 +87,8 @@ void execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
     if (pid == 0)
     {
         execve(cmd_path, current_cmd->str, convert_env_vars_to_array((*tools)->env_vars));
-        perror("execve");
-        exit(126);
+        // perror("execve"); why this should be here?
+        // exit(126);
     }
     else if (pid < 0)
         perror("fork");

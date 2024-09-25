@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/24 17:32:26 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/25 21:44:25 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int ft_strlen_array(char **array)
     return i;
 }
 
-void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
+void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
 {
 	int			word_count;
 	t_lexical	*word_temp;
@@ -149,8 +149,8 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 		word_count++;
 		word_temp = word_temp->next;
 	}
-	if (current_cmd->str)
-		count_str = ft_strlen_array(current_cmd->str);
+	if ((*current_cmd)->str)
+		count_str = ft_strlen_array((*current_cmd)->str);
 	else
 		count_str = 0;
 
@@ -163,34 +163,40 @@ void	handle_words(t_lexical **temp, t_simple_cmds *current_cmd, t_tools *tools)
 	i = -1;
     while (++i < count_str)
     {
-        new_str[i] = current_cmd->str[i];
+        new_str[i] = (*current_cmd)->str[i];
     }
-	free(current_cmd->str);
-	current_cmd->str = new_str;
+	free((*current_cmd)->str);
+	(*current_cmd)->str = new_str;
 	i = count_str;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
         expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
-        if (flag == 1 && (is_space(expanded) == 1))
-        {   
-            in = 0;
-            tmp = ft_split(expanded, ' ');
-            while(tmp[in])
+        if(expanded != NULL)
+        { 
+            if (flag == 1 && (is_space(expanded) == 1))
+            {   
+                in = 0;
+                tmp = ft_split(expanded, ' ');
+                while(tmp[in])
+                {
+                    (*current_cmd)->str[i] = ft_strdup(tmp[in]);
+                    in++;
+                    i++;
+                    
+                }
+
+            free(tmp);
+            }
+            else
             {
-                current_cmd->str[i] = tmp[in];
-                in++;
+                (*current_cmd)->str[i] = expanded;
                 i++;
             }
         }
-        else
-        {
-            current_cmd->str[i] = expanded;
-            i++;
-        }
 		*temp = (*temp)->next;
-        
-	}
-	current_cmd->str[i]= NULL;
+	} 
+    (*current_cmd)->str[i]= NULL;
+    
 }
 
 t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
@@ -208,7 +214,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
     {
         process_command(&temp, &current_cmd, &cmds_head);
         while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
-            handle_words(&temp, current_cmd, tools);
+            handle_words(&temp, &current_cmd, tools);
         while (temp && check_token(temp, &h_flag))
         {
             flag = handle_redirections(&tools, &temp, &current_cmd, tokens);
@@ -227,9 +233,12 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
                 return NULL;
             }
         while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
-            handle_words(&temp, current_cmd, tools);
+            handle_words(&temp, &current_cmd, tools);
         check_and_set_builtin(current_cmd);
     }
+    // printf("----%s\n", current_cmd->str[0]);
+    // printf("----%s\n", current_cmd->str[1]);
+    // printf("----%s\n", current_cmd->str[2]);
     return cmds_head;
 }
 
