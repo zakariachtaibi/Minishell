@@ -13,7 +13,7 @@
 #include "../../includes/minishell.h"
 
 void	count_quotes_and_parentheses(char c, int *quote, int *dquote,
-									int *parentheses)
+		int *parentheses)
 {
 	if (c == '\'' && *dquote % 2 == 0)
 		(*quote)++;
@@ -51,7 +51,7 @@ int	has_unclosed_quotes_or_parentheses(char *temp, t_tools *tools)
 }
 
 void	init_vars(int *single_quote_open, int *double_quote_open,
-				int *parentheses_open)
+		int *parentheses_open)
 {
 	*single_quote_open = 0;
 	*double_quote_open = 0;
@@ -69,7 +69,6 @@ char	*remove_enclosing_chars(char *input)
 
 	i = 0;
 	j = 0;
-
 	new_input = malloc(ft_strlen(input) + 1);
 	if (!new_input)
 		return (NULL);
@@ -82,7 +81,8 @@ char	*remove_enclosing_chars(char *input)
 			double_quote_open = !double_quote_open;
 		else if (input[i] == '(' && !single_quote_open && !double_quote_open)
 			parentheses_open = 1;
-		else if (input[i] == ')' && !single_quote_open && !double_quote_open && parentheses_open)
+		else if (input[i] == ')' && !single_quote_open && !double_quote_open
+			&& parentheses_open)
 			parentheses_open = 0;
 		else
 			new_input[j++] = input[i];
@@ -92,13 +92,13 @@ char	*remove_enclosing_chars(char *input)
 	return (new_input);
 }
 
-int has_semicolon(char *input, t_tools *tools)
+int	has_semicolon(char *input, t_tools *tools)
 {
-	if((strchr(input, ';')) || (strchr(input, '\\')))
+	if ((strchr(input, ';')) || (strchr(input, '\\')))
 	{
 		printf("Error: invalid input\n");
 		tools->exit_status = 2;
 		return (1);
-	}	
-	return(0);
+	}
+	return (0);
 }

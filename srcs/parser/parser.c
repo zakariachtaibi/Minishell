@@ -12,20 +12,22 @@
 
 #include "../../includes/minishell.h"
 
-int is_space(char *str)
+int	is_space(char *str)
 {
-    int i =0;
-    while (str[i]!= '\0')
-    {
-        if(str[i] == ' ')
-            return(1);
-        i++;
-    }
-    return(0);
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == ' ')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 void	process_command(t_lexical **temp, t_simple_cmds **current_cmd,
-							t_simple_cmds **cmds_head)
+		t_simple_cmds **cmds_head)
 {
 	t_simple_cmds	*new_cmd;
 
@@ -47,101 +49,110 @@ void	process_command(t_lexical **temp, t_simple_cmds **current_cmd,
 
 int	check_token(t_lexical *temp, int *heredoc_flag)
 {
-    
 	if ((temp)->token == TOKEN_REDIRECT_IN
-		|| (temp)->token == TOKEN_REDIRECT_OUT
-		|| (temp)->token == TOKEN_HEREDOC
+		|| (temp)->token == TOKEN_REDIRECT_OUT || (temp)->token == TOKEN_HEREDOC
 		|| (temp)->token == TOKEN_APPEND)
-        {
-            if ((temp)->token == TOKEN_HEREDOC)
-                *heredoc_flag = 1;
-            return (1);      
-        }
+	{
+		if ((temp)->token == TOKEN_HEREDOC)
+			*heredoc_flag = 1;
+		return (1);
+	}
 	else
 		return (0);
 }
 
-char *unescape_spaces(char *str, int flag)
+char	*unescape_spaces(char *str, int flag)
 {
-    char 	*result;
-    int 	i = 0;
-	int 	j = 0;
+	char	*result;
+	int		i;
+	int		j;
 
-    result = malloc(sizeof(char) * (ft_strlen(str) + 1));
-    if (!result)
-        return (NULL);
- 
-    if (!str || str[0]=='\0')
-        return (NULL);
-    while (str[i])
-    {
-        if (str[i] == ' ' && flag == 1)
-            return(NULL);
-        result[j++] = str[i++];
-    }
-    result[j] = '\0';
-    return (result);
+	i = 0;
+	j = 0;
+	result = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!result)
+		return (NULL);
+	if (!str || str[0] == '\0')
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] == ' ' && flag == 1)
+			return (NULL);
+		result[j++] = str[i++];
+	}
+	result[j] = '\0';
+	return (result);
 }
 
-int handle_redirections(t_tools **tools, t_lexical **temp, t_simple_cmds **current_cmd, t_lexical *token)
+int	handle_redirections(t_tools **tools, t_lexical **temp,
+		t_simple_cmds **current_cmd, t_lexical *token)
 {
-    t_lexical *redir;
-    t_lexical *filename;
-	char	*unescaped;
-    int flag = 0;
-    int heredoc_flag = 0;
-    // int j = 0 ;
+	t_lexical	*redir;
+	t_lexical	*filename;
+	char		*unescaped;
+	int			flag;
+	int			heredoc_flag;
 
-    if (check_token(*temp, &heredoc_flag))
-    {
-        redir = copy_node(*temp);
-        add_redirection((&(*current_cmd)->redirections), redir);
-        (*current_cmd)->num_redirections++;
-        if(heredoc_flag == 1)
-            (*current_cmd)->num_redirections_heredoc++;
-        delete_node(&token, *temp);
-        *temp = (*temp)->next;
-
-        if (*temp && (*temp)->token == TOKEN_WORD)
-        {
-            filename = copy_node(*temp);
-            if(!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str, '\'')))
-                filename->filename_flag = 2;
-            filename->str = expand_vars((*tools), filename->str, &flag, heredoc_flag);
-            unescaped = unescape_spaces(filename->str, flag);
-            if (!unescaped)
-                return(1);
-            free(filename->str);
-            filename->str = unescaped;
-            add_redirection((&(*current_cmd)->redirections), filename);
-            delete_node(&token, *temp);
-            *temp = (*temp)->next;
-        }
-    }
-    return 0;  // No ambiguity detected
+	flag = 0;
+	heredoc_flag = 0;
+	// int j = 0 ;
+	if (check_token(*temp, &heredoc_flag))
+	{
+		redir = copy_node(*temp);
+		add_redirection((&(*current_cmd)->redirections), redir);
+		(*current_cmd)->num_redirections++;
+		if (heredoc_flag == 1)
+			(*current_cmd)->num_redirections_heredoc++;
+		delete_node(&token, *temp);
+		*temp = (*temp)->next;
+		if (*temp && (*temp)->token == TOKEN_WORD)
+		{
+			filename = copy_node(*temp);
+			if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str,
+						'\'')))
+				filename->filename_flag = 2;
+			filename->str = expand_vars((*tools), filename->str, &flag,
+					heredoc_flag);
+			unescaped = unescape_spaces(filename->str, flag);
+			if (!unescaped)
+				return (1);
+			free(filename->str);
+			filename->str = unescaped;
+			add_redirection((&(*current_cmd)->redirections), filename);
+			delete_node(&token, *temp);
+			*temp = (*temp)->next;
+		}
+	}
+	return (0); // No ambiguity detected
 }
 
-int ft_strlen_array(char **array)
+int	ft_strlen_array(char **array)
 {
-    int i = 0;
-    while (array && array[i])
-        i++;
-    return i;
+	int	i;
+
+	i = 0;
+	while (array && array[i])
+		i++;
+	return (i);
 }
 
-void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
+void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
+		t_tools *tools)
 {
 	int			word_count;
 	t_lexical	*word_temp;
 	int			i;
 	int			count_str;
 	char		**new_str;
-    char    *expanded;
-    int flag = 0;
-    char **tmp;
-    int in = 0;
-    int heredoc_flag = 0;
+	char		*expanded;
+	int			flag;
+	char		**tmp;
+	int			in;
+	int			heredoc_flag;
 
+	flag = 0;
+	in = 0;
+	heredoc_flag = 0;
 	word_temp = *temp;
 	word_count = 0;
 	while (word_temp && word_temp->token == TOKEN_WORD)
@@ -153,7 +164,6 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
 		count_str = ft_strlen_array((*current_cmd)->str);
 	else
 		count_str = 0;
-
 	new_str = malloc(sizeof(char *) * (word_count + count_str + 1));
 	if (!new_str)
 	{
@@ -161,84 +171,82 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
 		exit(EXIT_FAILURE);
 	}
 	i = -1;
-    while (++i < count_str)
-    {
-        new_str[i] = (*current_cmd)->str[i];
-    }
+	while (++i < count_str)
+	{
+		new_str[i] = (*current_cmd)->str[i];
+	}
 	free((*current_cmd)->str);
 	(*current_cmd)->str = new_str;
 	i = count_str;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
-        expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
-        if(expanded != NULL)
-        { 
-            if (flag == 1 && (is_space(expanded) == 1))
-            {   
-                in = 0;
-                tmp = ft_split(expanded, ' ');
-                while(tmp[in])
-                {
-                    (*current_cmd)->str[i] = ft_strdup(tmp[in]);
-                    in++;
-                    i++;
-                    
-                }
-
-            free(tmp);
-            }
-            else
-            {
-                (*current_cmd)->str[i] = expanded;
-                i++;
-            }
-        }
+		expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
+		if (expanded != NULL)
+		{
+			if (flag == 1 && (is_space(expanded) == 1))
+			{
+				in = 0;
+				tmp = ft_split(expanded, ' ');
+				while (tmp[in])
+				{
+					(*current_cmd)->str[i] = ft_strdup(tmp[in]);
+					in++;
+					i++;
+				}
+				free(tmp);
+			}
+			else
+			{
+				(*current_cmd)->str[i] = expanded;
+				i++;
+			}
+		}
 		*temp = (*temp)->next;
-	} 
-    (*current_cmd)->str[i]= NULL;
-    
+	}
+	(*current_cmd)->str[i] = NULL;
 }
 
 t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 {
-    t_simple_cmds	*cmds_head;
-    t_simple_cmds	*current_cmd;
-    t_lexical		*temp;
-    int				flag = 0;
-    int             h_flag = 0;
+	t_simple_cmds	*cmds_head;
+	t_simple_cmds	*current_cmd;
+	t_lexical		*temp;
+	int				flag;
+	int				h_flag;
 
-    cmds_head = NULL;
-    current_cmd = NULL;
-    temp = tokens;
-    while (temp)
-    {
-        process_command(&temp, &current_cmd, &cmds_head);
-        while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
-            handle_words(&temp, &current_cmd, tools);
-        while (temp && check_token(temp, &h_flag))
-        {
-            flag = handle_redirections(&tools, &temp, &current_cmd, tokens);
-            if (flag == 1)
-            {
-                 printf("%s : ambiguous redirect\n",(temp)->str );
-                tools->exit_status = 1;
-                return NULL;
-            }
-        }
-        check_and_set_redirections(current_cmd, &tools);
-         if ((((current_cmd)->fd_out == -1) || ((current_cmd)->fd_in == -1)))
-            {
-	            perror("minishell");
-                tools->exit_status = 1;
-                return NULL;
-            }
-        while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
-            handle_words(&temp, &current_cmd, tools);
-        check_and_set_builtin(current_cmd);
-    }
-    // printf("----%s\n", current_cmd->str[0]);
-    // printf("----%s\n", current_cmd->str[1]);
-    // printf("----%s\n", current_cmd->str[2]);
-    return cmds_head;
+	flag = 0;
+	h_flag = 0;
+	cmds_head = NULL;
+	current_cmd = NULL;
+	temp = tokens;
+	while (temp)
+	{
+		process_command(&temp, &current_cmd, &cmds_head);
+		while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
+			handle_words(&temp, &current_cmd, tools);
+		while (temp && check_token(temp, &h_flag))
+		{
+			flag = handle_redirections(&tools, &temp, &current_cmd, tokens);
+			if (flag == 1)
+			{
+				printf("%s : ambiguous redirect\n", (temp)->str);
+				tools->exit_status = 1;
+				return (NULL);
+			}
+		}
+		check_and_set_redirections(current_cmd, &tools);
+		if ((((current_cmd)->fd_out == -1) || ((current_cmd)->fd_in == -1)))
+		{
+			perror("minishell");
+			tools->exit_status = 1;
+			return (NULL);
+		}
+		while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
+			handle_words(&temp, &current_cmd, tools);
+		check_and_set_builtin(current_cmd);
+	}
+	// printf("----%s\n", current_cmd->str[0]);
+	// printf("----%s\n", current_cmd->str[1]);
+	// printf("----%s\n", current_cmd->str[2]);
+	return (cmds_head);
 }
-

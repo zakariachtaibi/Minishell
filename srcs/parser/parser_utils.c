@@ -31,7 +31,7 @@ void	add_redirection(t_lexical **redirections, t_lexical *redir_node)
 
 t_simple_cmds	*init_cmd(void)
 {
-	t_simple_cmds	*new_cmd ;
+	t_simple_cmds	*new_cmd;
 
 	new_cmd = malloc(sizeof(t_simple_cmds));
 	new_cmd->next = NULL;
@@ -86,17 +86,18 @@ void	delete_node(t_lexical **head, t_lexical *node_to_delete)
 	free(node_to_delete);
 }
 
-char *ft_strndup(const char *src, size_t n) 
+char	*ft_strndup(const char *src, size_t n)
 {
-    size_t len = ft_strlen(src);
-    if (len > n) len = n;  
+	size_t	len;
+	char	*dup;
 
-    char *dup = (char *)malloc(len + 1);  
-    if (!dup) 
-		return NULL;  
-
-    strncpy(dup, src, len); 
-    dup[len] = '\0';  
-
-    return dup;
+	len = ft_strlen(src);
+	if (len > n)
+		len = n;
+	dup = (char *)malloc(len + 1);
+	if (!dup)
+		return (NULL);
+	strncpy(dup, src, len);
+	dup[len] = '\0';
+	return (dup);
 }

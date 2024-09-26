@@ -42,83 +42,79 @@ t_lexical	*check_node(char *str, int i)
 
 t_lexical	*tokenize(char *input)
 {
-    t_lexical	*head;
-    t_lexical	*current;
-    t_lexical	*node;
-    int			i;
-    int			j;
-    int			in_quotes;
-    char		token[1024];
-    char		quote_char;
+	t_lexical	*head;
+	t_lexical	*current;
+	t_lexical	*node;
+	int			i;
+	int			j;
+	int			in_quotes;
+	char		token[1024];
+	char		quote_char;
 
-    head = NULL;
-    current = NULL;
-    i = 0;
-    in_quotes = 0;
-    quote_char = 0;
-    while (input[i])
-    {
-        while (input[i] == ' ' || input[i] == '\t')
-            i++;
-        j = 0;
-        while (input[i])
-        {
-            if (input[i] == '"' || input[i] == '\'')
-            {
-                if (!in_quotes)
-                {
-                    in_quotes = 1;
-                    quote_char = input[i];
-                }
-                else if (in_quotes && input[i] == quote_char)
-                    in_quotes = 0;
-                token[j++] = input[i++];
-            }
-            else if (!in_quotes && (input[i] == '>' || input[i] == '<' || input[i] == '|'))
-            {
-                if (j > 0)
-                {
-                    token[j] = '\0';
-                    node = check_node(token, i);
-                    if (current)
-                    {
-                        current->next = node;
-                        node->prev = current;
-                    }
-                    else
-                        head = node;
-                    current = node;
-                    j = 0;
-                }
-                token[j++] = input[i++];
-                if ((token[0] == '>' && input[i] == '>') || (token[0] == '<' && input[i] == '<'))
-                    token[j++] = input[i++];
-                break;
-            }
-            else if (!in_quotes && (input[i] == ' ' || input[i] == '\t'))
-                break;
-            else
-                token[j++] = input[i++];
-        }
-        if (j > 0)
-        {
-            token[j] = '\0';
-            node = check_node(token, i);
-            if (current)
-            {
-                current->next = node;
-                node->prev = current;
-            }
-            else
-                head = node;
-            current = node;
-        }
-    }
-    return (head);
+	head = NULL;
+	current = NULL;
+	i = 0;
+	in_quotes = 0;
+	quote_char = 0;
+	while (input[i])
+	{
+		while (input[i] == ' ' || input[i] == '\t')
+			i++;
+		j = 0;
+		while (input[i])
+		{
+			if (input[i] == '"' || input[i] == '\'')
+			{
+				if (!in_quotes)
+				{
+					in_quotes = 1;
+					quote_char = input[i];
+				}
+				else if (in_quotes && input[i] == quote_char)
+					in_quotes = 0;
+				token[j++] = input[i++];
+			}
+			else if (!in_quotes && (input[i] == '>' || input[i] == '<'
+					|| input[i] == '|'))
+			{
+				if (j > 0)
+				{
+					token[j] = '\0';
+					node = check_node(token, i);
+					if (current)
+					{
+						current->next = node;
+						node->prev = current;
+					}
+					else
+						head = node;
+					current = node;
+					j = 0;
+				}
+				token[j++] = input[i++];
+				if ((token[0] == '>' && input[i] == '>') || (token[0] == '<'
+						&& input[i] == '<'))
+					token[j++] = input[i++];
+				break ;
+			}
+			else if (!in_quotes && (input[i] == ' ' || input[i] == '\t'))
+				break ;
+			else
+				token[j++] = input[i++];
+		}
+		if (j > 0)
+		{
+			token[j] = '\0';
+			node = check_node(token, i);
+			if (current)
+			{
+				current->next = node;
+				node->prev = current;
+			}
+			else
+				head = node;
+			current = node;
+		}
+	}
+	return (head);
 }
-
-
-
-
-
-

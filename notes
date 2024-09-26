@@ -9,11 +9,5 @@ signal int in heredoc
 
 "" -> command not found, and exit-status is 127 not 1
 
-to do : 
-
-SHLVL ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> huda
-
-env in ./minishell
-
 env shouldprintf  such file or dir or too many args
 
