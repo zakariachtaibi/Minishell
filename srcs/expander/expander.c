@@ -37,75 +37,61 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 		size_t *j, int heredoc_flag)
 {
 	char	*expanded_word;
-	char	*pid_str;
 	char	*new_expanded_word;
-	size_t	var_start;
-	size_t	var_len;
-	char	*var_name;
 	char	*var_value;
-	char	*exit_status;
-	char	temp_str[2] = {current_word[*j], '\0'};
+	char	temp_str[2];
 
 	expanded_word = ft_strdup("");
 	while (current_word[*j] && current_word[*j] != '"')
 	{
-		if (current_word[*j] == '$' && heredoc_flag == 0)
+		if (current_word[*j] == '\\' && current_word[*j + 1])
+		{
+			temp_str[0] = current_word[*j + 1];
+			temp_str[1] = '\0';
+			(*j) += 2;
+		}
+		else if (current_word[*j] == '$' && heredoc_flag == 0)
 		{
 			(*j)++;
 			if (current_word[*j] == '$')
 			{
-				pid_str = ft_itoa(getpid());
-				new_expanded_word = ft_strjoin(expanded_word, pid_str);
-				free(expanded_word);
-				free(pid_str);
-				expanded_word = new_expanded_word;
+				var_value = ft_itoa(getpid());
 				(*j)++;
 			}
 			else if (current_word[*j] == '?')
 			{
-				exit_status = ft_itoa(tools->exit_status);
-				new_expanded_word = ft_strjoin(expanded_word, exit_status);
-				free(expanded_word);
-				free(exit_status);
-				expanded_word = new_expanded_word;
+				var_value = ft_itoa(tools->exit_status);
 				(*j)++;
 			}
-			else if (current_word[*j] && current_word[*j] != ' '
-				&& current_word[*j] != '"')
+			else if (ft_isalnum(current_word[*j]) || current_word[*j] == '_')
 			{
-				var_start = *j;
-				while (current_word[*j] && (ft_isalnum(current_word[*j])
-						|| current_word[*j] == '_'))
-				{
-					if (current_word[*j] == 32)
-						break ;
+				size_t var_start = *j;
+				while (current_word[*j] && (ft_isalnum(current_word[*j]) || current_word[*j] == '_'))
 					(*j)++;
-				}
-				var_len = *j - var_start;
-				var_name = ft_strndup(&current_word[var_start], var_len);
+				char *var_name = ft_strndup(&current_word[var_start], *j - var_start);
 				var_value = get_vars_value(var_name, tools);
 				free(var_name);
-				if (var_value)
-				{
-					new_expanded_word = ft_strjoin(expanded_word, var_value);
-					free(expanded_word);
-					expanded_word = new_expanded_word;
-				}
+				if (!var_value)
+					var_value = ft_strdup("");
 			}
 			else
 			{
-				new_expanded_word = ft_strjoin(expanded_word, "$");
-				free(expanded_word);
-				expanded_word = new_expanded_word;
+				var_value = ft_strdup("$");
 			}
+			new_expanded_word = ft_strjoin(expanded_word, var_value);
+			free(expanded_word);
+			free(var_value);
+			expanded_word = new_expanded_word;
 		}
 		else
 		{
-			new_expanded_word = ft_strjoin(expanded_word, temp_str);
-			free(expanded_word);
-			expanded_word = new_expanded_word;
+			temp_str[0] = current_word[*j];
+			temp_str[1] = '\0';
 			(*j)++;
 		}
+		new_expanded_word = ft_strjoin(expanded_word, temp_str);
+		free(expanded_word);
+		expanded_word = new_expanded_word;
 	}
 	(*j)++;
 	return (expanded_word);
@@ -191,7 +177,6 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 			else
 			{
 				new_expansion = ft_strdup("$");
-
 				j++;
 				*flag = 0;
 			}

@@ -95,7 +95,6 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 
 	flag = 0;
 	heredoc_flag = 0;
-	// int j = 0 ;
 	if (check_token(*temp, &heredoc_flag))
 	{
 		redir = copy_node(*temp);
@@ -123,7 +122,7 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 			*temp = (*temp)->next;
 		}
 	}
-	return (0); // No ambiguity detected
+	return (0);
 }
 
 int	ft_strlen_array(char **array)
@@ -160,6 +159,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		word_count++;
 		word_temp = word_temp->next;
 	}
+
 	if ((*current_cmd)->str)
 		count_str = ft_strlen_array((*current_cmd)->str);
 	else
@@ -172,9 +172,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 	}
 	i = -1;
 	while (++i < count_str)
-	{
 		new_str[i] = (*current_cmd)->str[i];
-	}
 	free((*current_cmd)->str);
 	(*current_cmd)->str = new_str;
 	i = count_str;
@@ -245,8 +243,5 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 			handle_words(&temp, &current_cmd, tools);
 		check_and_set_builtin(current_cmd);
 	}
-	// printf("----%s\n", current_cmd->str[0]);
-	// printf("----%s\n", current_cmd->str[1]);
-	// printf("----%s\n", current_cmd->str[2]);
 	return (cmds_head);
 }

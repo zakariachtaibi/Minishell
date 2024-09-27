@@ -30,22 +30,28 @@ t_tools	*init_tools(void)
 }
 
 
-void set_env_var(const char *key, const char *value, t_tools **tools) {
-    t_env_var *current = (*tools)->env_vars;
-    t_env_var*env_var = NULL;
+void set_env_var(const char *key, const char *value, t_tools **tools)
+{
+    t_env_var 	*current;
+    t_env_var	*env_var;
 
-    while (current) {
-        if (strcmp(current->key, key) == 0) {
+	current = (*tools)->env_vars;
+	env_var = NULL;
+    while (current)
+	{
+        if (strcmp(current->key, key) == 0)
+		{
             env_var = current;
             break;
         }
         current = current->next;
     }
-
-    if (env_var) {
+    if (env_var)
+	{
         free(env_var->value);
         env_var->value = strdup(value);
-    } else {
+    } else
+	{
         t_env_var *new_var = (t_env_var *)malloc(sizeof(t_env_var));
         if (!new_var)
             return;
@@ -68,7 +74,6 @@ void increment_SHLVL(t_tools **tools)
         shlvl = 0;
     else
         shlvl = ft_atoi(shlvl_value);
-  
     shlvl++;
     new_shlvl_value = ft_itoa(shlvl);
     set_env_var("SHLVL", new_shlvl_value, tools); 

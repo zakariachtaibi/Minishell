@@ -32,6 +32,73 @@ void	setup_child_signals(void)
 	signal(SIGQUIT, handle_sigaquit_child);
 }
 
+// int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
+// {
+//     struct stat statbuf;
+//     pid_t pid;
+//     int status;
+
+//     // Check if the command exists
+//     if (stat(current_cmd->str[0], &statbuf) == -1)
+//     {
+//         // If stat fails, check if the error is "no such file or directory"
+//         if (errno == ENOENT)
+//         {
+//             write(2, "minishell: ", 12);
+//             write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+//             write(2, ": No such file or directory\n", 28);
+//             (*tools)->exit_status = 127; // Command not found
+//         }
+//         else
+//         {
+//             // Handle other stat errors if necessary
+//             perror("minishell");
+//             (*tools)->exit_status = 1; // General error
+//         }
+//         return (1);
+//     }
+
+//     // Check if it's a directory
+//     if (S_ISDIR(statbuf.st_mode))
+//     {
+//         write(2, "minishell: ", 12);
+//         write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+//         write(2, ": is a directory\n", 17);
+//         (*tools)->exit_status = 126; // Command is a directory
+//         return (1);
+//     }
+
+//     // Check if the file is executable
+//     if (access(current_cmd->str[0], X_OK) == -1)
+//     {
+//         write(2, "minishell: ", 12);
+//         write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+//         write(2, ": Permission denied\n", 20);
+//         (*tools)->exit_status = 126; // Permission denied
+//         return (1);
+//     }
+
+//     // Fork and execute the command if it's valid
+//     pid = fork();
+//     if (pid == 0)
+//     {
+//         execve(current_cmd->str[0], current_cmd->str,
+//                 convert_env_vars_to_array((*tools)->env_vars));
+//         perror("execve");
+//         exit(126);
+//     }
+//     else if (pid < 0)
+//     {
+//         perror("fork");
+//     }
+//     else
+//     {
+//         waitpid(pid, &status, 0);
+//         (*tools)->exit_status = WEXITSTATUS(status);
+//     }
+//     return (1);
+// }
+
 int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 {
 	struct stat	statbuf;
@@ -48,7 +115,7 @@ int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 			(*tools)->exit_status = 126;
 			return (1);
 		}
-		else if (access(current_cmd->str[0], X_OK) == 0)
+		if (access(current_cmd->str[0], X_OK) == 0)
 		{
 			pid = fork();
 			if (pid == 0)
@@ -66,8 +133,15 @@ int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 				(*tools)->exit_status = WEXITSTATUS(status);
 			}
 			return (1);
+		} else
+		{
+			write(2, "minishell: ", 12);
+			write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+			write(2, ": Permission denied\n", 20);
+			(*tools)->exit_status = 126;
+			return (1);
 		}
-	}
+	} 
 	// else if (stat(current_cmd->str[0], &statbuf) == -1)
 	// {
 	//     write(2, "minishell: ", 12);
@@ -129,6 +203,28 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 {
 	char	**split;
 
+	if (strcmp(current_cmd->str[0], ".") == 0)
+    {
+        if (!current_cmd->str[1])
+        {
+            write(2, "bash: .: filename argument required\n", 37);
+            write(2, ".: usage: . filename [arguments]\n", 33);
+            (*tools)->exit_status = 2;
+            return;
+        }
+    }
+    if (strcmp(current_cmd->str[0], "..") == 0)
+    {
+        write(2, "bash: ..: command not found\n", 29);
+        (*tools)->exit_status = 127;
+        return;
+    }
+    if (current_cmd->str[0][0] == '\0')
+    {
+        write(2, "bash: : command not found\n", 27);
+        (*tools)->exit_status = 127;
+        return;
+    }
 	if (execute_if_absolute_path(current_cmd, tools))
 		return ;
 	split = get_path_dirs((*tools)->env_vars);

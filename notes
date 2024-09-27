@@ -3,11 +3,6 @@ echo $? after ls | << kk
 
 signal int in heredoc
 
-. -> exit-status must be 2, not 1
-
-.. -> exit-status must be 127, not 1
-
-"" -> command not found, and exit-status is 127 not 1
-
 env shouldprintf  such file or dir or too many args
 
+$'ls' --> should
