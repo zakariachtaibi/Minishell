@@ -1,0 +1,25 @@
+signal int in heredoc
+
+env shouldprintf  such file or dir or too many args
+
+$'ls' --> should
+
+export ls="ls -la" -> export a=$ls -> error
+
+existing var modification // export HOME=
+
+minishell> export $var=test with $var unset
+
+$LESS$var
+
+unset ""
+
+export var="cat Makefile | grep >" ; echo $var
+
+cat Makefile | grep pr | head -n 5 | cd file_not_exit ->>>> exit-status = 1
+
+cat Makefile | grep pr | head -n 5 | hello ->>>>> exit-status = 1
+
+<pp cat <Mak  <notes.txt
+
+unset "" test -> error messsage && exit-status = 1

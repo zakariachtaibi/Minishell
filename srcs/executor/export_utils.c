@@ -62,9 +62,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 	if (plus_equal_sign)
 		handle_plus_equal(tools, str[*i], &key, &value);
 	else if (equal_sign)
-	{
 		handle_equal(str[*i], &key, &value);
-	}
 	else
 	{
 		key = ft_strdup(str[*i]);
