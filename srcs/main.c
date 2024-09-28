@@ -12,18 +12,102 @@
 
 #include "../includes/minishell.h"
 
-// void	ft_free(t_simple_cmds **a)
+// void free_tools(t_tools *tools)
 // {
-// 	t_simple_cmds	*tmp;
+//     if (tools == NULL)
+//         return;
 
-// 	while (*a)
-// 	{
-// 		tmp = (*a)->next;
-// 		(*a)->nbr = 0;
-// 		free(*a);
-// 		*a = tmp;
-// 	}
+//     // Free environment variables
+//     t_env_var *current_env = tools->env_vars;
+//     t_env_var *next_env;
+//     while (current_env)
+//     {
+//         next_env = current_env->next;
+//         free(current_env->key);
+//         free(current_env->value);
+//         free(current_env);
+//         current_env = next_env;
+//     }
+
+//     // Free other allocated memory
+//     free(tools->var_name);
+//     free(tools->var_value);
+//     free(tools->working_dir_path);
+
+//     // Close duplicated file descriptors
+//     if (tools->std_out > 2)
+//         close(tools->std_out);
+//     if (tools->std_in > 2)
+//         close(tools->std_in);
+
+//     // Finally, free the tools structure itself
+//     free(tools);
 // }
+void free_lexical(t_lexical *head)
+{
+    t_lexical *current;
+    t_lexical *next;
+
+    current = head;
+    while (current != NULL)
+    {
+        next = current->next;
+        
+        // Free the string if it exists
+        if (current->str)
+            free(current->str);
+        
+        // Free the current node
+        free(current);
+        
+        current = next;
+    }
+}
+
+void free_cmds(t_simple_cmds **cmds)
+{
+    t_simple_cmds *current;
+    t_simple_cmds *next;
+
+    current = *cmds;
+    while (current)
+    {
+        next = current->next;
+
+        // Free the string array
+        if (current->str)
+        {
+            for (int i = 0; current->str[i]; i++)
+                free(current->str[i]);
+            free(current->str);
+        }
+
+        // Free the heredoc file name if it exists
+        if (current->hd_file_name)
+            free(current->hd_file_name);
+
+        // Free the redirections linked list
+        t_lexical *redir = current->redirections;
+        while (redir)
+        {
+            t_lexical *next_redir = redir->next;
+            free(redir->str);
+            free(redir);
+            redir = next_redir;
+        }
+
+        // Close file descriptors if they're open
+        if (current->fd_in > 2)
+            close(current->fd_in);
+        if (current->fd_out > 2)
+            close(current->fd_out);
+
+        // Free the current command structure
+        free(current);
+
+        current = next;
+    }
+}
 t_tools	*init_tools(void)
 {
 	t_tools	*new_tool;
@@ -136,7 +220,8 @@ int	main(int ac, char **av, char **envp)
 		dup2(tools->std_out, 1);
 		dup2(tools->std_in, 0);
 		free(input);
-		  ft_free()
+		free_lexical(tokens);
+		free_cmds(&cmds);
 		system("leaks minishell");
 	}
 	return (tools->exit_status);
