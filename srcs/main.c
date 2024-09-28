@@ -6,12 +6,24 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/26 20:11:55 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/28 19:04:34 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+// void	ft_free(t_simple_cmds **a)
+// {
+// 	t_simple_cmds	*tmp;
+
+// 	while (*a)
+// 	{
+// 		tmp = (*a)->next;
+// 		(*a)->nbr = 0;
+// 		free(*a);
+// 		*a = tmp;
+// 	}
+// }
 t_tools	*init_tools(void)
 {
 	t_tools	*new_tool;
@@ -28,7 +40,6 @@ t_tools	*init_tools(void)
 	new_tool->std_in = 0;
 	return (new_tool);
 }
-
 
 void set_env_var(const char *key, const char *value, t_tools **tools)
 {
@@ -125,6 +136,8 @@ int	main(int ac, char **av, char **envp)
 		dup2(tools->std_out, 1);
 		dup2(tools->std_in, 0);
 		free(input);
+		  ft_free()
+		system("leaks minishell");
 	}
 	return (tools->exit_status);
 }

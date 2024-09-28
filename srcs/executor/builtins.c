@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/19 12:59:49 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/09/28 16:56:40 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int	builtin_env(t_tools *tools, t_simple_cmds *cmd)
 int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 {
 	int	j;
+	
 	int	flag;
 
 	(void)*tools;
