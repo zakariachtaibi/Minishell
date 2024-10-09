@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/25 21:49:08 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/09 13:17:14 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,8 +229,13 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 		return ;
 	split = get_path_dirs((*tools)->env_vars);
 	if (split && execute_from_path(split, current_cmd, tools))
+	{
+		ft_free(split);
 		return ;
+	}
 	handle_command_not_found(current_cmd, tools);
+	if(split)
+		ft_free(split);
 }
 
 int	count_cmds(t_simple_cmds *list)

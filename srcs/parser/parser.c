@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/25 21:44:25 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/09 13:27:07 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void ft_free(char **arr) 
+{
+    int i = 0;
+    while (arr[i]) {
+        free(arr[i]);
+        i++;
+    }
+    free(arr);
+}
 
 int	is_space(char *str)
 {
@@ -69,6 +79,8 @@ char	*unescape_spaces(char *str, int flag)
 
 	i = 0;
 	j = 0;
+	 if (!str || str[0] == '\0') 
+	 	return NULL;
 	result = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!result)
 		return (NULL);
@@ -77,7 +89,10 @@ char	*unescape_spaces(char *str, int flag)
 	while (str[i])
 	{
 		if (str[i] == ' ' && flag == 1)
+		{
+			free(result);
 			return (NULL);
+		}
 		result[j++] = str[i++];
 	}
 	result[j] = '\0';
@@ -114,9 +129,14 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 					heredoc_flag);
 			unescaped = unescape_spaces(filename->str, flag);
 			if (!unescaped)
-				return (1);
+			{
+				free(redir);
+				free(filename);
+    			return (1);
+			}
 			free(filename->str);
-			filename->str = unescaped;
+			filename->str = ft_strdup(unescaped);
+			free(unescaped);
 			add_redirection((&(*current_cmd)->redirections), filename);
 			delete_node(&token, *temp);
 			*temp = (*temp)->next;
@@ -191,7 +211,8 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 					in++;
 					i++;
 				}
-				free(tmp);
+				free(expanded);  
+				ft_free(tmp);
 			}
 			else
 			{
@@ -243,5 +264,6 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 			handle_words(&temp, &current_cmd, tools);
 		check_and_set_builtin(current_cmd);
 	}
+		// system("leaks minishell");
 	return (cmds_head);
 }

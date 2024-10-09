@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/24 17:25:11 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/09 13:14:38 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,5 +159,7 @@ void			setup_signal(void);
 void			handle_sigint(int sig);
 void			sigint2();
 void			sig_handler1(int test);
+void			free_lexical(t_lexical *head);
+void ft_free(char **arr);
 
 #endif

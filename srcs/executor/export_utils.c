@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/19 13:35:41 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/09 13:09:06 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,13 @@ void	process_export(t_tools *tools, char **str, int *i)
 	{
 		printf("minishell: export: `%s': not a valid identifier\n", str[*i]);
 		free(key);
-		free(value);
+		if (value)
+			free(value);
 		tools->exit_status = 1;
 	}
+    free(key);
+    if (value) 
+		free(value);
 }
 
 void	print_sorted_env(t_tools *tools)

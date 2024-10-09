@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/16 16:18:40 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/08 14:04:07 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ t_lexical	*check_node(char *str, int i)
 
 	node = malloc(sizeof(t_lexical));
 	if (!node)
-		exit(1);
+		return(NULL);
 	node->str = ft_strdup(str);
 	if (!node->str)
-		exit(1);
+	{
+		free(node);
+		return(NULL);
+	}
 	node->i = i;
 	if (!strcmp(str, "|"))
 		node->token = TOKEN_PIPE;
@@ -81,6 +84,11 @@ t_lexical	*tokenize(char *input)
 				{
 					token[j] = '\0';
 					node = check_node(token, i);
+					if (!node)
+					{ 
+                    free_lexical(head);
+                    return NULL;
+					}
 					if (current)
 					{
 						current->next = node;
@@ -116,5 +124,6 @@ t_lexical	*tokenize(char *input)
 			current = node;
 		}
 	}
+	// system("leaks minishell");
 	return (head);
 }

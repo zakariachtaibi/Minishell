@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:42:32 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/26 19:54:24 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/08 14:27:30 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,14 @@ void	sort_env_vars(t_env_var *copy)
 			if (ft_strncmp(i->key, j->key, ft_strlen(i->key) + 1) > 0)
 			{
 				// Swap key and value
-				temp_key = i->key;
-				temp_value = i->value;
-				i->key = j->key;
-				i->value = j->value;
+				temp_key = ft_strdup(i->key);
+				temp_value = ft_strdup(i->value);
+				 free(i->key);
+                free(i->value);
+				i->key = ft_strdup(j->key);
+				i->value = ft_strdup(j->value);
+				free(j->key);
+                free(j->value);
 				j->key = temp_key;
 				j->value = temp_value;
 			}

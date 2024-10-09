@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/19 13:07:11 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/08 14:23:02 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,42 @@
 
 int	has_invalid_redirections(t_lexical **tokens)
 {
-	while ((*tokens))
+	t_lexical *current = *tokens;
+	while ((current))
 	{
-		if ((*tokens)->token != 5 && (*tokens)->token != 0)
+		if (current->token != 5 && current->token != 0)
 		{
-			if (((*tokens)->next == NULL) || (((*tokens)->next)->token != 5))
+			if ((current->next == NULL) || ((current->next)->token != 5))
 				return (1);
 		}
-		else if ((*tokens)->token == 0)
+		else if (current->token == 0)
 		{
-			if (((*tokens)->next == NULL) || (((*tokens)->next)->token == 0)
-				|| ((*tokens)->prev == NULL))
+			if ((current->next == NULL) || ((current->next)->token == 0)
+				|| (current->prev == NULL))
 				return (10);
 		}
-		(*tokens) = (*tokens)->next;
+		current = current->next;
 	}
 	return (0);
 }
 
-t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
+t_lexical *validate_syntax(t_lexical *tokens, t_tools *tools)
 {
-	t_lexical	*temp;
+	t_lexical *temp = tokens;
+    int error_code;
 
-	temp = tokens;
-	if (has_invalid_redirections(&tokens))
-	{
-		if (has_invalid_redirections(&tokens) == 10)
-			printf(" syntax error near unexpected token '%s'\n", (tokens)->str);
-		else if ((tokens)->next == NULL)
-			printf(" syntax error near unexpected token 'newline' \n");
-		else
-			printf(" syntax error near unexpected token '%s'\n",
-				(tokens)->next->str);
-		tools->exit_status = 2;
-		return (NULL);
-	}
-	return (temp);
+    error_code = has_invalid_redirections(&temp);
+    if (error_code) {
+        if (error_code == 10) {
+            printf("syntax error near unexpected token '%s'\n", tokens->str);
+        } else if (!tokens->next) {
+            printf("syntax error near unexpected token 'newline'\n");
+        } else {
+            printf("syntax error near unexpected token '%s'\n", tokens->next->str);
+        }
+        tools->exit_status = 2;
+        return NULL;
+    }
+    return tokens;  // Return the original token list
 }
+

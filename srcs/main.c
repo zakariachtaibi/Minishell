@@ -3,46 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/28 19:04:34 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/09 14:24:50 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// void free_tools(t_tools *tools)
-// {
-//     if (tools == NULL)
-//         return;
+void free_tools(t_tools *tools)
+{
+    if (tools == NULL)
+        return;
 
-//     // Free environment variables
-//     t_env_var *current_env = tools->env_vars;
-//     t_env_var *next_env;
-//     while (current_env)
-//     {
-//         next_env = current_env->next;
-//         free(current_env->key);
-//         free(current_env->value);
-//         free(current_env);
-//         current_env = next_env;
-//     }
+    // Free environment variables
+    t_env_var *current_env = tools->env_vars;
+    t_env_var *next_env;
+    while (current_env)
+    {
+        next_env = current_env->next;
+        free(current_env->key);
+        free(current_env->value);
+        free(current_env);
+        current_env = next_env;
+    }
 
-//     // Free other allocated memory
-//     free(tools->var_name);
-//     free(tools->var_value);
-//     free(tools->working_dir_path);
+    // Free other allocated memory
+    free(tools->var_name);
+    free(tools->var_value);
+    free(tools->working_dir_path);
 
-//     // Close duplicated file descriptors
-//     if (tools->std_out > 2)
-//         close(tools->std_out);
-//     if (tools->std_in > 2)
-//         close(tools->std_in);
+    // Close duplicated file descriptors
+    if (tools->std_out > 2)
+        close(tools->std_out);
+    if (tools->std_in > 2)
+        close(tools->std_in);
 
-//     // Finally, free the tools structure itself
-//     free(tools);
-// }
+    // Finally, free the tools structure itself
+    free(tools);
+}
 void free_lexical(t_lexical *head)
 {
     t_lexical *current;
@@ -184,6 +184,11 @@ int	main(int ac, char **av, char **envp)
 	t_tools			*tools;
 
 	tools = init_tools();
+    if (!tools)
+	{
+		perror("Error initializing tools");
+		exit(1);
+	}
 	tools->std_out = dup(1);
 	tools->std_in = dup(0);
 	(void)av;
@@ -220,9 +225,13 @@ int	main(int ac, char **av, char **envp)
 		dup2(tools->std_out, 1);
 		dup2(tools->std_in, 0);
 		free(input);
+        // ft_free(envp);
 		free_lexical(tokens);
-		free_cmds(&cmds);
-		system("leaks minishell");
+        // if(cmds)
+		//     free_cmds(&cmds);
+         
+		// system("leaks minishell");
 	}
+    free_tools(tools);                     
 	return (tools->exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/19 13:45:07 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/08 14:09:05 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ t_simple_cmds	*init_cmd(void)
 	t_simple_cmds	*new_cmd;
 
 	new_cmd = malloc(sizeof(t_simple_cmds));
+	 if (!new_cmd)
+	{
+        return NULL;
+	}
 	new_cmd->next = NULL;
 	new_cmd->prev = NULL;
 	new_cmd->str = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/28 16:56:40 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/09 13:56:16 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 {
-	char	*buff;
 
 	(void)cmd;
+	  char *buff;
 	buff = malloc(1024 * sizeof(char));
 	if (!buff)
 	{
@@ -31,11 +31,12 @@ int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 		// tools->exit_status = 1;
 		return (1);
 	}
-	printf("%s\n", buff);
-	tools->working_dir_path = buff;
+	ft_putstr_fd(buff, 1);
+	printf("\n");
+	tools->working_dir_path = ft_strdup(buff);
 	free(buff);
 	return (0);
-}
+} //leaks fixed;
 
 int	builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 {
@@ -59,49 +60,48 @@ int	builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 	exit(exit_status);
 }
 
-int	builtin_unset(t_tools *tools, t_simple_cmds *cmd)
-{
-	t_env_var	*current;
-	int			i;
-
-	current = tools->env_vars;
-	i = 1;
-	while (cmd->str[i])
-	{
-		current = tools->env_vars;
-		while (current)
+int builtin_unset(t_tools *tools, t_simple_cmds *cmd) {
+    int i = 1;
+    while (cmd->str[i]) {
+        t_env_var *current = tools->env_vars;
+        // t_env_var *prev = NULL;
+        while (current) 
 		{
-			if (!(strcmp(current->key, cmd->str[i])))
-			{
-				delete_node_env(&(tools->env_vars), current);
-				break ;
-			}
-			current = current->next;
-		}
-		i++;
-	}
-	return (0);
-}
+            if (strcmp(current->key, cmd->str[i]) == 0) {
+                // Delete the node
+                delete_node_env(&(tools->env_vars), current);
+                break; 
+            }
+            // prev = current;
+            current = current->next;
+        }
+        if (!current) {
+            fprintf(stderr, "minishell: unset: %s: no such variable\n", cmd->str[i]);
+        }
+        i++;
+    }
+    return 0;
+}//leaks fixed
 
-int	builtin_env(t_tools *tools, t_simple_cmds *cmd)
-{
-	int			i;
-	t_env_var	*current;
+int builtin_env(t_tools *tools, t_simple_cmds *cmd) {
+    int i = 1;
+    t_env_var *current = tools->env_vars;
 
-	i = 1;
-	if (cmd->str[i] == NULL)
-	{
-		current = tools->env_vars;
-		while (current)
-		{
-			if (ft_strncmp(current->value, "", 1))
-				printf("%s=%s\n", current->key, current->value);
-			current = current->next;
-		}
-		return (0);
-	}
-	return (1);
-}
+    if (cmd->str[i] == NULL) {
+        if (!current) {
+            printf("No environment variables set.\n");
+            return 0;
+        }
+        while (current) {
+            if (current->value) { // Only print if the value is non-NULL
+                printf("%s=%s\n", current->key, current->value);
+            }
+            current = current->next;
+        }
+        return 0;
+    }
+    return 1; // Indicate invalid usage
+}// Leaks fixed
 
 int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 {
@@ -123,4 +123,4 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 	if (!flag)
 		ft_putchar_fd('\n', 1);
 	return (0);
-}
+}// leaks fixed
