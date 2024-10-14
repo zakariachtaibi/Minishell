@@ -1,6 +1,5 @@
 signal int in heredoc
 
-env shouldprintf  such file or dir or too many args
 
 $'ls' --> should
 

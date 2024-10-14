@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:42:32 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/08 14:27:30 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/14 11:09:23 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,11 @@ void	print_env_vars(t_env_var *copy)
 		// if (current->value[0] == '\0')
 		//     printf("declare -x %s=\"\"\n", current->key);
 		if (current->value == NULL)
-			printf("declare -x %s\n", current->key);
+		{
+			ft_putstr_fd("declare -x", 1);
+			ft_putstr_fd(current->key, 1);
+			ft_putstr_fd("\n", 1);
+		}
 		// else if (current->value[0] == '\0')
 		// Case when the value is an empty string `""` (e.g.,
 		// export hello="")
@@ -63,9 +67,19 @@ void	print_env_vars(t_env_var *copy)
 		else
 		{
 			if (current->value[0] == '\0')
-				printf("declare -x %s\n", current->key);
+			{
+				ft_putstr_fd("declare -x ", 1);
+				ft_putstr_fd(current->key, 1);
+				ft_putstr_fd("\n", 1);
+			}
 			else
-				printf("declare -x %s=\"%s\"\n", current->key, current->value);
+			{
+				ft_putstr_fd("declare -x", 1);
+				ft_putstr_fd(current->key, 1);
+				ft_putstr_fd("=", 1);
+				ft_putstr_fd(current->value, 1);
+				ft_putstr_fd("\n", 1);
+			}
 		} // General case where value is non-empty
 		current = current->next;
 	}

@@ -6,11 +6,17 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/09 14:24:50 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/14 11:35:49 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void cleanup_readline() 
+{
+    clear_history();    // Clear history entries
+    rl_free_line_state();  // Release any state maintained by readline
+}
 
 void free_tools(t_tools *tools)
 {
@@ -183,6 +189,14 @@ int	main(int ac, char **av, char **envp)
 	t_simple_cmds	*cmds;
 	t_tools			*tools;
 
+if (ac != 1)
+	{
+        // free_tools(tools);
+        // cleanup_readline();
+        perror("minishell");
+		// printf("wrong number of args");
+		exit(1);
+	}
 	tools = init_tools();
     if (!tools)
 	{
@@ -192,11 +206,6 @@ int	main(int ac, char **av, char **envp)
 	tools->std_out = dup(1);
 	tools->std_in = dup(0);
 	(void)av;
-	if (ac != 1)
-	{
-		printf("wrong number of args");
-		exit(1);
-	}
 	get_env_vars(tools, envp);
 	increment_SHLVL(&tools);
 	while (1)
@@ -227,11 +236,14 @@ int	main(int ac, char **av, char **envp)
 		free(input);
         // ft_free(envp);
 		free_lexical(tokens);
-        // if(cmds)
-		//     free_cmds(&cmds);
+		free_cmds(&cmds);
          
-		// system("leaks minishell");
+		system("leaks minishell");
 	}
-    free_tools(tools);                     
+    
+    cleanup_readline();
+    free_lexical(tokens);
+	free_cmds(&cmds);
+    // free_tools(tools);                     
 	return (tools->exit_status);
 }

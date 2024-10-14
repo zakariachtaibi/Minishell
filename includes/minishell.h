@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/09 13:14:38 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/14 10:54:30 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <sys/stat.h>
 # include <string.h>
 #include <errno.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 # include "../libft/libft.h"
 
@@ -161,5 +163,8 @@ void			sigint2();
 void			sig_handler1(int test);
 void			free_lexical(t_lexical *head);
 void ft_free(char **arr);
+void free_cmds(t_simple_cmds **cmds);
+void free_tools(t_tools *tools);
+void 	cleanup_readline();
 
 #endif
