@@ -4,12 +4,6 @@ minishell> export $var=test with $var unset
 
 $LESS$var
 
-export var="cat Makefile | grep >" ; echo $var
-
-cat Makefile | grep pr | head -n 5 | cd file_not_exit ->>>> exit-status = 1
-
-cat Makefile | grep pr | head -n 5 | hello ->>>>> exit-status = 1
-
 <pp cat <Mak  <notes.txt
 
 echo $? after ls | << kk
@@ -17,3 +11,7 @@ echo $? after ls | << kk
 env shouldprintf  such file or dir or too many args
 
 $'ls' --> should
+
+echo ~
+
+> test | echo bbb -> problme in all redirect bcuz of double free
