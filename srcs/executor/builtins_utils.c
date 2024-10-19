@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 14:18:10 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/19 16:25:33 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,21 +89,29 @@ void	add_new_env_var(t_tools *tools, char *key, char *value,
 		tools->env_vars = new_var;
 }
 
-void	handle_env_var(t_tools **tools, char *key, char *value)
+void handle_env_var(t_tools **tools, char *key, char *value)
 {
-	t_env_var	*current;
-	t_env_var	*prev;
-
-	current = (*tools)->env_vars;
-	prev = NULL;
-
-	
-	while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) < 0)
-	{
-		printf("%s\n", current->key);
-		prev = current;
-		
-		current = current->next;	
-	}
-		add_new_env_var((*tools), key, value, current, prev);
+    t_env_var *current;
+    t_env_var *prev;
+    
+    current = (*tools)->env_vars;
+    while (current)
+    {
+        if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
+        {
+            free(current->value);
+            current->value = value;
+            free(key);
+            return;
+        }
+        current = current->next;
+    }
+    current = (*tools)->env_vars;
+    prev = NULL;
+    while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) < 0)
+    {
+        prev = current;
+        current = current->next;
+    }
+    add_new_env_var((*tools), key, value, current, prev);
 }

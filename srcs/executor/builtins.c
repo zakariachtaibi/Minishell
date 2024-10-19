@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 12:32:35 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/19 17:03:52 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,41 +69,65 @@ int	builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 	exit(exit_status);
 }
 
-int	builtin_unset(t_tools *tools, t_simple_cmds *cmd)
+static int is_valid_identifier(const char *str)
 {
-	int i = 1;
-	while (cmd->str[i])
-	{
-		t_env_var *current = tools->env_vars;
-		t_env_var *node_to_delete = NULL; // Pointer to the node to delete
+    if (!str || !*str || *str == '{' || (*str >= '0' && *str <= '9'))
+        return (0);
+    while (*str)
+    {
+        if (!(*str == '_' || (*str >= 'a' && *str <= 'z') || 
+            (*str >= 'A' && *str <= 'Z') || 
+            (*str >= '0' && *str <= '9')))
+            return (0);
+        str++;
+    }
+    return (1);
+}
 
-		// Find the environment variable
-		while (current)
-		{
-			if (strcmp(current->key, cmd->str[i]) == 0)
-			{
-				node_to_delete = current; // Store the node to delete
-				break ;
-			}
-			current = current->next;
-		}
+int builtin_unset(t_tools *tools, t_simple_cmds *cmd)
+{
+    int			i;
+    int 		had_error;
+	t_env_var 	*current;
+	t_env_var 	*node_to_delete;
 
-		if (node_to_delete)
-		{
-			// Delete the node if found
-			delete_node_env(&(tools->env_vars), node_to_delete);
-		}
-		else
-		{
-			// Variable not found
-			fprintf(stderr, "minishell: unset: %s: no such variable\n",
-					cmd->str[i]);
-		}
-
-		i++;
-	}
-	return (0);
-} //leaks fixed
+	i = 1;
+	had_error = 0;
+    while (cmd->str[i])
+    {
+        if (!is_valid_identifier(cmd->str[i]))
+        {
+            fprintf(stderr, "minishell: unset: `%s': not a valid identifier\n", 
+                    cmd->str[i]);
+            had_error = 1;
+            i++;
+            continue;
+        }
+    	current = tools->env_vars;
+        node_to_delete = NULL;
+        while (current)
+        {
+            if (strcmp(current->key, cmd->str[i]) == 0)
+            {
+                node_to_delete = current;
+                break;
+            }
+            current = current->next;
+        }
+        if (node_to_delete)
+        {
+            delete_node_env(&(tools->env_vars), node_to_delete);
+            if (tools->exit_status == 1)
+                had_error = 1;
+        }
+        i++;
+    }
+    if (had_error)
+        tools->exit_status = 1;
+    else
+        tools->exit_status = 0;  
+    return (tools->exit_status);
+}
 
 int	builtin_env(t_tools *tools, t_simple_cmds *cmd)
 {

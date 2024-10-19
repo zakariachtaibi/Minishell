@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/09 13:27:07 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/19 17:09:56 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 
 	flag = 0;
 	heredoc_flag = 0;
+	(*current_cmd)->num_redirections_heredoc = 0;
 	if (check_token(*temp, &heredoc_flag))
 	{
 		redir = copy_node(*temp);
