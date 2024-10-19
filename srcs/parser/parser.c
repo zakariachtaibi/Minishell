@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 17:09:56 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/19 18:37:56 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 	flag = 0;
 	in = 0;
 	heredoc_flag = 0;
+	int export_flag = 0;
 	word_temp = *temp;
 	word_count = 0;
 	while (word_temp && word_temp->token == TOKEN_WORD)
@@ -201,10 +202,12 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 	i = count_str;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
+		if(strcmp((*temp)->str, "export") == 0)
+			export_flag=1;
 		expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
 		if (expanded != NULL)
 		{
-			if (flag == 1 && (is_space(expanded) == 1))
+			if (flag == 1 && (is_space(expanded) == 1) && (export_flag != 1))
 			{
 				in = 0;
 				tmp = ft_split(expanded, ' ');

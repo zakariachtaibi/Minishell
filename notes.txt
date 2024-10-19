@@ -1,5 +1,4 @@
 
-export ls="ls -la" -> export a=$ls -> error
 
 minishell> export $var=test with $var unset
 

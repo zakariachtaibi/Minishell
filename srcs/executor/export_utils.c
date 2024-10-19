@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 14:09:22 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/19 19:21:07 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,10 @@ void	process_export(t_tools *tools, char **str, int *i)
 	if (plus_equal_sign)
 		handle_plus_equal(tools, str[*i], &key, &value);
 	else if (equal_sign)
+	{
 		handle_equal(str[*i], &key, &value);
+	}
+		
 	else
 	{
 		key = ft_strdup(str[*i]);
@@ -108,7 +111,6 @@ void	print_sorted_env(t_tools *tools)
 int	builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
 	int i = 1;
-
 	if (!cmd->str[i])
 	{
 		print_sorted_env(tools);

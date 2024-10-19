@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/19 12:35:20 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/19 19:16:08 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	*expand_variable(t_tools *tools, const char *current_word, size_t *j)
 	var_value = get_vars_value(var_name, tools);
 	free(var_name);
 	if (!var_value)
-		return (NULL);
+		return (ft_strdup(""));
 	return (ft_strdup(var_value));
 }
 
@@ -185,14 +185,6 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 				*flag = 0;
 			}
 		}
-		// else if (current_word[j] == '~')
-		// {
-		// 	new_expansion = ft_strdup(get_vars_value("~", tools));
-		// 	if (!new_expansion)
-		// 		return (ft_strdup(""));
-		// 	j++;
-		// 	*flag = 2;
-		// }
 		else
 		{
 			new_expansion = expand_plain_text(current_word, &j);
@@ -201,8 +193,8 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		if (new_expansion)
 		{
 			char *temp_word = ft_strjoin(expanded_word, new_expansion);
-			free(expanded_word);
-			free(new_expansion);
+			// free(expanded_word);
+			// free(new_expansion);
 			expanded_word = temp_word;
 		}
 		else
