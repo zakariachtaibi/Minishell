@@ -18,12 +18,12 @@ t_lexical	*check_node(char *str, int i)
 
 	node = malloc(sizeof(t_lexical));
 	if (!node)
-		return(NULL);
+		return (NULL);
 	node->str = ft_strdup(str);
 	if (!node->str)
 	{
 		free(node);
-		return(NULL);
+		return (NULL);
 	}
 	node->i = i;
 	if (!strcmp(str, "|"))
@@ -78,16 +78,16 @@ t_lexical	*tokenize(char *input)
 				token[j++] = input[i++];
 			}
 			else if (!in_quotes && (input[i] == '>' || input[i] == '<'
-					|| input[i] == '|'))
+						|| input[i] == '|'))
 			{
 				if (j > 0)
 				{
 					token[j] = '\0';
 					node = check_node(token, i);
 					if (!node)
-					{ 
-                    free_lexical(head);
-                    return NULL;
+					{
+						free_lexical(head);
+						return (NULL);
 					}
 					if (current)
 					{

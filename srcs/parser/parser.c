@@ -12,14 +12,17 @@
 
 #include "../../includes/minishell.h"
 
-void ft_free(char **arr) 
+void	ft_free(char **arr)
 {
-    int i = 0;
-    while (arr[i]) {
-        free(arr[i]);
-        i++;
-    }
-    free(arr);
+	int	i;
+
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }
 
 int	is_space(char *str)
@@ -79,8 +82,8 @@ char	*unescape_spaces(char *str, int flag)
 
 	i = 0;
 	j = 0;
-	 if (!str || str[0] == '\0') 
-	 	return NULL;
+	if (!str || str[0] == '\0')
+		return (NULL);
 	result = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!result)
 		return (NULL);
@@ -132,7 +135,7 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 			{
 				free(redir);
 				free(filename);
-    			return (1);
+				return (1);
 			}
 			free(filename->str);
 			filename->str = ft_strdup(unescaped);
@@ -179,7 +182,6 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		word_count++;
 		word_temp = word_temp->next;
 	}
-
 	if ((*current_cmd)->str)
 		count_str = ft_strlen_array((*current_cmd)->str);
 	else
@@ -211,7 +213,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 					in++;
 					i++;
 				}
-				free(expanded);  
+				free(expanded);
 				ft_free(tmp);
 			}
 			else
@@ -264,6 +266,6 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 			handle_words(&temp, &current_cmd, tools);
 		check_and_set_builtin(current_cmd);
 	}
-		// system("leaks minishell");
+	// system("leaks minishell");
 	return (cmds_head);
 }

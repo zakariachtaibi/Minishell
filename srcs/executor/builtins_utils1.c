@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:42:32 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/14 11:09:23 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/19 13:24:17 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	sort_env_vars(t_env_var *copy)
 {
 	t_env_var	*i;
 	t_env_var	*j;
-	char		*temp_key;
-	char		*temp_value;
 
 	i = copy;
 	while (i)
@@ -27,17 +25,7 @@ void	sort_env_vars(t_env_var *copy)
 		{
 			if (ft_strncmp(i->key, j->key, ft_strlen(i->key) + 1) > 0)
 			{
-				// Swap key and value
-				temp_key = ft_strdup(i->key);
-				temp_value = ft_strdup(i->value);
-				 free(i->key);
-                free(i->value);
-				i->key = ft_strdup(j->key);
-				i->value = ft_strdup(j->value);
-				free(j->key);
-                free(j->value);
-				j->key = temp_key;
-				j->value = temp_value;
+				swap_values(&(i->key), &(i->value), &(j->key), &(j->value));
 			}
 			j = j->next;
 		}
@@ -52,35 +40,7 @@ void	print_env_vars(t_env_var *copy)
 	current = copy;
 	while (current)
 	{
-		// if (current->value[0] == '\0')
-		//     printf("declare -x %s=\"\"\n", current->key);
-		if (current->value == NULL)
-		{
-			ft_putstr_fd("declare -x", 1);
-			ft_putstr_fd(current->key, 1);
-			ft_putstr_fd("\n", 1);
-		}
-		// else if (current->value[0] == '\0')
-		// Case when the value is an empty string `""` (e.g.,
-		// export hello="")
-		//     printf("declare -x %s=\"\"\n", current->key);
-		else
-		{
-			if (current->value[0] == '\0')
-			{
-				ft_putstr_fd("declare -x ", 1);
-				ft_putstr_fd(current->key, 1);
-				ft_putstr_fd("\n", 1);
-			}
-			else
-			{
-				ft_putstr_fd("declare -x", 1);
-				ft_putstr_fd(current->key, 1);
-				ft_putstr_fd("=", 1);
-				ft_putstr_fd(current->value, 1);
-				ft_putstr_fd("\n", 1);
-			}
-		} // General case where value is non-empty
+		check_env_vars(&current);
 		current = current->next;
 	}
 }
@@ -106,7 +66,6 @@ char	*get_env_value(t_env_var *env_vars, const char *key)
 	key_len = ft_strlen(key);
 	while (env_vars)
 	{
-		// Check if the current node's key matches the provided key
 		if (!ft_strncmp(env_vars->key, key, key_len)
 			&& env_vars->key[key_len] == '\0')
 			return (env_vars->value);
@@ -117,7 +76,9 @@ char	*get_env_value(t_env_var *env_vars, const char *key)
 
 int	is_numeric(char *str)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
 	while (str[i])

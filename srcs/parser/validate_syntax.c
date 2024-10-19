@@ -14,7 +14,9 @@
 
 int	has_invalid_redirections(t_lexical **tokens)
 {
-	t_lexical *current = *tokens;
+	t_lexical	*current;
+
+	current = *tokens;
 	while ((current))
 	{
 		if (current->token != 5 && current->token != 0)
@@ -33,23 +35,30 @@ int	has_invalid_redirections(t_lexical **tokens)
 	return (0);
 }
 
-t_lexical *validate_syntax(t_lexical *tokens, t_tools *tools)
+t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 {
-	t_lexical *temp = tokens;
-    int error_code;
+	t_lexical	*temp;
+	int			error_code;
 
-    error_code = has_invalid_redirections(&temp);
-    if (error_code) {
-        if (error_code == 10) {
-            printf("syntax error near unexpected token '%s'\n", tokens->str);
-        } else if (!tokens->next) {
-            printf("syntax error near unexpected token 'newline'\n");
-        } else {
-            printf("syntax error near unexpected token '%s'\n", tokens->next->str);
-        }
-        tools->exit_status = 2;
-        return NULL;
-    }
-    return tokens;  // Return the original token list
+	temp = tokens;
+	error_code = has_invalid_redirections(&temp);
+	if (error_code)
+	{
+		if (error_code == 10)
+		{
+			printf("syntax error near unexpected token '%s'\n", tokens->str);
+		}
+		else if (!tokens->next)
+		{
+			printf("syntax error near unexpected token 'newline'\n");
+		}
+		else
+		{
+			printf("syntax error near unexpected token '%s'\n",
+					tokens->next->str);
+		}
+		tools->exit_status = 2;
+		return (NULL);
+	}
+	return (tokens); // Return the original token list
 }
-

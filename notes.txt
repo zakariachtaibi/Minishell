@@ -22,3 +22,10 @@ cat Makefile | grep pr | head -n 5 | hello ->>>>> exit-status = 1
 <pp cat <Mak  <notes.txt
 
 unset "" test -> error messsage && exit-status = 1
+echo $? after ls | << kk
+
+signal int in heredoc
+
+env shouldprintf  such file or dir or too many args
+
+$'ls' --> should

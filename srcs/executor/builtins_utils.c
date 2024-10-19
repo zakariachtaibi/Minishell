@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/09/28 18:59:15 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/19 14:18:10 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,28 +87,23 @@ void	add_new_env_var(t_tools *tools, char *key, char *value,
 		prev->next = new_var;
 	else
 		tools->env_vars = new_var;
-	// system("leaks minishell");
 }
 
-void	handle_env_var(t_tools *tools, char *key, char *value)
+void	handle_env_var(t_tools **tools, char *key, char *value)
 {
 	t_env_var	*current;
 	t_env_var	*prev;
 
-	current = tools->env_vars;
+	current = (*tools)->env_vars;
 	prev = NULL;
+
+	
 	while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) < 0)
 	{
+		printf("%s\n", current->key);
 		prev = current;
-		current = current->next;
+		
+		current = current->next;	
 	}
-	if (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
-	{
-		free(current->value);
-		current->value = value;
-		free(key);
-	}
-	else
-		add_new_env_var(tools, key, value, current, prev);
+		add_new_env_var((*tools), key, value, current, prev);
 }
-//leaks done

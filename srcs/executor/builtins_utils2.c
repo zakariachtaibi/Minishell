@@ -1,0 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_utils2.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/19 13:11:55 by hchouai           #+#    #+#             */
+/*   Updated: 2024/10/19 13:18:38 by hchouai          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+
+void	swap_values(char **ikey, char **ivalue, char **jkey, char **jvalue)
+{
+	char	*temp_key;
+	char	*temp_value;
+
+	temp_key = ft_strdup(*ikey);
+	temp_value = ft_strdup(*ivalue);
+	free(*ikey);
+	free(*ivalue);
+	(*ikey) = ft_strdup(*jkey);
+	(*ivalue) = ft_strdup(*jvalue);
+	free(*jkey);
+	free(*jvalue);
+	(*jkey) = temp_key;
+	(*jvalue) = temp_value;
+}
+
+void	check_env_vars(t_env_var **current)
+{
+	if ((*current)->value == NULL)
+	{
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd((*current)->key, 1);
+		ft_putstr_fd("\n", 1);
+	}
+	else
+	{
+		if ((*current)->value[0] == '\0')
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd((*current)->key, 1);
+			ft_putstr_fd("\n", 1);
+		}
+		else
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd((*current)->key, 1);
+			ft_putstr_fd("=", 1);
+			ft_putstr_fd((*current)->value, 1);
+			ft_putstr_fd("\n", 1);
+		}
+	}
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/14 10:54:30 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/19 13:36:34 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void			count_quotes_and_parentheses(char c, int *quote, int *dquote, int *parent
 int				count_env_vars(t_env_var *env_vars);
 void			print_sorted_env(t_tools *tools);
 void			print_env_vars(t_env_var *copy);
-void			handle_env_var(t_tools *tools, char *key, char *value);
+void			handle_env_var(t_tools **tools, char *key, char *value);
 void			handle_command_not_found(t_simple_cmds *current_cmd, t_tools **tools);
 t_lexical		*tokenize(char *input);
 char			*expand_vars(t_tools *tools, char *temp, int *flag, int heredoc_flag);	
@@ -162,6 +162,9 @@ void			handle_sigint(int sig);
 void			sigint2();
 void			sig_handler1(int test);
 void			free_lexical(t_lexical *head);
+
+void	swap_values(char **ikey, char **ivalue, char **jkey, char **jvalue);
+void	check_env_vars(t_env_var **current);
 void ft_free(char **arr);
 void free_cmds(t_simple_cmds **cmds);
 void free_tools(t_tools *tools);

@@ -121,7 +121,7 @@ int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 			if (pid == 0)
 			{
 				execve(current_cmd->str[0], current_cmd->str,
-					convert_env_vars_to_array((*tools)->env_vars));
+						convert_env_vars_to_array((*tools)->env_vars));
 				perror("execve");
 				exit(126);
 			}
@@ -133,7 +133,8 @@ int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 				(*tools)->exit_status = WEXITSTATUS(status);
 			}
 			return (1);
-		} else
+		}
+		else
 		{
 			write(2, "minishell: ", 12);
 			write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
@@ -141,7 +142,7 @@ int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 			(*tools)->exit_status = 126;
 			return (1);
 		}
-	} 
+	}
 	// else if (stat(current_cmd->str[0], &statbuf) == -1)
 	// {
 	//     write(2, "minishell: ", 12);
@@ -162,7 +163,7 @@ void	execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
 	if (pid == 0)
 	{
 		execve(cmd_path, current_cmd->str,
-			convert_env_vars_to_array((*tools)->env_vars));
+				convert_env_vars_to_array((*tools)->env_vars));
 		// perror("execve"); why this should be here?
 		// exit(126);
 	}
@@ -204,27 +205,27 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 	char	**split;
 
 	if (strcmp(current_cmd->str[0], ".") == 0)
-    {
-        if (!current_cmd->str[1])
-        {
-            write(2, "bash: .: filename argument required\n", 37);
-            write(2, ".: usage: . filename [arguments]\n", 33);
-            (*tools)->exit_status = 2;
-            return;
-        }
-    }
-    if (strcmp(current_cmd->str[0], "..") == 0)
-    {
-        write(2, "bash: ..: command not found\n", 29);
-        (*tools)->exit_status = 127;
-        return;
-    }
-    if (current_cmd->str[0][0] == '\0')
-    {
-        write(2, "bash: : command not found\n", 27);
-        (*tools)->exit_status = 127;
-        return;
-    }
+	{
+		if (!current_cmd->str[1])
+		{
+			write(2, "bash: .: filename argument required\n", 37);
+			write(2, ".: usage: . filename [arguments]\n", 33);
+			(*tools)->exit_status = 2;
+			return ;
+		}
+	}
+	if (strcmp(current_cmd->str[0], "..") == 0)
+	{
+		write(2, "bash: ..: command not found\n", 29);
+		(*tools)->exit_status = 127;
+		return ;
+	}
+	if (current_cmd->str[0][0] == '\0')
+	{
+		write(2, "bash: : command not found\n", 27);
+		(*tools)->exit_status = 127;
+		return ;
+	}
 	if (execute_if_absolute_path(current_cmd, tools))
 		return ;
 	split = get_path_dirs((*tools)->env_vars);
@@ -234,7 +235,7 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 		return ;
 	}
 	handle_command_not_found(current_cmd, tools);
-	if(split)
+	if (split)
 		ft_free(split);
 }
 
@@ -284,7 +285,7 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
 				if (current_cmd->fd_out != STDOUT_FILENO)
 					dup2(current_cmd->fd_out, STDOUT_FILENO);
 				(*tools)->exit_status = current_cmd->builtin(*tools,
-						current_cmd);
+																current_cmd);
 				dup2(old_stdout, STDOUT_FILENO);
 				dup2(old_stdin, STDIN_FILENO);
 				close(old_stdout);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/14 10:00:37 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/19 12:35:20 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 	char	*new_expanded_word;
 	char	*var_value;
 	char	temp_str[2];
+	size_t	var_start;
+	char	*var_name;
 
 	expanded_word = ft_strdup("");
 	while (current_word[*j] && current_word[*j] != '"')
@@ -65,10 +67,11 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 			}
 			else if (ft_isalnum(current_word[*j]) || current_word[*j] == '_')
 			{
-				size_t var_start = *j;
-				while (current_word[*j] && (ft_isalnum(current_word[*j]) || current_word[*j] == '_'))
+				var_start = *j;
+				while (current_word[*j] && (ft_isalnum(current_word[*j])
+						|| current_word[*j] == '_'))
 					(*j)++;
-				char *var_name = ft_strndup(&current_word[var_start], *j - var_start);
+				var_name = ft_strndup(&current_word[var_start], *j - var_start);
 				var_value = get_vars_value(var_name, tools);
 				free(var_name);
 				if (!var_value)
@@ -125,8 +128,9 @@ char	*expand_variable(t_tools *tools, const char *current_word, size_t *j)
 
 char	*expand_plain_text(const char *current_word, size_t *j)
 {
-	char	temp_str[2] = {current_word[*j], '\0'};
+	// char	temp_str[2];
 
+	char temp_str[2] = {current_word[*j], '\0'};
 	(*j)++;
 	return (ft_strdup(temp_str));
 }
@@ -168,8 +172,8 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 				*flag = 1;
 			}
 			else if (j + 1 < len && (current_word[j + 1] == '?'
-					|| ft_isalnum(current_word[j + 1]) || current_word[j
-					+ 1] == '_'))
+						|| ft_isalnum(current_word[j + 1]) || current_word[j
+						+ 1] == '_'))
 			{
 				new_expansion = expand_variable(tools, current_word, &j);
 				*flag = 1;

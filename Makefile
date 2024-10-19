@@ -41,6 +41,7 @@ SRCS = srcs/main.c \
 		srcs/expander/expander_utils.c\
 		srcs/parser/redirections_checker.c\
 		srcs/signals/signals.c\
+		srcs/executor/builtins_utils2.c
 
 
 

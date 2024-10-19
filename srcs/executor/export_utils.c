@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/09 13:09:06 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/19 14:09:22 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 	char	*plus_equal_sign;
 	char	*equal_sign;
 	int		in;
+	// t_tools *tmp = tools;
 
 	plus_equal_sign = ft_strnstr(str[*i], "+=", ft_strlen(str[*i]));
 	equal_sign = ft_strchr(str[*i], '=');
@@ -74,7 +75,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 			|| key[in] == 32)
 		{
 			printf("minishell: export: `%s': not a valid identifier\n",
-				str[*i]);
+					str[*i]);
 			free(key);
 			free(value);
 			tools->exit_status = 1;
@@ -83,7 +84,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 		in++;
 	}
 	if (key[0] != '\0')
-		handle_env_var(tools, key, value);
+		handle_env_var(&tools, key, value);
 	else
 	{
 		printf("minishell: export: `%s': not a valid identifier\n", str[*i]);
@@ -92,9 +93,6 @@ void	process_export(t_tools *tools, char **str, int *i)
 			free(value);
 		tools->exit_status = 1;
 	}
-    free(key);
-    if (value) 
-		free(value);
 }
 
 void	print_sorted_env(t_tools *tools)

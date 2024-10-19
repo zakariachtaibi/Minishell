@@ -43,9 +43,10 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 		printf("minishell: maximum here-document count exceeded\n");
 		exit(2);
 	}
-	if ((*current_cmd)->hd_file_name) {
-        free((*current_cmd)->hd_file_name);  
-    }
+	if ((*current_cmd)->hd_file_name)
+	{
+		free((*current_cmd)->hd_file_name);
+	}
 	(*current_cmd)->hd_file_name = ft_strdup((*redir)->str);
 	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
 		close((*current_cmd)->fd_in);

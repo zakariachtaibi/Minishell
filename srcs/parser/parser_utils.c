@@ -34,9 +34,9 @@ t_simple_cmds	*init_cmd(void)
 	t_simple_cmds	*new_cmd;
 
 	new_cmd = malloc(sizeof(t_simple_cmds));
-	 if (!new_cmd)
+	if (!new_cmd)
 	{
-        return NULL;
+		return (NULL);
 	}
 	new_cmd->next = NULL;
 	new_cmd->prev = NULL;
