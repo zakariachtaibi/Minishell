@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 11:12:37 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:15:59 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,14 @@ void	process_export(t_tools *tools, char **str, int *i)
 	plus_equal_sign = ft_strnstr(str[*i], "+=", ft_strlen(str[*i]));
 	equal_sign = ft_strchr(str[*i], '=');
 	in = 0;
-	if (str[*i][0] == '\0')
+	if (str[*i][0] == '\0' && tools->export_flag == 1)
 	{
-		print_sorted_env(tools);
+		if(!str[*i + 1])
+		{
+			print_sorted_env(tools);
 			tools->exit_status = 0;
 			return ;
+		}
 	}
 	if (plus_equal_sign)
 		handle_plus_equal(tools, str[*i], &key, &value);
@@ -77,7 +80,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 		if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in])))
 			|| key[in] == 32)
 		{
-			printf("minishell: export: `%s': not a valid identifier\n",
+			printf("minishell: export: `%s': not a valid ildentifier\n",
 					str[*i]);
 			free(key);
 			free(value);
@@ -88,7 +91,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 	}
 	if (key[0] != '\0')
 		handle_env_var(&tools, key, value);
-	else
+	else if(key[0] == '\0' && (tools->export_flag == 0))
 	{
 		printf("minishell: export `%s': not a valid identifier\n", str[*i]);
 		free(key);

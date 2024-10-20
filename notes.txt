@@ -3,3 +3,4 @@ cat Makefile | grep pr | head -n 5 | cd file_not_exit ->>>> exit-status = 1
 
 cat Makefile | grep pr | head -n 5 | hello ->>>>> exit-status = 1 
 
+ export $llll $HOME

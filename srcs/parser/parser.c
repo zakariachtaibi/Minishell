@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 11:23:31 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:08:32 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,8 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		if(strcmp((*temp)->str, "export") == 0)
 			export_flag=1;
 		expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
+		tools->export_flag = flag;
+		// printf("%d\n", tools->export_flag);
 		if (expanded != NULL)
 		{
 			if (flag == 1 && (is_space(expanded) == 1) && (export_flag != 1))

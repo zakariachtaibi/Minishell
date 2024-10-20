@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 13:36:34 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:06:22 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_tools
 	int			exit_status;
 	int			std_out;
 	int			std_in;
+	int 		export_flag;
 }	t_tools;
 
 typedef struct s_simple_cmds
