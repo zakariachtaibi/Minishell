@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 17:03:52 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/20 11:19:40 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,10 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
 	search_for_argn(cmd, &flag, &j);
 	while (cmd->str[j])
 	{
-		ft_putstr_fd(cmd->str[j], 1);
+		if(strcmp(cmd->str[j],"~") == 0)
+				ft_putstr_fd("/Users/hchouai", 1);
+		else
+			ft_putstr_fd(cmd->str[j], 1);
 		if (cmd->str[j + 1] != NULL)
 			ft_putchar_fd(' ', 1);
 		j++;

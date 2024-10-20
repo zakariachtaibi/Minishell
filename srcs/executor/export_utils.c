@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 19:21:07 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/20 11:12:37 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	handle_equal(char *str, char **key, char **value)
 	equal_sign = ft_strchr(str, '=');
 	*key = ft_substr(str, 0, equal_sign - str);
 	if (*(equal_sign + 1) == '\0')
-		*value = ft_strdup(" ");
+		*value = NULL;
 	else
 		*value = ft_strdup(equal_sign + 1);
 }
@@ -56,9 +56,9 @@ void	process_export(t_tools *tools, char **str, int *i)
 	in = 0;
 	if (str[*i][0] == '\0')
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", str[*i]);
-		tools->exit_status = 1;
-		return ;
+		print_sorted_env(tools);
+			tools->exit_status = 0;
+			return ;
 	}
 	if (plus_equal_sign)
 		handle_plus_equal(tools, str[*i], &key, &value);
@@ -90,7 +90,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 		handle_env_var(&tools, key, value);
 	else
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", str[*i]);
+		printf("minishell: export `%s': not a valid identifier\n", str[*i]);
 		free(key);
 		if (value)
 			free(value);

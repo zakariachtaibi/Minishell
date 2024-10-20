@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 17:45:53 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/20 11:43:55 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,38 +69,23 @@ void	free_cmds(t_simple_cmds **cmds)
 {
 	t_simple_cmds	*current;
 	t_simple_cmds	*next;
-	t_lexical		*redir;
-	t_lexical		*next_redir;
+	// t_lexical		*redir;
+	
 
 	current = *cmds;
 	while (current)
 	{
 		next = current->next;
-		// Free the string array
 		if (current->str)
 		{
 			for (int i = 0; current->str[i]; i++)
 				free(current->str[i]);
 			free(current->str);
 		}
-		// Free the heredoc file name if it exists
 		if (current->hd_file_name)
 			free(current->hd_file_name);
-		// Free the redirections linked list
-		redir = current->redirections;
-		while (redir)
-		{
-			next_redir = redir->next;
-			free(redir->str);
-			free(redir);
-			redir = next_redir;
-		}
-		// Close file descriptors if they're open
-		if (current->fd_in > 2)
-			close(current->fd_in);
-		if (current->fd_out > 2)
-			close(current->fd_out);
-		// Free the current command structure
+		// redir = current->redirections;
+		// free_lexical(redir);
 		free(current);
 		current = next;
 	}
@@ -224,6 +209,7 @@ int	main(int ac, char **av, char **envp)
 		execute_commands(cmds, &tools, tokens);
 		dup2(tools->std_out, 1);
 		dup2(tools->std_in, 0);
+		
 		free(input);
 		// ft_free(envp);
 		free_lexical(tokens);
