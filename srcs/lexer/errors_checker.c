@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:36:42 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/07 20:41:12 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/21 13:29:40 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,40 +57,6 @@ void	init_vars(int *single_quote_open, int *double_quote_open,
 	*double_quote_open = 0;
 	*parentheses_open = 0;
 }
-
-// char	*remove_enclosing_chars(char *input)
-// {
-// 	int		i;
-// 	int		j;
-// 	char	*new_input;
-// 	int		single_quote_open;
-// 	int		double_quote_open;
-// 	int		parentheses_open;
-
-// 	i = 0;
-// 	j = 0;
-// 	new_input = malloc(ft_strlen(input) + 1);
-// 	if (!new_input)
-// 		return (NULL);
-// 	init_vars(&single_quote_open, &double_quote_open, &parentheses_open);
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '\'' && !double_quote_open && !parentheses_open)
-// 			single_quote_open = !single_quote_open;
-// 		else if (input[i] == '"' && !single_quote_open && !parentheses_open)
-// 			double_quote_open = !double_quote_open;
-// 		else if (input[i] == '(' && !single_quote_open && !double_quote_open)
-// 			parentheses_open = 1;
-// 		else if (input[i] == ')' && !single_quote_open && !double_quote_open
-// 			&& parentheses_open)
-// 			parentheses_open = 0;
-// 		else
-// 			new_input[j++] = input[i];
-// 		i++;
-// 	}
-// 	new_input[j] = '\0';
-// 	return (new_input);
-// }
 
 int	has_semicolon(char *input, t_tools *tools)
 {

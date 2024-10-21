@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 13:06:22 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/20 20:45:08 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,12 +163,12 @@ void			handle_sigint(int sig);
 void			sigint2();
 void			sig_handler1(int test);
 void			free_lexical(t_lexical *head);
-
-void	swap_values(char **ikey, char **ivalue, char **jkey, char **jvalue);
-void	check_env_vars(t_env_var **current);
-void ft_free(char **arr);
-void free_cmds(t_simple_cmds **cmds);
-void free_tools(t_tools *tools);
-void 	cleanup_readline();
+void			swap_values(char **ikey, char **ivalue, char **jkey, char **jvalue);
+void			check_env_vars(t_env_var **current);
+void 			ft_free(char **arr);
+void 			free_cmds(t_simple_cmds **cmds);
+void 			free_tools(t_tools *tools);
+void 			cleanup_readline();
+int				is_valid_identifier(const char *str);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/08 14:23:02 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/21 13:32:36 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 		else
 		{
 			printf("syntax error near unexpected token '%s'\n",
-					tokens->next->str);
+				tokens->next->str);
 		}
 		tools->exit_status = 2;
 		return (NULL);
 	}
-	return (tokens); // Return the original token list
+	return (tokens);
 }

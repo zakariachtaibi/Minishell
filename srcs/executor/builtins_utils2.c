@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 13:11:55 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 13:18:38 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/20 20:47:58 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,18 @@ void	check_env_vars(t_env_var **current)
 			ft_putstr_fd("\n", 1);
 		}
 	}
+}
+
+int	is_valid_identifier(const char *str)
+{
+	if (!str || !*str || *str == '{' || (*str >= '0' && *str <= '9'))
+		return (0);
+	while (*str)
+	{
+		if (!(*str == '_' || (*str >= 'a' && *str <= 'z') || (*str >= 'A'
+					&& *str <= 'Z') || (*str >= '0' && *str <= '9')))
+			return (0);
+		str++;
+	}
+	return (1);
 }

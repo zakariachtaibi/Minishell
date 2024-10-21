@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_checker.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:04:13 by hchouai           #+#    #+#             */
-/*   Updated: 2024/08/07 11:51:49 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:33:06 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_builtin	check_builtins_type(char *str)
 		return (BUILTIN_NONE);
 }
 
-int (*get_builtin_func(t_builtin type))(t_tools *tools, t_simple_cmds *cmds)
+int	(*get_builtin_func(t_builtin type))(t_tools *tools, t_simple_cmds *cmds)
 {
 	if (type == BUILTIN_ECHO)
 		return (builtin_echo);

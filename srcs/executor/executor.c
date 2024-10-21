@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 00:02:57 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:23:05 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 			if (pid == 0)
 			{
 				execve(current_cmd->str[0], current_cmd->str,
-						convert_env_vars_to_array((*tools)->env_vars));
+					convert_env_vars_to_array((*tools)->env_vars));
 				perror("execve");
 				exit(126);
 			}
@@ -88,7 +88,7 @@ void	execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
 	if (pid == 0)
 	{
 		execve(cmd_path, current_cmd->str,
-				convert_env_vars_to_array((*tools)->env_vars));
+			convert_env_vars_to_array((*tools)->env_vars));
 	}
 	else if (pid < 0)
 		perror("fork");
@@ -177,125 +177,113 @@ int	count_cmds(t_simple_cmds *list)
 	return (i);
 }
 
-void execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
-        t_lexical *tokens)
+void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
+		t_lexical *tokens)
 {
-    int pipe_fd[2];
-    int prev_pipe_read = STDIN_FILENO;
-    int status;
-    t_simple_cmds *current_cmd;
-    pid_t pid;
-    int last_failed = 0;  // Track if the last command in pipe failed
-    (void)tokens;
+	int				pipe_fd[2];
+	int				prev_pipe_read;
+	int				status;
+	t_simple_cmds	*current_cmd;
+	pid_t			pid;
+	int				old_stdout;
+	int				old_stdin;
+	int				last_failed;
 
-    current_cmd = cmds_head;
-
-    while (current_cmd)
-    {
-        if (current_cmd->next && pipe(pipe_fd) == -1)
-        {
-            perror("pipe");
-            exit(EXIT_FAILURE);
-        }
-        
-        // Handle builtin without fork for the last command
-        if (current_cmd->builtin != NULL && current_cmd->next == NULL && 
-            prev_pipe_read == STDIN_FILENO)
-        {
-            int old_stdout = dup(STDOUT_FILENO);
-            int old_stdin = dup(STDIN_FILENO);
-            
-            if (current_cmd->fd_in != STDIN_FILENO)
-                dup2(current_cmd->fd_in, STDIN_FILENO);
-            if (current_cmd->fd_out != STDOUT_FILENO)
-                dup2(current_cmd->fd_out, STDOUT_FILENO);
-            
-            (*tools)->exit_status = current_cmd->builtin(*tools, current_cmd);
-            
-            dup2(old_stdout, STDOUT_FILENO);
-            dup2(old_stdin, STDIN_FILENO);
-            close(old_stdout);
-            close(old_stdin);
-            current_cmd = current_cmd->next;
-            continue;
-        }
-
-        pid = fork();
-        if (pid == 0)
-        {
-            setup_child_signals();
-            if (prev_pipe_read != STDIN_FILENO)
-            {
-                dup2(prev_pipe_read, STDIN_FILENO);
-                close(prev_pipe_read);
-            }
-
-            if (current_cmd->next)
-            {
-                close(pipe_fd[0]);
-                dup2(pipe_fd[1], STDOUT_FILENO);
-                close(pipe_fd[1]);
-            }
-
-            if (current_cmd->fd_in != STDIN_FILENO)
-            {
-                dup2(current_cmd->fd_in, STDIN_FILENO);
-                close(current_cmd->fd_in);
-            }
-
-            if (current_cmd->fd_out != STDOUT_FILENO)
-            {
-                dup2(current_cmd->fd_out, STDOUT_FILENO);
-                close(current_cmd->fd_out);
-            }
-
-            if (current_cmd->builtin != NULL)
-                exit(current_cmd->builtin(*tools, current_cmd));
-            else
-                execute_cmd(current_cmd, tools);
-            exit((*tools)->exit_status);
-        }
-        else if (pid < 0)
-        {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        }
-        else
-        {
-            if (prev_pipe_read != STDIN_FILENO)
-                close(prev_pipe_read);
-
-            if (current_cmd->next)
-            {
-                close(pipe_fd[1]);
-                prev_pipe_read = pipe_fd[0];
-            }
-            else
-            {
-                // For the last command, wait and store its status
-                waitpid(pid, &status, 0);
-                if (WIFEXITED(status))
-                {
-                    last_failed = WEXITSTATUS(status);
-                    (*tools)->exit_status = last_failed;
-                }
-                else if (WIFSIGNALED(status))
-                    (*tools)->exit_status = WTERMSIG(status) + 128;
-            }
-        }
-        current_cmd = current_cmd->next;
-    }
-
-    // Wait for remaining processes but preserve the last command's status
-    while (wait(&status) > 0)
-    {
-        // Only update exit_status if we haven't recorded a failure yet
-        if ((*tools)->exit_status == 0)
-        {
-            if (WIFEXITED(status))
-                (*tools)->exit_status = WEXITSTATUS(status);
-            else if (WIFSIGNALED(status))
-                (*tools)->exit_status = WTERMSIG(status) + 128;
-        }
-    }
+	prev_pipe_read = STDIN_FILENO;
+	last_failed = 0;
+	(void)tokens;
+	current_cmd = cmds_head;
+	while (current_cmd)
+	{
+		if (current_cmd->next && pipe(pipe_fd) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+		if (current_cmd->builtin != NULL && current_cmd->next == NULL
+			&&prev_pipe_read == STDIN_FILENO)
+		{
+			old_stdout = dup(STDOUT_FILENO);
+			old_stdin = dup(STDIN_FILENO);
+			if (current_cmd->fd_in != STDIN_FILENO)
+				dup2(current_cmd->fd_in, STDIN_FILENO);
+			if (current_cmd->fd_out != STDOUT_FILENO)
+				dup2(current_cmd->fd_out, STDOUT_FILENO);
+			(*tools)->exit_status = current_cmd->builtin(*tools, current_cmd);
+			dup2(old_stdout, STDOUT_FILENO);
+			dup2(old_stdin, STDIN_FILENO);
+			close(old_stdout);
+			close(old_stdin);
+			current_cmd = current_cmd->next;
+			continue ;
+		}
+		pid = fork();
+		if (pid == 0)
+		{
+			setup_child_signals();
+			if (prev_pipe_read != STDIN_FILENO)
+			{
+				dup2(prev_pipe_read, STDIN_FILENO);
+				close(prev_pipe_read);
+			}
+			if (current_cmd->next)
+			{
+				close(pipe_fd[0]);
+				dup2(pipe_fd[1], STDOUT_FILENO);
+				close(pipe_fd[1]);
+			}
+			if (current_cmd->fd_in != STDIN_FILENO)
+			{
+				dup2(current_cmd->fd_in, STDIN_FILENO);
+				close(current_cmd->fd_in);
+			}
+			if (current_cmd->fd_out != STDOUT_FILENO)
+			{
+				dup2(current_cmd->fd_out, STDOUT_FILENO);
+				close(current_cmd->fd_out);
+			}
+			if (current_cmd->builtin != NULL)
+				exit(current_cmd->builtin(*tools, current_cmd));
+			else
+				execute_cmd(current_cmd, tools);
+			exit((*tools)->exit_status);
+		}
+		else if (pid < 0)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			if (prev_pipe_read != STDIN_FILENO)
+				close(prev_pipe_read);
+			if (current_cmd->next)
+			{
+				close(pipe_fd[1]);
+				prev_pipe_read = pipe_fd[0];
+			}
+			else
+			{
+				waitpid(pid, &status, 0);
+				if (WIFEXITED(status))
+				{
+					last_failed = WEXITSTATUS(status);
+					(*tools)->exit_status = last_failed;
+				}
+				else if (WIFSIGNALED(status))
+					(*tools)->exit_status = WTERMSIG(status) + 128;
+			}
+		}
+		current_cmd = current_cmd->next;
+	}
+	while (wait(&status) > 0)
+	{
+		if ((*tools)->exit_status == 0)
+		{
+			if (WIFEXITED(status))
+				(*tools)->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				(*tools)->exit_status = WTERMSIG(status) + 128;
+		}
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 13:08:32 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/21 13:31:34 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,11 +172,12 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 	char		**tmp;
 	int			in;
 	int			heredoc_flag;
+	int			export_flag;
 
 	flag = 0;
 	in = 0;
 	heredoc_flag = 0;
-	int export_flag = 0;
+	export_flag = 0;
 	word_temp = *temp;
 	word_count = 0;
 	while (word_temp && word_temp->token == TOKEN_WORD)
@@ -202,11 +203,10 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 	i = count_str;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{
-		if(strcmp((*temp)->str, "export") == 0)
-			export_flag=1;
+		if (strcmp((*temp)->str, "export") == 0)
+			export_flag = 1;
 		expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
 		tools->export_flag = flag;
-		// printf("%d\n", tools->export_flag);
 		if (expanded != NULL)
 		{
 			if (flag == 1 && (is_space(expanded) == 1) && (export_flag != 1))
@@ -272,6 +272,5 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 			handle_words(&temp, &current_cmd, tools);
 		check_and_set_builtin(current_cmd);
 	}
-	// system("leaks minishell");
 	return (cmds_head);
 }

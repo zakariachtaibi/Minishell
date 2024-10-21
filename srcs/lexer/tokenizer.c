@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 19:16:25 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/21 13:30:21 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_lexical	*tokenize(char *input)
 				token[j++] = input[i++];
 			}
 			else if (!in_quotes && (input[i] == '>' || input[i] == '<'
-						|| input[i] == '|'))
+					|| input[i] == '|'))
 			{
 				if (j > 0)
 				{
@@ -124,6 +124,5 @@ t_lexical	*tokenize(char *input)
 			current = node;
 		}
 	}
-	// system("leaks minishell");
 	return (head);
 }
