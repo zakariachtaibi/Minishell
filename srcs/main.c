@@ -186,10 +186,10 @@ int	main(int ac, char **av, char **envp)
 	increment_SHLVL(&tools);
 	while (1)
 	{
-		// signal(SIGINT, handle_sigint);
-		// signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell> ");
-		// signal(SIGINT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
 		if (!input)
 		{
 			printf("exit\n");
@@ -210,15 +210,15 @@ int	main(int ac, char **av, char **envp)
 		dup2(tools->std_out, 1);
 		dup2(tools->std_in, 0);
 		
-		free(input);
-		// ft_free(envp);
-		free_lexical(tokens);
-		free_cmds(&cmds);
+		// free(input);
+		// // ft_free(envp);
+		// free_lexical(tokens);
+		// free_cmds(&cmds);
 		// system("leaks minishell");
 	}
-	cleanup_readline();
-	free_lexical(tokens);
-	free_cmds(&cmds);
+	// cleanup_readline();
+	// free_lexical(tokens);
+	// free_cmds(&cmds);
 	// free_tools(tools);
 	return (tools->exit_status);
 }

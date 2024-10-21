@@ -185,7 +185,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
     int status;
     t_simple_cmds *current_cmd;
     pid_t pid;
-    int last_failed = 0;  // Track if the last command in pipe failed
+    pid_t last_pid = 0;  // Track the last command's pid
     (void)tokens;
 
     current_cmd = cmds_head;
@@ -270,32 +270,25 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
                 close(pipe_fd[1]);
                 prev_pipe_read = pipe_fd[0];
             }
-            else
-            {
-                // For the last command, wait and store its status
-                waitpid(pid, &status, 0);
-                if (WIFEXITED(status))
-                {
-                    last_failed = WEXITSTATUS(status);
-                    (*tools)->exit_status = last_failed;
-                }
-                else if (WIFSIGNALED(status))
-                    (*tools)->exit_status = WTERMSIG(status) + 128;
-            }
+            
+            // Store the last command's pid
+            if (current_cmd->next == NULL)
+                last_pid = pid;
         }
         current_cmd = current_cmd->next;
     }
 
-    // Wait for remaining processes but preserve the last command's status
+    // Wait for all processes
     while (wait(&status) > 0)
     {
-        // Only update exit_status if we haven't recorded a failure yet
-        if ((*tools)->exit_status == 0)
-        {
-            if (WIFEXITED(status))
-                (*tools)->exit_status = WEXITSTATUS(status);
-            else if (WIFSIGNALED(status))
-                (*tools)->exit_status = WTERMSIG(status) + 128;
-        }
+        // Only update exit status for the last command in the pipeline
+        if (WIFEXITED(status) && last_pid == wait(NULL))
+            (*tools)->exit_status = WEXITSTATUS(status);
+        else if (WIFSIGNALED(status) && last_pid == wait(NULL))
+            (*tools)->exit_status = WTERMSIG(status) + 128;
     }
+
+    // Reset exit status to 0 if the last command was a heredoc
+    if (cmds_head && cmds_head->next == NULL && cmds_head->fd_in != STDIN_FILENO)
+        (*tools)->exit_status = 0;
 }
