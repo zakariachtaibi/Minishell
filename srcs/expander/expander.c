@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/20 13:17:05 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/21 13:28:56 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,16 @@ char	*expand_variable(t_tools *tools, const char *current_word, size_t *j)
 	var_value = get_vars_value(var_name, tools);
 	free(var_name);
 	if (!var_value)
-		return (ft_strdup(""));
+		return (NULL);
 	return (ft_strdup(var_value));
 }
 
 char	*expand_plain_text(const char *current_word, size_t *j)
 {
-	// char	temp_str[2];
+	char	temp_str[2];
 
-	char temp_str[2] = {current_word[*j], '\0'};
+	temp_str[0] = current_word[*j];
+	temp_str[1] = '\0';
 	(*j)++;
 	return (ft_strdup(temp_str));
 }
@@ -138,15 +139,14 @@ char	*expand_plain_text(const char *current_word, size_t *j)
 char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		int heredoc_flag)
 {
-	size_t j;
-	char *expanded_word;
-	// char    *current_word;
-	size_t len;
-	char *new_expansion;
+	size_t	j;
+	char	*expanded_word;
+	size_t	len;
+	char	*new_expansion;
+	char	*temp_word;
 
 	j = 0;
 	expanded_word = ft_strdup("");
-	// current_word = temp->str;
 	len = ft_strlen(current_word);
 	while (j < len)
 	{
@@ -172,13 +172,13 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 				*flag = 1;
 			}
 			else if (j + 1 < len && (current_word[j + 1] == '?'
-						|| ft_isalnum(current_word[j + 1]) || current_word[j
+					|| ft_isalnum(current_word[j + 1]) || current_word[j
 						+ 1] == '_'))
 			{
 				new_expansion = expand_variable(tools, current_word, &j);
 				*flag = 1;
 			}
-			else 
+			else
 			{
 				if (current_word[j + 1] == '\0')
 					new_expansion = ft_strdup("$");
@@ -187,18 +187,15 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 				j++;
 				*flag = 0;
 			}
-			
 		}
 		else
 		{
 			new_expansion = expand_plain_text(current_word, &j);
-			*flag = 0;
+			*flag = 2;
 		}
 		if (new_expansion)
 		{
-			char *temp_word = ft_strjoin(expanded_word, new_expansion);
-			// free(expanded_word);
-			// free(new_expansion);
+			temp_word = ft_strjoin(expanded_word, new_expansion);
 			expanded_word = temp_word;
 		}
 		else

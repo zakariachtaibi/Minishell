@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 13:15:59 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/21 13:17:20 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,15 @@ void	handle_equal(char *str, char **key, char **value)
 		*value = ft_strdup(equal_sign + 1);
 }
 
+void	print_error(char *str, char *key, char *value, t_tools *tools)
+{
+	printf("minishell: export `%s': not a valid identifier\n", str);
+	free(key);
+	if (value)
+		free(value);
+	tools->exit_status = 1;
+}
+
 void	process_export(t_tools *tools, char **str, int *i)
 {
 	char	*key;
@@ -49,14 +58,13 @@ void	process_export(t_tools *tools, char **str, int *i)
 	char	*plus_equal_sign;
 	char	*equal_sign;
 	int		in;
-	// t_tools *tmp = tools;
 
 	plus_equal_sign = ft_strnstr(str[*i], "+=", ft_strlen(str[*i]));
 	equal_sign = ft_strchr(str[*i], '=');
 	in = 0;
 	if (str[*i][0] == '\0' && tools->export_flag == 1)
 	{
-		if(!str[*i + 1])
+		if (!str[*i + 1])
 		{
 			print_sorted_env(tools);
 			tools->exit_status = 0;
@@ -69,7 +77,6 @@ void	process_export(t_tools *tools, char **str, int *i)
 	{
 		handle_equal(str[*i], &key, &value);
 	}
-		
 	else
 	{
 		key = ft_strdup(str[*i]);
@@ -80,25 +87,16 @@ void	process_export(t_tools *tools, char **str, int *i)
 		if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in])))
 			|| key[in] == 32)
 		{
-			printf("minishell: export: `%s': not a valid ildentifier\n",
-					str[*i]);
-			free(key);
-			free(value);
-			tools->exit_status = 1;
+			print_error(str[*i], key, value, tools);
 			return ;
 		}
 		in++;
 	}
 	if (key[0] != '\0')
 		handle_env_var(&tools, key, value);
-	else if(key[0] == '\0' && (tools->export_flag == 0))
-	{
-		printf("minishell: export `%s': not a valid identifier\n", str[*i]);
-		free(key);
-		if (value)
-			free(value);
-		tools->exit_status = 1;
-	}
+	else if (key[0] == '\0' && (tools->export_flag == 0
+			|| tools->export_flag == 3))
+		print_error(str[*i], key, value, tools);
 }
 
 void	print_sorted_env(t_tools *tools)
@@ -113,7 +111,9 @@ void	print_sorted_env(t_tools *tools)
 
 int	builtin_export(t_tools *tools, t_simple_cmds *cmd)
 {
-	int i = 1;
+	int	i;
+
+	i = 1;
 	if (!cmd->str[i])
 	{
 		print_sorted_env(tools);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/14 10:21:43 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/20 20:58:03 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ int	check_cd_arguments(t_tools *tools, t_simple_cmds *cmd)
 		{
 			ft_putstr_fd("cd: HOME not set\n", 2);
 			tools->exit_status = 1;
-			return (1); // Early return on error
+			return (1);
 		}
 	}
 	else if (cmd->str[2] != NULL)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
 		tools->exit_status = 1;
-		return (1); // Early return on error
+		return (1);
 	}
 	else
 		path = cmd->str[1];
@@ -43,7 +43,7 @@ int	check_cd_arguments(t_tools *tools, t_simple_cmds *cmd)
 		tools->exit_status = 1;
 		return (1);
 	}
-	return (0); // No errors
+	return (0);
 }
 
 t_env_var	*find_env_var(t_env_var *env_vars, const char *key)
@@ -52,11 +52,11 @@ t_env_var	*find_env_var(t_env_var *env_vars, const char *key)
 	{
 		if (strcmp(env_vars->key, key) == 0)
 		{
-			return (env_vars); // Return directly on match
+			return (env_vars);
 		}
 		env_vars = env_vars->next;
 	}
-	return (NULL); // Not found
+	return (NULL);
 }
 
 void	update_pwd_variables(t_tools *tools)
@@ -76,7 +76,8 @@ void	update_pwd_variables(t_tools *tools)
 	old_pwd = find_env_var(tools->env_vars, "OLDPWD");
 	if (pwd)
 	{
-		free(old_pwd ? old_pwd->value : NULL);
+		if (old_pwd)
+			free(old_pwd->value);
 		if (old_pwd)
 		{
 			old_pwd->value = ft_strdup(pwd->value);
@@ -93,6 +94,5 @@ int	builtin_cd(t_tools *tools, t_simple_cmds *cmd)
 		return (1);
 	}
 	update_pwd_variables(tools);
-	// free(cmd->str[1]);
 	return (0);
 }
