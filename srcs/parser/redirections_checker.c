@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:32:10 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:45:44 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 	char	*input;
 	int		fd;
 	int		f;
-
+	char	*ttname;
+	ttname=ttyname(1);
+	ttname=ft_substr(ttname, 9, ft_strlen(ttname));
+	
 	f = 0;
 	*redir = (*redir)->next;
 	if ((*current_cmd)->num_redirections_heredoc > 16)
@@ -51,7 +54,7 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 	(*current_cmd)->hd_file_name = ft_strdup((*redir)->str);
 	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
 		close((*current_cmd)->fd_in);
-	fd = open((*current_cmd)->hd_file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror("minishell");
@@ -74,10 +77,10 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 		free(input);
 	}
 	close(fd);
-	(*current_cmd)->fd_in = open((*current_cmd)->hd_file_name, O_RDONLY);
+	(*current_cmd)->fd_in = open(ttname, O_RDONLY);
 	if ((*current_cmd)->fd_in == -1)
 		perror("minishell");
-	if (unlink((*current_cmd)->hd_file_name) == -1)
+	if (unlink(ttname) == -1)
 		perror("minishell: failed to remove heredoc temp file");
 }
 
