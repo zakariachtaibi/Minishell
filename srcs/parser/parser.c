@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:31:34 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/22 14:21:25 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,40 @@ int	ft_strlen_array(char **array)
 	return (i);
 }
 
+void resize_cmd_lst(t_simple_cmds **current_cmd, char **tmp)
+{
+    char    **new_str;
+    int     count_str = 0;
+    int     count_tmp = 0;
+    int     i, j;
+	j = 0;
+	i = 0;
+    if ((*current_cmd)->str)
+        count_str = ft_strlen_array((*current_cmd)->str);
+
+    if (tmp)
+        count_tmp = ft_strlen_array(tmp);
+// ft_putnbr_fd(count_str, 1);
+    new_str = malloc(sizeof(char *) * (count_tmp + 1));
+    if (!new_str)
+    {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    while(++i < count_str)
+        new_str[i] = (*current_cmd)->str[i];
+
+	while (tmp[j])
+	{
+		 new_str[i++] = ft_strdup(tmp[j]);
+			j++;
+	}
+    new_str[i] = NULL;
+
+    free((*current_cmd)->str);
+    (*current_cmd)->str = new_str;
+}
+
 void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		t_tools *tools)
 {
@@ -209,10 +243,13 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		tools->export_flag = flag;
 		if (expanded != NULL)
 		{
+			
 			if (flag == 1 && (is_space(expanded) == 1) && (export_flag != 1))
 			{
 				in = 0;
 				tmp = ft_split(expanded, ' ');
+				
+				resize_cmd_lst(current_cmd, tmp);
 				while (tmp[in])
 				{
 					(*current_cmd)->str[i] = ft_strdup(tmp[in]);

@@ -6,7 +6,7 @@
 #    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/10/21 15:36:06 by hchouai          ###   ########.fr        #
+#    Updated: 2024/10/22 14:18:12 by hchouai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ SRCS = srcs/main.c \
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3 
+CFLAGS = -Wall -Wextra -Werror -g3 
 LDFLAGS = -lreadline
 
 all: $(NAME)
