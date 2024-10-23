@@ -25,7 +25,7 @@ char	*expand_single_quote(const char *current_word, size_t *j)
 		temp_str[0] = current_word[*j];
 		temp_str[1] = '\0';
 		new_expanded_word = ft_strjoin(expanded_word, temp_str);
-		free(expanded_word);
+		free(expanded_word);  // Free old expanded_word
 		expanded_word = new_expanded_word;
 		(*j)++;
 	}
@@ -82,8 +82,8 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 				var_value = ft_strdup("$");
 			}
 			new_expanded_word = ft_strjoin(expanded_word, var_value);
-			free(expanded_word);
-			free(var_value);
+			// free(expanded_word)C  // Free old expanded_word
+			free(var_value);  // Free var_value after use
 			expanded_word = new_expanded_word;
 		}
 		else
@@ -93,7 +93,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 			(*j)++;
 		}
 		new_expanded_word = ft_strjoin(expanded_word, temp_str);
-		free(expanded_word);
+		// free(expanded_word);MAK  // Free old expanded_word
 		expanded_word = new_expanded_word;
 	}
 	(*j)++;
@@ -196,10 +196,13 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		if (new_expansion)
 		{
 			temp_word = ft_strjoin(expanded_word, new_expansion);
+			free(expanded_word);
 			expanded_word = temp_word;
+			free(new_expansion); 
 		}
 		else
 			return (NULL);
 	}
 	return (expanded_word);
 }
+

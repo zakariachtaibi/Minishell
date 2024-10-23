@@ -1,1 +1,40 @@
-exit status f signals 
+minishell> export a="ls    -la"
+minishell> echo $a
+ls -la
+minishell> echo $a"$a" 
+ls    -lals    -la
+minishell> cat << l
+> jnbf
+> $a
+> "$a"
+> '$a'
+> $b
+> $b
+> jgb$a
+> jgn$b
+> l
+jnbf
+ls    -kla
+ls    -kla
+$a
+$b
+
+jgbls    -kla
+jgn$b
+
+
+
+[1]    10542 abort      ./minishell
+➜  Minishell git:(main) ✗ export a="ls  -la"
+➜  Minishell git:(main) ✗ ./minishell
+minishell> ls > $a
+$a : ambiguous redirect
+minishell> ls > "fff$a"
+minishell> ls > "fff$a jhfkn"
+minishell> echo $a
+ls -la                              
+minishell>
+
+> echo "$1TEST"
+
+

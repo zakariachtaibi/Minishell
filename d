@@ -1,0 +1,10 @@
+c_formatter_42
+d
+includes
+libft
+Makefile
+minishell
+notes.txt
+readline.supp
+s
+srcs

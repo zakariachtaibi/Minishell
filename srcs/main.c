@@ -47,49 +47,55 @@ void	free_tools(t_tools *tools)
 	// Finally, free the tools structure itself
 	free(tools);
 }
-void	free_lexical(t_lexical *head)
-{
-	t_lexical	*current;
-	t_lexical	*next;
 
-	current = head;
-	while (current != NULL)
-	{
-		next = current->next;
-		// Free the string if it exists
-		if (current->str)
-			free(current->str);
-		// Free the current node
-		free(current);
-		current = next;
-	}
+void free_lexical(t_lexical *head)
+{
+    t_lexical *current;
+    t_lexical *next;
+
+    current = head;
+    while (current != NULL)
+    {
+        next = current->next;
+        if (current->str)
+            free(current->str);
+        free(current);
+        current = next;
+    }
 }
 
-void	free_cmds(t_simple_cmds **cmds)
+void free_cmds(t_simple_cmds **cmds)
 {
-	t_simple_cmds	*current;
-	t_simple_cmds	*next;
-	// t_lexical		*redir;
-	
+    t_simple_cmds *current;
+    t_simple_cmds *next;
+    t_lexical     *redir;
 
-	current = *cmds;
-	while (current)
-	{
-		next = current->next;
-		if (current->str)
-		{
-			for (int i = 0; current->str[i]; i++)
-				free(current->str[i]);
-			free(current->str);
-		}
-		if (current->hd_file_name)
-			free(current->hd_file_name);
-		// redir = current->redirections;
-		// free_lexical(redir);
-		free(current);
-		current = next;
-	}
+    if (!cmds || !*cmds)
+        return;
+        
+    current = *cmds;
+    while (current)
+    {
+        next = current->next;
+        if (current->str)
+        {
+            for (int i = 0; current->str[i]; i++)
+                free(current->str[i]);
+            free(current->str);
+        }
+        if (current->hd_file_name)
+            free(current->hd_file_name);
+            
+        // Free redirections
+        redir = current->redirections;
+        free_lexical(redir);
+        
+        free(current);
+        current = next;
+    }
+    *cmds = NULL;
 }
+
 t_tools	*init_tools(void)
 {
 	t_tools	*new_tool;
@@ -127,15 +133,15 @@ void	set_env_var(const char *key, const char *value, t_tools **tools)
 	if (env_var)
 	{
 		free(env_var->value);
-		env_var->value = strdup(value);
+		env_var->value = ft_strdup(value);
 	}
 	else
 	{
 		new_var = (t_env_var *)malloc(sizeof(t_env_var));
 		if (!new_var)
 			return ;
-		new_var->key = strdup(key);
-		new_var->value = strdup(value);
+		new_var->key = ft_strdup(key);
+		new_var->value = ft_strdup(value);
 		new_var->next = (*tools)->env_vars;
 		(*tools)->env_vars = new_var;
 	}
@@ -158,67 +164,88 @@ void	increment_SHLVL(t_tools **tools)
 	free(new_shlvl_value);
 }
 
-int	main(int ac, char **av, char **envp)
+void cleanup_all(char *input, t_lexical *tokens, t_simple_cmds *cmds, t_tools *tools)
 {
-	t_lexical		*tokens;
-	char			*input;
-	t_simple_cmds	*cmds;
-	t_tools			*tools;
+    if (input)
+        free(input);
+    if (tokens)
+        free_lexical(tokens);
+    if (cmds)
+        free_cmds(&cmds);
+    if (tools)
+    {
+        if (tools->std_out > 2)
+            close(tools->std_out);
+        if (tools->std_in > 2)
+            close(tools->std_in);
+        free_tools(tools);
+    }
+    cleanup_readline();
+}
 
-	if (ac != 1)
-	{
-		// free_tools(tools);
-		// cleanup_readline();
-		perror("minishell");
-		// printf("wrong number of args");
-		exit(1);
-	}
-	tools = init_tools();
-	if (!tools)
-	{
-		perror("Error initializing tools");
-		exit(1);
-	}
-	tools->std_out = dup(1);
-	tools->std_in = dup(0);
-	(void)av;
-	get_env_vars(tools, envp);
-	increment_SHLVL(&tools);
-	while (1)
-	{
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
-		input = readline("minishell> ");
-		signal(SIGINT, SIG_IGN);
-		if (!input)
-		{
-			printf("exit\n");
-			tools->exit_status = 130;
-			break ;
-		}
-		if (strcmp(input, "") && strcmp(input, "\n"))
-			add_history(input);
-		input = validat_input(input, tools);
-		if (input == NULL)
-			continue ;
-		tokens = tokenize(input);
-		tokens = validate_syntax(tokens, tools);
-		if (tokens == NULL)
-			continue ;
-		cmds = process_tokens(tokens, tools);
-		execute_commands(cmds, &tools, tokens);
-		dup2(tools->std_out, 1);
-		dup2(tools->std_in, 0);
-		
-		// free(input);
-		// // ft_free(envp);
-		// free_lexical(tokens);
-		// free_cmds(&cmds);
-		// system("leaks minishell");
-	}
-	// cleanup_readline();
-	// free_lexical(tokens);
-	// free_cmds(&cmds);
-	// free_tools(tools);
-	return (tools->exit_status);
+int main(int ac, char **av, char **envp)
+{
+    t_lexical       *tokens;
+    char            *input;
+    t_simple_cmds   *cmds;
+    t_tools         *tools;
+
+    if (ac != 1)
+    {
+        perror("minishell");
+        return (1);
+    }
+    tools = init_tools();
+    if (!tools)
+    {
+        perror("Error initializing tools");
+        return (1);
+    }
+    tools->std_out = dup(1);
+    tools->std_in = dup(0);
+    (void)av;
+    get_env_vars(tools, envp);
+    increment_SHLVL(&tools);
+    
+    while (1)
+    {
+        signal(SIGINT, handle_sigint);
+        signal(SIGQUIT, SIG_IGN);
+        input = readline("minishell> ");
+        signal(SIGINT, SIG_IGN);
+        
+        if (!input)
+        {
+            printf("exit\n");
+            tools->exit_status = 130;
+            cleanup_all(NULL, NULL, NULL, tools);
+            break;
+        }
+        
+        if (strcmp(input, "") && strcmp(input, "\n"))
+            add_history(input);
+            
+        input = validat_input(input, tools);
+        if (input == NULL)
+        {
+            cleanup_all(input, NULL, NULL, NULL);
+            continue;
+        }
+        
+        tokens = tokenize(input);
+        tokens = validate_syntax(tokens, tools);
+        if (tokens == NULL)
+        {
+            cleanup_all(input, tokens, NULL, NULL);
+            continue;
+        }
+        
+        cmds = process_tokens(tokens, tools);
+        execute_commands(cmds, &tools, tokens);
+        dup2(tools->std_out, 1);
+        dup2(tools->std_in, 0);
+    
+        cleanup_all(input, tokens, cmds, NULL);
+    }
+    return (tools->exit_status);
 }
