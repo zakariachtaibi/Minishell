@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/22 11:50:17 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/23 17:52:43 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,6 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 	expanded_word = ft_strdup("");
 	while (current_word[*j] && current_word[*j] != '"')
 	{
-		// if (current_word[*j] == '\\' && current_word[*j + 1])
-		// {
-		// 	temp_str[0] = current_word[*j + 1];
-		// 	temp_str[1] = '\0';
-		// 	(*j) += 2;
-		// }
 		if (current_word[*j] == '$' && heredoc_flag == 0)
 		{
 			(*j)++;
@@ -83,8 +77,8 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 				var_value = ft_strdup("$");
 			}
 			new_expanded_word = ft_strjoin(expanded_word, var_value);
-			// free(expanded_word)C  // Free old expanded_word
-			free(var_value);  // Free var_value after use
+			free(expanded_word);
+			free(var_value);
 			expanded_word = new_expanded_word;
 		}
 		else
@@ -94,7 +88,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 			(*j)++;
 		}
 		new_expanded_word = ft_strjoin(expanded_word, temp_str);
-		// free(expanded_word);MAK  // Free old expanded_word
+		free(expanded_word);
 		expanded_word = new_expanded_word;
 	}
 	(*j)++;
@@ -198,11 +192,11 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		{
 			temp_word = ft_strjoin(expanded_word, new_expansion);
 			free(expanded_word);
+			free(new_expansion);
 			expanded_word = temp_word;
-			free(new_expansion); 
 		}
 		else
-			return (NULL);
+			free(expanded_word);
 	}
 	return (expanded_word);
 }

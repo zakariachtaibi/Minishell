@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/23 14:48:20 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/23 17:32:45 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,17 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 			unescaped = unescape_spaces(filename->str, flag);
 			if (!unescaped)
 			{
-				free(redir);
-				free(filename);
+				free(redir); // Free redirection if unescape fails
+				free(filename->str); // Free the string before exiting
+				free(filename);      // Free the node itself
 				return (1);
 			}
-			free(filename->str);
-			filename->str = ft_strdup(unescaped);
-			free(unescaped);
-			add_redirection((&(*current_cmd)->redirections), filename);
+
+			free(filename->str); // Free the old string
+			filename->str = ft_strdup(unescaped); // Assign unescaped string
+			free(unescaped); // Free the temporary unescaped string
+
+			add_redirection((&(*current_cmd)->redirections), filename);  // Store filename
 			delete_node(&token, *temp);
 			*temp = (*temp)->next;
 		}
@@ -275,7 +278,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 			}
 			else
 			{
-				(*current_cmd)->str[i] = ft_strdup(expanded);
+				(*current_cmd)->str[i] = expanded;
 				i++;
 			}
 		}
