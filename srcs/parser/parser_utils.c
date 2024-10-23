@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/08 14:09:05 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/21 22:07:41 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	add_redirection(t_lexical **redirections, t_lexical *redir_node)
+void	    add_redirection(t_lexical **redirections, t_lexical *redir_node)
 {
 	t_lexical	*current;
 

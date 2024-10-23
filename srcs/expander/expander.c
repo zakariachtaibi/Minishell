@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/21 13:28:56 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/22 11:50:17 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,17 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 	size_t	var_start;
 	char	*var_name;
 
+	temp_str[0] = '\0';
 	expanded_word = ft_strdup("");
 	while (current_word[*j] && current_word[*j] != '"')
 	{
-		if (current_word[*j] == '\\' && current_word[*j + 1])
-		{
-			temp_str[0] = current_word[*j + 1];
-			temp_str[1] = '\0';
-			(*j) += 2;
-		}
-		else if (current_word[*j] == '$' && heredoc_flag == 0)
+		// if (current_word[*j] == '\\' && current_word[*j + 1])
+		// {
+		// 	temp_str[0] = current_word[*j + 1];
+		// 	temp_str[1] = '\0';
+		// 	(*j) += 2;
+		// }
+		if (current_word[*j] == '$' && heredoc_flag == 0)
 		{
 			(*j)++;
 			if (current_word[*j] == '$')
@@ -75,7 +76,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 				var_value = get_vars_value(var_name, tools);
 				free(var_name);
 				if (!var_value)
-					var_value = ft_strdup("");
+					var_value = NULL;
 			}
 			else
 			{
