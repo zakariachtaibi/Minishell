@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/23 17:32:45 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/25 23:03:28 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	ft_free(char **arr)
 int	is_space(char *str)
 {
 	int	i;
-
 	i = 0;
 	while (str[i] != '\0')
 	{
@@ -245,9 +244,8 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		
 		expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
 		tools->export_flag = flag;
-		if (expanded != NULL)
+		if (expanded)
 		{
-			
 			if (flag == 1 && (is_space(expanded) == 1) && (export_flag != 1))
 			{
 				in = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/23 17:52:43 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/25 23:35:23 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 		if (current_word[*j] == '$' && heredoc_flag == 0)
 		{
 			(*j)++;
-			if (current_word[*j] == '$')
+			if(ft_isdigit(current_word[*j]))
+				(*j)++;
+			else if (current_word[*j] == '$')
 			{
 				var_value = ft_itoa(getpid());
 				(*j)++;
@@ -70,7 +72,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 				var_value = get_vars_value(var_name, tools);
 				free(var_name);
 				if (!var_value)
-					var_value = NULL;
+					var_value = ft_strdup("");
 			}
 			else
 			{
@@ -78,7 +80,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 			}
 			new_expanded_word = ft_strjoin(expanded_word, var_value);
 			free(expanded_word);
-			free(var_value);
+			// free(var_value);
 			expanded_word = new_expanded_word;
 		}
 		else
@@ -86,10 +88,10 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 			temp_str[0] = current_word[*j];
 			temp_str[1] = '\0';
 			(*j)++;
-		}
 		new_expanded_word = ft_strjoin(expanded_word, temp_str);
 		free(expanded_word);
 		expanded_word = new_expanded_word;
+		}
 	}
 	(*j)++;
 	return (expanded_word);
@@ -117,7 +119,7 @@ char	*expand_variable(t_tools *tools, const char *current_word, size_t *j)
 	var_value = get_vars_value(var_name, tools);
 	free(var_name);
 	if (!var_value)
-		return (NULL);
+		return (ft_strdup(""));
 	return (ft_strdup(var_value));
 }
 
@@ -160,7 +162,9 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		}
 		else if (current_word[j] == '$' && heredoc_flag == 0)
 		{
-			if (j + 1 < len && current_word[j + 1] == '$')
+			if(j + 1 < len && ft_isdigit(current_word[j + 1]))
+				j += 2;
+			else if (j + 1 < len && current_word[j + 1] == '$')
 			{
 				new_expansion = ft_itoa(getpid());
 				j += 2;
@@ -188,7 +192,7 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 			new_expansion = expand_plain_text(current_word, &j);
 			*flag = 2;
 		}
-		if (new_expansion)
+		if (new_expansion && *new_expansion)
 		{
 			temp_word = ft_strjoin(expanded_word, new_expansion);
 			free(expanded_word);
@@ -196,7 +200,7 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 			expanded_word = temp_word;
 		}
 		else
-			free(expanded_word);
+			expanded_word = NULL;
 	}
 	return (expanded_word);
 }

@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:17:20 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/25 22:40:27 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,16 @@ void	process_export(t_tools *tools, char **str, int *i)
 	plus_equal_sign = ft_strnstr(str[*i], "+=", ft_strlen(str[*i]));
 	equal_sign = ft_strchr(str[*i], '=');
 	in = 0;
-	if (str[*i][0] == '\0' && tools->export_flag == 1)
-	{
-		if (!str[*i + 1])
-		{
-			print_sorted_env(tools);
-			tools->exit_status = 0;
-			return ;
-		}
-	}
+	// if (str[*i][0] == '\0')
+	// {
+	// 	printf("heeere");
+	// 	// if (!str[*i + 1])
+	// 	// {
+	// 	// 	print_sorted_env(tools);
+	// 	// 	tools->exit_status = 0;
+	// 	// 	return ;
+	// 	// }
+	// }
 	if (plus_equal_sign)
 		handle_plus_equal(tools, str[*i], &key, &value);
 	else if (equal_sign)
@@ -92,10 +93,9 @@ void	process_export(t_tools *tools, char **str, int *i)
 		}
 		in++;
 	}
-	if (key[0] != '\0')
+	if (key[0] != '\0' || !key)
 		handle_env_var(&tools, key, value);
-	else if (key[0] == '\0' && (tools->export_flag == 0
-			|| tools->export_flag == 3))
+	else if (key[0] == '\0')
 		print_error(str[*i], key, value, tools);
 }
 

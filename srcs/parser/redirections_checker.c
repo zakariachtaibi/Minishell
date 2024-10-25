@@ -6,11 +6,61 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 15:45:44 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/26 00:15:43 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char *expand_inside_heredoc(t_tools *tools, char *input)
+{
+	char *expanded_word;
+	size_t i = 0;
+	char *new_expansion;
+	char *temp_word;
+	size_t len = ft_strlen(input);
+	expanded_word = ft_strdup("");
+	while(i < len)
+	{
+		if(input[i] == '$')
+		{
+			if(i + 1 < len && ft_isdigit(input[i + 1]))
+				i += 2;
+			else if (i + 1 < len && input[i + 1] == '$')
+			{
+				new_expansion = ft_itoa(getpid());
+				i += 2;
+			}
+			else if (i + 1 < len && (input[i + 1] == '?'
+					|| ft_isalnum(input[i + 1]) || input[i
+						+ 1] == '_'))
+				new_expansion = expand_variable(tools, input, &i);
+			else
+			{
+				if (input[i + 1] == '\0')
+					new_expansion = ft_strdup("$");
+				else
+					new_expansion = ft_strdup("");
+				i++;
+			}
+		}
+		else
+		{
+			new_expansion = expand_plain_text(input, &i);
+		}
+		if (new_expansion && *new_expansion)
+		{
+			temp_word = ft_strjoin(expanded_word, new_expansion);
+			free(expanded_word);
+			free(new_expansion);
+			expanded_word = temp_word;
+		}
+		else
+			expanded_word = NULL;
+	}
+	
+	return(expanded_word);
+}
 
 void	redir_in(t_simple_cmds **current_cmd, t_lexical **redir)
 {
@@ -36,9 +86,11 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 	int		fd;
 	int		f;
 	char	*ttname;
+	(void) tools;
+	// size_t	i = 0;
 	ttname=ttyname(1);
 	ttname=ft_substr(ttname, 9, ft_strlen(ttname));
-	
+	ttname=ft_strjoin("/tmp/", ttname);
 	f = 0;
 	*redir = (*redir)->next;
 	if ((*current_cmd)->num_redirections_heredoc > 16)
@@ -47,11 +99,11 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 			(*current_cmd)->num_redirections_heredoc);
 		exit(2);
 	}
-	if ((*current_cmd)->hd_file_name)
-	{
-		free((*current_cmd)->hd_file_name);
-	}
-	(*current_cmd)->hd_file_name = ft_strdup((*redir)->str);
+	// if ((*current_cmd)->hd_file_name)
+	// {
+	// 	free((*current_cmd)->hd_file_name);
+	// }
+	// (*current_cmd)->hd_file_name = ft_strdup((*redir)->str);
 	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
 		close((*current_cmd)->fd_in);
 	fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -71,7 +123,9 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 			break ;
 		}
 		if ((*redir)->filename_flag == 2)
-			input = expand_vars(tools, input, &f, 0);
+			input = expand_inside_heredoc(tools, input);
+			if(!input)
+				input=ft_strdup("");
 		write(fd, input, strlen(input));
 		write(fd, "\n", 1);
 		free(input);

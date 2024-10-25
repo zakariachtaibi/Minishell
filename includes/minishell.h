@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:54:18 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/25 21:32:26 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,11 @@ void			print_env_vars(t_env_var *copy);
 void			handle_env_var(t_tools **tools, char *key, char *value);
 void			handle_command_not_found(t_simple_cmds *current_cmd, t_tools **tools);
 t_lexical		*tokenize(char *input);
-char			*expand_vars(t_tools *tools, char *temp, int *flag, int heredoc_flag);	
+char			*expand_vars(t_tools *tools, char *temp, int *flag, int heredoc_flag);
+char			*expand_double_quote(t_tools *tools, const char *current_word,
+					size_t *j, int heredoc_flag);
+char			*expand_plain_text(const char *current_word, size_t *j);
+char			*expand_variable(t_tools *tools, const char *current_word, size_t *j);
 char			*ft_strndup(const char *src, size_t n) ;
 void			search_for_argn(t_simple_cmds *cmd, int *flag, int *j);
 int 			change_directory(t_tools *tools, t_simple_cmds *cmd);

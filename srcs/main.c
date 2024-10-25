@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/23 18:29:40 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/25 22:29:03 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@ int	main(int ac, char **av, char **envp)
 	char			*input;
 	t_simple_cmds	*cmds;
 	t_tools			*tools;
-	// char	*ttname;
-	// ttname=ttyname(1);
-	// ttname=ft_substr(ttname, 9, ft_strlen(ttname));
-	// printf("%s\n", ttname);
 
 	if (ac != 1)
 	{
@@ -44,10 +40,10 @@ int	main(int ac, char **av, char **envp)
 	increment_SHLVL(&tools);
 	while (1)
 	{
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
+		// signal(SIGINT, handle_sigint);
+		// signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell> ");
-		signal(SIGINT, SIG_IGN);
+		// signal(SIGINT, SIG_IGN);
 		if (!input)
 		{
 			printf("exit\n");

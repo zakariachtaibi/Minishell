@@ -22,19 +22,6 @@ $b
 jgbls    -kla
 jgn$b
 
-
-
-[1]    10542 abort      ./minishell
-➜  Minishell git:(main) ✗ export a="ls  -la"
-➜  Minishell git:(main) ✗ ./minishell
-minishell> ls > $a
-$a : ambiguous redirect
-minishell> ls > "fff$a"
-minishell> ls > "fff$a jhfkn"
-minishell> echo $a
-ls -la                              
-minishell>
-
-> echo "$1TEST"
-
+ echo lll$5546lll
+546lll
 

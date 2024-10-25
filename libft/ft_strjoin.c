@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:54:45 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/23 17:37:28 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/10/26 00:20:28 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
+#include "stdio.h"
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		i;
 	int		j;
 	char	*rs;
-
+	
 	if (!s1 && !s2)
 		return (ft_strdup(""));
 	if (!s1 && s2)

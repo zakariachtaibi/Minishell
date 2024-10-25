@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:23:05 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/25 22:31:31 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 {
 	char	**split;
 
+	if(current_cmd->str[0] == NULL)
+		return ;
 	if (strcmp(current_cmd->str[0], ".") == 0)
 	{
 		if (!current_cmd->str[1])
