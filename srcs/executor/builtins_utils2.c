@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 13:11:55 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 20:47:58 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/26 17:18:55 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ void	check_env_vars(t_env_var **current)
 			ft_putstr_fd("declare -x ", 1);
 			ft_putstr_fd((*current)->key, 1);
 			ft_putstr_fd("=", 1);
+			ft_putchar_fd('"', 1);
 			ft_putstr_fd((*current)->value, 1);
+			ft_putchar_fd('"', 1);
 			ft_putstr_fd("\n", 1);
 		}
 	}

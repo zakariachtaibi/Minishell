@@ -6,11 +6,110 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/26 14:57:34 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/26 18:27:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+bool	is_quote(char c) {
+    return (c == '"' || c == '\'');
+}
+
+int count_words(const char *str) {
+    int count = 0;
+    bool in_word = false;
+    bool inside_quotes = false;
+    char quote_char = '\0';
+
+    while (*str) {
+        if (is_quote(*str) && !inside_quotes) {
+            inside_quotes = true;
+            quote_char = *str;
+            if (!in_word) {
+                in_word = true; // Starting a new word
+            }
+        } else if (*str == quote_char && inside_quotes) {
+            inside_quotes = false;
+            quote_char = '\0';
+        } else if (*str == ' ' && !inside_quotes) {
+            if (in_word) {
+                count++;
+                in_word = false; // End of the current word
+            }
+        } else if (!in_word) {
+            in_word = true; // Found a new word
+        }
+        str++;
+    }
+    if (in_word) {
+        count++; // Count the last word if any
+    }
+    return count;
+}
+
+char *extract_word(const char **str) {
+    const char *start = *str;
+    bool inside_quotes = false;
+    char quote_char = '\0';
+    int length = 0;
+
+    // Move through the word, handling quoted sections as needed
+    while (**str && (**str != ' ' || inside_quotes)) {
+        if (is_quote(**str) && !inside_quotes) {
+            inside_quotes = true;
+            quote_char = **str;
+        } else if (**str == quote_char && inside_quotes) {
+            inside_quotes = false;
+            quote_char = '\0';
+        }
+        (*str)++;
+        length++;
+    }
+
+    char *word = malloc(length + 1);
+    if (!word) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    strncpy(word, start, length);
+    word[length] = '\0';
+
+    // Skip trailing spaces after the word
+    while (**str == ' ')
+        (*str)++;
+    return word;
+}
+
+char **split_ignoring_quotes(const char *str) {
+    int word_count = count_words(str);
+    char **result = malloc(sizeof(char *) * (word_count + 1));
+    if (!result) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    int i = 0;
+    while (*str) {
+        while (*str == ' ')
+            str++; // Skip initial spaces
+        if (*str) {
+            result[i++] = extract_word(&str); // Extract the next word
+        }
+    }
+    result[i] = NULL; // Null-terminate the array
+
+    return result;
+}
 
 void	ft_free(char **arr)
 {
@@ -29,7 +128,7 @@ int	is_space(char *str)
 {
 	int	i;
 	i = 0;
-	while (str[i] != '\0')
+	while (str[i] != '\0' && str[i] != '"')
 	{
 		if (str[i] == ' ')
 			return (1);
@@ -212,10 +311,10 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		tools->export_flag = flag;
 		if (expanded)
 		{
-			if (flag == 1 && (is_space(expanded) == 1) && (export_flag != 1))
+			if ((is_space(expanded) == 1) && (export_flag != 1))
 			{
 				in = 0;
-				tmp = ft_split(expanded, ' ');
+				tmp = split_ignoring_quotes(expanded);
 				
 				// resize_cmd_lst(current_cmd, tmp);
 				while (tmp[in])

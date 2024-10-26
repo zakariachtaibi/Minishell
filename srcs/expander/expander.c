@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/26 14:03:33 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/26 17:28:25 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 
 	temp_str[0] = '\0';
 	expanded_word = ft_strdup("");
-	while (current_word[*j] && current_word[*j] != '"')
+	while (current_word[*j])
 	{
 		if (current_word[*j] == '$' && heredoc_flag == 0)
 		{
@@ -155,7 +155,7 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		}
 		else if (current_word[j] == '"')
 		{
-			j++;
+			// j++;
 			new_expansion = expand_double_quote(tools, current_word, &j,
 					heredoc_flag);
 			*flag = 0;

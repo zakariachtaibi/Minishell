@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/25 22:40:27 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/26 17:27:32 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,12 @@ void	handle_plus_equal(t_tools *tools, char *str, char **key, char **value)
 void	handle_equal(char *str, char **key, char **value)
 {
 	char	*equal_sign;
-
 	equal_sign = ft_strchr(str, '=');
 	*key = ft_substr(str, 0, equal_sign - str);
 	if (*(equal_sign + 1) == '\0')
 		*value = NULL;
 	else
-		*value = ft_strdup(equal_sign + 1);
+		*value = ft_strtrim(equal_sign + 1, "\"");
 }
 
 void	print_error(char *str, char *key, char *value, t_tools *tools)
