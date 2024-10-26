@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/25 23:03:28 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/26 14:57:34 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,40 +161,6 @@ int	ft_strlen_array(char **array)
 	return (i);
 }
 
-// void resize_cmd_lst(t_simple_cmds **current_cmd, char **tmp)
-// {
-//     char    **new_str;
-//     int     count_str = 0;
-//     int     count_tmp = 0;
-//     int     i, j;
-// 	j = 0;
-// 	i = 0;
-//     if ((*current_cmd)->str)
-//         count_str = ft_strlen_array((*current_cmd)->str);
-
-//     if (tmp)
-//         count_tmp = ft_strlen_array(tmp);
-// // ft_putnbr_fd(count_str, 1);
-//     new_str = malloc(sizeof(char *) * (count_tmp + 1));
-//     if (!new_str)
-//     {
-//         perror("malloc");
-//         exit(EXIT_FAILURE);
-//     }
-//     while(++i < count_str)
-//         new_str[i] = (*current_cmd)->str[i];
-
-// 	while (tmp[j])
-// 	{
-// 		 new_str[i++] = ft_strdup(tmp[j]);
-// 			j++;
-// 	}
-//     new_str[i] = NULL;
-
-//     free((*current_cmd)->str);
-//     (*current_cmd)->str = new_str;
-// }
-
 void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		t_tools *tools)
 {
@@ -276,6 +242,18 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 			}
 			else
 			{
+				if (i >= (word_count + count_str))
+					{
+    					int new_size = (word_count + count_str) * 2; // Double the size
+						new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
+						if (!new_str) 
+						{
+							perror("realloc");
+							exit(EXIT_FAILURE);
+						}
+						(*current_cmd)->str = new_str;
+						word_count = new_size - count_str; 
+					}
 				(*current_cmd)->str[i] = expanded;
 				i++;
 			}

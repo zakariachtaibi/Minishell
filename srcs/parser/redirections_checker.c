@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/26 00:15:43 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/26 14:17:38 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ char *expand_inside_heredoc(t_tools *tools, char *input)
 	char *temp_word;
 	size_t len = ft_strlen(input);
 	expanded_word = ft_strdup("");
+	
 	while(i < len)
 	{
+		new_expansion = NULL;
 		if(input[i] == '$')
 		{
 			if(i + 1 < len && ft_isdigit(input[i + 1]))
@@ -55,8 +57,6 @@ char *expand_inside_heredoc(t_tools *tools, char *input)
 			free(new_expansion);
 			expanded_word = temp_word;
 		}
-		else
-			expanded_word = NULL;
 	}
 	
 	return(expanded_word);
@@ -87,7 +87,6 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 	int		f;
 	char	*ttname;
 	(void) tools;
-	// size_t	i = 0;
 	ttname=ttyname(1);
 	ttname=ft_substr(ttname, 9, ft_strlen(ttname));
 	ttname=ft_strjoin("/tmp/", ttname);
@@ -99,11 +98,6 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 			(*current_cmd)->num_redirections_heredoc);
 		exit(2);
 	}
-	// if ((*current_cmd)->hd_file_name)
-	// {
-	// 	free((*current_cmd)->hd_file_name);
-	// }
-	// (*current_cmd)->hd_file_name = ft_strdup((*redir)->str);
 	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
 		close((*current_cmd)->fd_in);
 	fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
