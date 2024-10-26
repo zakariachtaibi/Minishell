@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/25 22:31:31 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/26 22:58:51 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,12 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 		(*tools)->exit_status = 127;
 		return ;
 	}
+	if(strcmp(current_cmd->str[0],"minishell") == 0)
+	{
+		write(2, "bash: : command not found\n", 27);
+		(*tools)->exit_status = 127;
+		return ;
+	}
 	if (current_cmd->str[0][0] == '\0')
 	{
 		write(2, "bash: : command not found\n", 27);
@@ -194,6 +200,7 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
 
     while (current_cmd)
     {
+			
         if (current_cmd->next && pipe(pipe_fd) == -1)
         {
             perror("pipe");
