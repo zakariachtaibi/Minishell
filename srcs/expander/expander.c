@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/10/26 17:28:25 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/10/27 15:41:55 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 			{
 				var_value = ft_itoa(tools->exit_status);
 				(*j)++;
+			}
+			else if (current_word[*j] == '\'')
+			{
+				printf("heeeeeere");
+				return(expanded_word);
 			}
 			else if (ft_isalnum(current_word[*j]) || current_word[*j] == '_')
 			{
