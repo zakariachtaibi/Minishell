@@ -2,9 +2,10 @@ minishell> export a="ls    -la"
 minishell> echo $a
 ls -la
 minishell> echo $a"$a" 
-ls    -lals    -la
+ls -lals    -la
 
+> ss -> double free
 
+cntrl c -> exit status
 
-
-
+echo '$PWD'

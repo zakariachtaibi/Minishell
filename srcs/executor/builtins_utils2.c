@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 13:11:55 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/26 17:18:55 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/04 18:20:25 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,17 @@ void	swap_values(char **ikey, char **ivalue, char **jkey, char **jvalue)
 	char	*temp_value;
 
 	temp_key = ft_strdup(*ikey);
-	temp_value = ft_strdup(*ivalue);
+	if ((*ivalue) == NULL)
+		temp_value = NULL;
+	else
+		temp_value = ft_strdup(*ivalue);
 	free(*ikey);
 	free(*ivalue);
 	(*ikey) = ft_strdup(*jkey);
-	(*ivalue) = ft_strdup(*jvalue);
+	if ((*jvalue) == NULL)
+		(*ivalue) = NULL;
+	else
+		(*ivalue) = ft_strdup(*jvalue);
 	free(*jkey);
 	free(*jvalue);
 	(*jkey) = temp_key;
@@ -43,6 +49,7 @@ void	check_env_vars(t_env_var **current)
 		{
 			ft_putstr_fd("declare -x ", 1);
 			ft_putstr_fd((*current)->key, 1);
+			ft_putstr_fd("=\"\"", 1);
 			ft_putstr_fd("\n", 1);
 		}
 		else

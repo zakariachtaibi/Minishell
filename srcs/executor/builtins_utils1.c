@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:42:32 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/19 13:24:17 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/04 18:21:31 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ void	sort_env_vars(t_env_var *copy)
 		while (j)
 		{
 			if (ft_strncmp(i->key, j->key, ft_strlen(i->key) + 1) > 0)
-			{
 				swap_values(&(i->key), &(i->value), &(j->key), &(j->value));
-			}
 			j = j->next;
 		}
 		i = i->next;

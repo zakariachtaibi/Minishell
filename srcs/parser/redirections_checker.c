@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_checker.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/26 14:17:38 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/03 21:06:34 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,11 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 {
 	char	*input;
 	int		fd;
-	int		f;
 	char	*ttname;
 	(void) tools;
 	ttname=ttyname(1);
 	ttname=ft_substr(ttname, 9, ft_strlen(ttname));
 	ttname=ft_strjoin("/tmp/", ttname);
-	f = 0;
 	*redir = (*redir)->next;
 	if ((*current_cmd)->num_redirections_heredoc > 16)
 	{
@@ -118,8 +116,8 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 		}
 		if ((*redir)->filename_flag == 2)
 			input = expand_inside_heredoc(tools, input);
-			if(!input)
-				input=ft_strdup("");
+		if (!input)
+			input = ft_strdup("");
 		write(fd, input, strlen(input));
 		write(fd, "\n", 1);
 		free(input);

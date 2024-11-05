@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/23 17:59:35 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/04 16:38:11 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,10 @@ t_lexical	*tokenize(char *input)
 			token[j] = '\0';
 			node = check_node(token, i);
 			if (!node)
-					{
-						free_lexical(head);
-						return (NULL);
-					}
+			{
+				free_lexical(head);
+				return (NULL);
+			}
 			if (current)
 			{
 				current->next = node;

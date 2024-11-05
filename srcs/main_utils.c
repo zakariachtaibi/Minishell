@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:51:51 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:56:13 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/03 23:32:50 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,15 @@ void	set_env_var(const char *key, const char *value, t_tools **tools)
 	if (env_var)
 	{
 		free(env_var->value);
-		env_var->value = strdup(value);
+		env_var->value = ft_strdup(value);
 	}
 	else
 	{
 		new_var = (t_env_var *)malloc(sizeof(t_env_var));
 		if (!new_var)
 			return ;
-		new_var->key = strdup(key);
-		new_var->value = strdup(value);
+		new_var->key = ft_strdup(key);
+		new_var->value = ft_strdup(value);
 		new_var->next = (*tools)->env_vars;
 		(*tools)->env_vars = new_var;
 	}

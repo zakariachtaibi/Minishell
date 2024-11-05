@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 20:34:36 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/04 18:17:38 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ t_env_var	*copy_env_vars(t_env_var *env_vars)
 	{
 		new_node = malloc(sizeof(t_env_var));
 		new_node->key = ft_strdup(temp->key);
-		new_node->value = ft_strdup(temp->value);
+		if (temp->value == NULL)
+			new_node->value = NULL;
+		else
+			new_node->value = ft_strdup(temp->value);
 		new_node->next = copy;
 		copy = new_node;
 		temp = temp->next;

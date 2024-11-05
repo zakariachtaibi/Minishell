@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/30 13:11:35 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/03 21:12:37 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void			sort_env_vars(t_env_var *copy);
 void			free_env_vars(t_env_var *copy);
 void			setup_signal(void);
 void			handle_sigint(int sig);
-void			sigint2(void);
+void			sigint2(int sig);
 void			sig_handler1(int test);
 void			free_lexical(t_lexical *head);
 void			swap_values(char **ikey, char **ivalue, char **jkey,

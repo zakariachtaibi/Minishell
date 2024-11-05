@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/26 22:58:51 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/05 14:57:50 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,12 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 {
 	char	**split;
 
-	if(current_cmd->str[0] == NULL)
-		return ;
+	if (!current_cmd || !current_cmd->str || !current_cmd->str[0])
+	{
+		(*tools)->exit_status = 0;  // Set exit status to 0 for pure redirections
+		return;
+	}
+
 	if (strcmp(current_cmd->str[0], ".") == 0)
 	{
 		if (!current_cmd->str[1])
@@ -188,25 +192,22 @@ int	count_cmds(t_simple_cmds *list)
 void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
 		t_lexical *tokens)
 {
-    int pipe_fd[2];
-    int prev_pipe_read = STDIN_FILENO;
-    int status;
-    t_simple_cmds *current_cmd;
-    pid_t pid;
-    pid_t last_pid = 0;  // Track the last command's pid
+    int				pipe_fd[2];
+    int 			prev_pipe_read = STDIN_FILENO;
+    int 			status;
+    t_simple_cmds	*current_cmd;
+    pid_t 			pid;
+    pid_t 			last_pid = 0;
     (void)tokens;
 
     current_cmd = cmds_head;
-
     while (current_cmd)
-    {
-			
+    {		
         if (current_cmd->next && pipe(pipe_fd) == -1)
         {
             perror("pipe");
             exit(EXIT_FAILURE);
         }
-        
         // Handle builtin without fork for the last command
         if (current_cmd->builtin != NULL && current_cmd->next == NULL && 
             prev_pipe_read == STDIN_FILENO)
@@ -228,7 +229,6 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
             current_cmd = current_cmd->next;
             continue;
         }
-
         pid = fork();
         if (pid == 0)
         {
@@ -280,22 +280,21 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
                 prev_pipe_read = pipe_fd[0];
             }
             
-            // Store the last command's pid
-            if (current_cmd->next == NULL)
-                last_pid = pid;
+            last_pid = pid;  // Update last_pid for each command
         }
         current_cmd = current_cmd->next;
     }
 
-    // Wait for all processes
-    while (wait(&status) > 0)
-    {
-        // Only update exit status for the last command in the pipeline
-        if (WIFEXITED(status) && last_pid == wait(NULL))
-            (*tools)->exit_status = WEXITSTATUS(status);
-        else if (WIFSIGNALED(status) && last_pid == wait(NULL))
-            (*tools)->exit_status = WTERMSIG(status) + 128;
-    }
+    // Wait for the last process first to get its exit status
+    waitpid(last_pid, &status, 0);
+    if (WIFEXITED(status))
+        (*tools)->exit_status = WEXITSTATUS(status);
+    // else if (WIFSIGNALED(status))
+    //     (*tools)->exit_status = WTERMSIG(status) + 128;
+
+    // Wait for remaining processes
+    while (wait(NULL) > 0)
+        continue;
 
     // Reset exit status to 0 if the last command was a heredoc
     if (cmds_head && cmds_head->next == NULL && cmds_head->fd_in != STDIN_FILENO)

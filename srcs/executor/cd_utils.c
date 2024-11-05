@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 20:58:03 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/05 14:52:54 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ int	check_cd_arguments(t_tools *tools, t_simple_cmds *cmd)
 	}
 	else
 		path = cmd->str[1];
+	if (strcmp(path, "\0") == 0)
+	{
+		tools->exit_status = 0;
+		return (1);
+	}
 	if (chdir(path) != 0)
 	{
 		ft_putstr_fd("cd:", 2);
@@ -51,9 +56,7 @@ t_env_var	*find_env_var(t_env_var *env_vars, const char *key)
 	while (env_vars)
 	{
 		if (strcmp(env_vars->key, key) == 0)
-		{
 			return (env_vars);
-		}
 		env_vars = env_vars->next;
 	}
 	return (NULL);
@@ -79,9 +82,7 @@ void	update_pwd_variables(t_tools *tools)
 		if (old_pwd)
 			free(old_pwd->value);
 		if (old_pwd)
-		{
 			old_pwd->value = ft_strdup(pwd->value);
-		}
 		free(pwd->value);
 		pwd->value = new_pwd;
 	}
@@ -90,9 +91,7 @@ void	update_pwd_variables(t_tools *tools)
 int	builtin_cd(t_tools *tools, t_simple_cmds *cmd)
 {
 	if (check_cd_arguments(tools, cmd))
-	{
 		return (1);
-	}
 	update_pwd_variables(tools);
 	return (0);
 }

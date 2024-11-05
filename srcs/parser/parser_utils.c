@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/23 17:33:22 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/05 16:05:49 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ t_simple_cmds	*init_cmd(void)
 
 	new_cmd = malloc(sizeof(t_simple_cmds));
 	if (!new_cmd)
-	{
 		return (NULL);
-	}
 	new_cmd->next = NULL;
 	new_cmd->prev = NULL;
 	new_cmd->str = NULL;
@@ -64,11 +62,11 @@ t_lexical	*copy_node(t_lexical *src)
 	dest->prev = NULL;
 	if (src->str != NULL)
 	{
-		if (dest->str == NULL)
-		{
-			free_lexical(dest);
-			return (NULL);
-		}
+		// if (dest->str == NULL)
+		// {
+		// 	free_lexical(dest);
+		// 	return (NULL);
+		// }
 		dest->str = src->str;
 	}
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/26 17:27:32 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/04 18:19:44 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	handle_equal(char *str, char **key, char **value)
 	equal_sign = ft_strchr(str, '=');
 	*key = ft_substr(str, 0, equal_sign - str);
 	if (*(equal_sign + 1) == '\0')
-		*value = NULL;
+		*value = ft_strdup("");
 	else
 		*value = ft_strtrim(equal_sign + 1, "\"");
 }
@@ -61,22 +61,10 @@ void	process_export(t_tools *tools, char **str, int *i)
 	plus_equal_sign = ft_strnstr(str[*i], "+=", ft_strlen(str[*i]));
 	equal_sign = ft_strchr(str[*i], '=');
 	in = 0;
-	// if (str[*i][0] == '\0')
-	// {
-	// 	printf("heeere");
-	// 	// if (!str[*i + 1])
-	// 	// {
-	// 	// 	print_sorted_env(tools);
-	// 	// 	tools->exit_status = 0;
-	// 	// 	return ;
-	// 	// }
-	// }
 	if (plus_equal_sign)
 		handle_plus_equal(tools, str[*i], &key, &value);
 	else if (equal_sign)
-	{
 		handle_equal(str[*i], &key, &value);
-	}
 	else
 	{
 		key = ft_strdup(str[*i]);
