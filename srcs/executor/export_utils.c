@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/04 18:19:44 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/07 01:58:29 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,12 @@ void	print_sorted_env(t_tools *tools)
 	free_env_vars(copy);
 }
 
-int	builtin_export(t_tools *tools, t_simple_cmds *cmd)
+int	builtin_export(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	int	i;
 
 	i = 1;
+	(void)tokens;
 	if (!cmd->str[i])
 	{
 		print_sorted_env(tools);

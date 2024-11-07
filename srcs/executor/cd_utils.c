@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/05 14:52:54 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/07 01:58:52 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,9 @@ void	update_pwd_variables(t_tools *tools)
 	}
 }
 
-int	builtin_cd(t_tools *tools, t_simple_cmds *cmd)
+int	builtin_cd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
+	(void)tokens;
 	if (check_cd_arguments(tools, cmd))
 		return (1);
 	update_pwd_variables(tools);

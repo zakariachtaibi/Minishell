@@ -6,7 +6,7 @@
 #    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/05 15:34:27 by zchtaibi         ###   ########.fr        #
+#    Updated: 2024/11/06 16:51:41 by zchtaibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRCS = srcs/main.c \
 		libft/ft_itoa.c\
 		libft/ft_strnstr.c\
 		libft/ft_strtrim.c\
+		libft/ft_strcmp.c\
 		srcs/lexer/tokenizer.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\

@@ -9,3 +9,5 @@ ls -lals    -la
 cntrl c -> exit status
 
 echo '$PWD'
+
+export HOME= ; cd -> exit-status

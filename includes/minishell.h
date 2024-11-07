@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/03 21:12:37 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/07 01:55:41 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ typedef struct s_tools
 typedef struct s_simple_cmds
 {
 	char					**str;
-	int						(*builtin)(t_tools *, struct s_simple_cmds *);
+	int						(*builtin)(t_tools *, struct s_simple_cmds *, t_lexical *);
 	int						num_redirections;
 	int						num_redirections_heredoc;
 	char					*hd_file_name;
@@ -100,7 +100,7 @@ typedef struct s_simple_cmds
 }	t_simple_cmds;
 
 int				(*get_builtin_func(t_builtin type))(t_tools *tools,
-					t_simple_cmds *cmds);
+					t_simple_cmds *cmds, t_lexical *tokens);
 void			get_env_vars(t_tools *tools, char **envp);
 char			*get_env_value(t_env_var *env_vars, const char *key);
 char			**get_path_dirs(t_env_var *env_vars);
@@ -117,13 +117,13 @@ void			execute(char *cmd_path, t_simple_cmds *current_cmd,
 					t_tools **tools);
 int				execute_from_path(char **split, t_simple_cmds *current_cmd,
 					t_tools **tools);
-int				builtin_echo(t_tools *tools, t_simple_cmds *cmd);
-int				builtin_cd(t_tools *tools, t_simple_cmds *cmd);
-int				builtin_pwd(t_tools *tools, t_simple_cmds *cmd);
-int				builtin_export(t_tools *tools, t_simple_cmds *cmd);
-int				builtin_unset(t_tools *tools, t_simple_cmds *cmd);
-int				builtin_env(t_tools *tools, t_simple_cmds *cmd);
-int				builtin_exit(t_tools *tools, t_simple_cmds *cmd);
+int				builtin_echo(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
+int				builtin_cd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
+int				builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
+int				builtin_export(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
+int				builtin_unset(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
+int				builtin_env(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
+int				builtin_exit(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
 t_builtin		check_builtins_type(char *str);
 void			check_and_set_builtin(t_simple_cmds *cmd);
 void			check_and_set_redirections(t_simple_cmds *current_cmd,
@@ -170,6 +170,7 @@ void			fill_envp_array(char **envp, t_env_var *env_vars, int count);
 char			**convert_env_vars_to_array(t_env_var *env_vars);
 void			sort_env_vars(t_env_var *copy);	
 void			free_env_vars(t_env_var *copy);
+void			free_env_var(t_env_var *env_vars);
 void			setup_signal(void);
 void			handle_sigint(int sig);
 void			sigint2(int sig);

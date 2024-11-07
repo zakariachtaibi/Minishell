@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/05 14:57:50 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/07 02:25:36 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
 			{
 				execve(current_cmd->str[0], current_cmd->str,
 					convert_env_vars_to_array((*tools)->env_vars));
+				free_tools(*tools);
+				free_cmds(&current_cmd);
 				perror("execve");
 				exit(126);
 			}
@@ -133,7 +135,7 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 		return;
 	}
 
-	if (strcmp(current_cmd->str[0], ".") == 0)
+	if (ft_strcmp(current_cmd->str[0], ".") == 0)
 	{
 		if (!current_cmd->str[1])
 		{
@@ -143,13 +145,13 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 			return ;
 		}
 	}
-	if (strcmp(current_cmd->str[0], "..") == 0)
+	if (ft_strcmp(current_cmd->str[0], "..") == 0)
 	{
 		write(2, "bash: ..: command not found\n", 29);
 		(*tools)->exit_status = 127;
 		return ;
 	}
-	if(strcmp(current_cmd->str[0],"minishell") == 0)
+	if(ft_strcmp(current_cmd->str[0],"minishell") == 0)
 	{
 		write(2, "bash: : command not found\n", 27);
 		(*tools)->exit_status = 127;
@@ -198,7 +200,7 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
     t_simple_cmds	*current_cmd;
     pid_t 			pid;
     pid_t 			last_pid = 0;
-    (void)tokens;
+	int				e;
 
     current_cmd = cmds_head;
     while (current_cmd)
@@ -220,7 +222,7 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
             if (current_cmd->fd_out != STDOUT_FILENO)
                 dup2(current_cmd->fd_out, STDOUT_FILENO);
             
-            (*tools)->exit_status = current_cmd->builtin(*tools, current_cmd);
+            (*tools)->exit_status = current_cmd->builtin(*tools, current_cmd, tokens);
             
             dup2(old_stdout, STDOUT_FILENO);
             dup2(old_stdin, STDIN_FILENO);
@@ -257,29 +259,40 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
                 dup2(current_cmd->fd_out, STDOUT_FILENO);
                 close(current_cmd->fd_out);
             }
-
+			
             if (current_cmd->builtin != NULL)
-                exit(current_cmd->builtin(*tools, current_cmd));
+			{
+				e = current_cmd->builtin(*tools, current_cmd, tokens);
+				free_lexical(tokens);
+				free_cmds(&cmds_head);
+				free_tools((*tools));
+                exit(e);
+			}
             else
                 execute_cmd(current_cmd, tools);
-            exit((*tools)->exit_status);
+			e = (*tools)->exit_status;
+			free_lexical(tokens);
+			free_cmds(&cmds_head);
+			free_tools((*tools));
+            exit(e);
         }
         else if (pid < 0)
         {
             perror("fork");
+			free_lexical(tokens);
+			free_cmds(&cmds_head);
+			free_env_var((*tools)->env_vars);
             exit(EXIT_FAILURE);
         }
         else
         {
             if (prev_pipe_read != STDIN_FILENO)
                 close(prev_pipe_read);
-
             if (current_cmd->next)
             {
                 close(pipe_fd[1]);
                 prev_pipe_read = pipe_fd[0];
             }
-            
             last_pid = pid;  // Update last_pid for each command
         }
         current_cmd = current_cmd->next;
@@ -287,16 +300,17 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
 
     // Wait for the last process first to get its exit status
     waitpid(last_pid, &status, 0);
-    if (WIFEXITED(status))
-        (*tools)->exit_status = WEXITSTATUS(status);
+    // if (WIFEXITED(status))
+    //     (*tools)->exit_status = WEXITSTATUS(status);
     // else if (WIFSIGNALED(status))
     //     (*tools)->exit_status = WTERMSIG(status) + 128;
 
-    // Wait for remaining processes
     while (wait(NULL) > 0)
         continue;
 
     // Reset exit status to 0 if the last command was a heredoc
     if (cmds_head && cmds_head->next == NULL && cmds_head->fd_in != STDIN_FILENO)
-        (*tools)->exit_status = 0;
+    {
+		(*tools)->exit_status = 0;
+	}
 }

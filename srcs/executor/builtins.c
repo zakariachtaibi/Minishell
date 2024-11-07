@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:24:10 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/07 01:57:20 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
+int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	char	*buff;
 
 	(void)cmd;
+	(void)tokens;
 	buff = malloc(1024 * sizeof(char));
 	if (!buff)
 	{
@@ -36,7 +37,7 @@ int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd)
 	return (0);
 }
 
-int	builtin_exit(t_tools *tools, t_simple_cmds *cmd)
+int	builtin_exit(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	int	exit_status;
 
@@ -48,6 +49,8 @@ int	builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 			free_cmds(&cmd);
 		if (tools)
 			free_tools(tools);
+		if (tokens)
+			free_lexical(tokens);
 		exit(exit_status);
 	}
 	if (!is_numeric(cmd->str[1]))
@@ -68,13 +71,14 @@ int	builtin_exit(t_tools *tools, t_simple_cmds *cmd)
 	exit(exit_status);
 }
 
-int	builtin_unset(t_tools *tools, t_simple_cmds *cmd)
+int	builtin_unset(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	int			i;
 	int			had_error;
 	t_env_var	*current;
 	t_env_var	*node_to_delete;
-
+	(void)tokens;
+	
 	i = 1;
 	had_error = 0;
 	while (cmd->str[i])
@@ -113,10 +117,11 @@ int	builtin_unset(t_tools *tools, t_simple_cmds *cmd)
 	return (tools->exit_status);
 }
 
-int	builtin_env(t_tools *tools, t_simple_cmds *cmd)
+int	builtin_env(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	int			i;
 	t_env_var	*current;
+	(void)tokens;
 
 	i = 1;
 	current = tools->env_vars;
@@ -150,12 +155,13 @@ int	builtin_env(t_tools *tools, t_simple_cmds *cmd)
 	return (1);
 }
 
-int	builtin_echo(t_tools *tools, t_simple_cmds *cmd)
+int	builtin_echo(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	int	j;
 	int	flag;
 
 	(void)*tools;
+	(void)tokens;
 	j = 1;
 	flag = 0;
 	search_for_argn(cmd, &flag, &j);

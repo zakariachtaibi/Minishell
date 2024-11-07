@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:55:22 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/05 15:41:48 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/07 02:07:44 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	free_tools(t_tools *tools)
 		close(tools->std_in);
 	free(tools);
 }
+
 
 void	free_lexical(t_lexical *head)
 {
