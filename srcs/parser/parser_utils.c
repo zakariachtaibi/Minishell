@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/06 22:44:46 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/08 01:28:21 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_lexical	*copy_node(t_lexical *src)
 		// 	free_lexical(dest);
 		// 	return (NULL);
 		// }
-		dest->str = src->str;
+		dest->str = ft_strdup(src->str);
 	}
 	else
 		dest->str = NULL;

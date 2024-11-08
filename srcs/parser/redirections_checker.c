@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/03 21:06:34 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/08 01:55:00 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,55 +79,67 @@ void	redir_out(t_simple_cmds **current_cmd, t_lexical **redir)
 			0644);
 }
 
-void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
-		t_tools *tools)
+void    redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
+        t_tools *tools)
 {
-	char	*input;
-	int		fd;
-	char	*ttname;
-	(void) tools;
-	ttname=ttyname(1);
-	ttname=ft_substr(ttname, 9, ft_strlen(ttname));
-	ttname=ft_strjoin("/tmp/", ttname);
-	*redir = (*redir)->next;
-	if ((*current_cmd)->num_redirections_heredoc > 16)
-	{
-		printf("minishell: maximum here-document count exceeded is %d\n",
-			(*current_cmd)->num_redirections_heredoc);
-		exit(2);
-	}
-	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
-		close((*current_cmd)->fd_in);
-	fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-	{
-		perror("minishell");
-		return ;
-	}
-	while (1)
-	{
-		input = readline("> ");
-		if (!input)
-			break ;
-		if (strcmp(input, (*redir)->str) == 0)
-		{
-			free(input);
-			break ;
-		}
-		if ((*redir)->filename_flag == 2)
-			input = expand_inside_heredoc(tools, input);
-		if (!input)
-			input = ft_strdup("");
-		write(fd, input, strlen(input));
-		write(fd, "\n", 1);
-		free(input);
-	}
-	close(fd);
-	(*current_cmd)->fd_in = open(ttname, O_RDONLY);
-	if ((*current_cmd)->fd_in == -1)
-		perror("minishell");
-	if (unlink(ttname) == -1)
-		perror("minishell: failed to remove heredoc temp file");
+    char    *input;
+    int        fd;
+    char    *ttname;
+    char    *temp;
+    char    *temp2;
+
+    ttname = ttyname(1);
+    temp = ft_substr(ttname, 9, ft_strlen(ttname));
+    temp2 = ft_strjoin("/tmp/", temp);
+    free(temp);
+    ttname = temp2;
+
+    *redir = (*redir)->next;
+    if ((*current_cmd)->num_redirections_heredoc > 16)
+    {
+        printf("minishell: maximum here-document count exceeded is %d\n",
+            (*current_cmd)->num_redirections_heredoc);
+        free(ttname);
+        exit(2);
+    }
+    if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
+        close((*current_cmd)->fd_in);
+    fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1)
+    {
+        perror("minishell");
+        free(ttname);
+        return;
+    }
+    while (1)
+    {
+        input = readline("> ");
+        if (!input)
+            break;
+        if (strcmp(input, (*redir)->str) == 0)
+        {
+            free(input);
+            break;
+        }
+        if ((*redir)->filename_flag == 2)
+        {
+            char *expanded = expand_inside_heredoc(tools, input);
+            free(input);
+            input = expanded;
+        }
+        if (!input)
+            input = ft_strdup("");
+        write(fd, input, strlen(input));
+        write(fd, "\n", 1);
+        free(input);
+    }
+    close(fd);
+    (*current_cmd)->fd_in = open(ttname, O_RDONLY);
+    if ((*current_cmd)->fd_in == -1)
+        perror("minishell");
+    if (unlink(ttname) == -1)
+        perror("minishell: failed to remove heredoc temp file");
+    free(ttname);
 }
 
 void	redir_append(t_simple_cmds **current_cmd, t_lexical **redir)

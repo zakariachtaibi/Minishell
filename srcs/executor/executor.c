@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/07 02:25:36 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/08 02:20:09 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,7 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
     pid_t 			last_pid = 0;
 	int				e;
 
+	status = 0;
     current_cmd = cmds_head;
     while (current_cmd)
     {		
@@ -221,10 +222,8 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
                 dup2(current_cmd->fd_in, STDIN_FILENO);
             if (current_cmd->fd_out != STDOUT_FILENO)
                 dup2(current_cmd->fd_out, STDOUT_FILENO);
-            
             (*tools)->exit_status = current_cmd->builtin(*tools, current_cmd, tokens);
-            
-            dup2(old_stdout, STDOUT_FILENO);
+			dup2(old_stdout, STDOUT_FILENO);
             dup2(old_stdin, STDIN_FILENO);
             close(old_stdout);
             close(old_stdin);
@@ -259,27 +258,27 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
                 dup2(current_cmd->fd_out, STDOUT_FILENO);
                 close(current_cmd->fd_out);
             }
-			
             if (current_cmd->builtin != NULL)
 			{
 				e = current_cmd->builtin(*tools, current_cmd, tokens);
-				free_lexical(tokens);
 				free_cmds(&cmds_head);
 				free_tools((*tools));
                 exit(e);
 			}
             else
+			{
                 execute_cmd(current_cmd, tools);
-			e = (*tools)->exit_status;
-			free_lexical(tokens);
-			free_cmds(&cmds_head);
-			free_tools((*tools));
-            exit(e);
+				e = (*tools)->exit_status;
+				free_cmds(&cmds_head);
+				if (tokens)
+					free_lexical(tokens);
+				free_tools((*tools));
+				exit(e);
+			}
         }
         else if (pid < 0)
         {
             perror("fork");
-			free_lexical(tokens);
 			free_cmds(&cmds_head);
 			free_env_var((*tools)->env_vars);
             exit(EXIT_FAILURE);
@@ -297,11 +296,10 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
         }
         current_cmd = current_cmd->next;
     }
-
     // Wait for the last process first to get its exit status
     waitpid(last_pid, &status, 0);
-    // if (WIFEXITED(status))
-    //     (*tools)->exit_status = WEXITSTATUS(status);
+    if (WIFEXITED(status))
+        (*tools)->exit_status = WEXITSTATUS(status);
     // else if (WIFSIGNALED(status))
     //     (*tools)->exit_status = WTERMSIG(status) + 128;
 
@@ -310,7 +308,5 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
 
     // Reset exit status to 0 if the last command was a heredoc
     if (cmds_head && cmds_head->next == NULL && cmds_head->fd_in != STDIN_FILENO)
-    {
 		(*tools)->exit_status = 0;
-	}
 }

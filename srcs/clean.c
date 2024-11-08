@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:55:22 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/07 02:07:44 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/08 01:03:33 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,20 @@ void	cleanup_readline(void)
 {
 	clear_history();
 	rl_free_line_state(); 
+}
+
+void free_env_var(t_env_var *env_vars)
+{
+    t_env_var *tmp;
+
+    while (env_vars)
+    {
+        tmp = env_vars;
+        env_vars = env_vars->next;
+        free(tmp->key);
+        free(tmp->value);
+        free(tmp);
+    }
 }
 
 void	free_tools(t_tools *tools)
@@ -77,6 +91,8 @@ void	free_cmds(t_simple_cmds **cmds)
 				free(current->str[i]);
 			free(current->str);
 		}
+		if (current->redirections)
+			free_lexical(current->redirections);
 		if (current->hd_file_name)
 			free(current->hd_file_name);
 		free(current);

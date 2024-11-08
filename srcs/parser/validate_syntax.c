@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:32:36 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/08 00:12:19 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,12 @@ t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 	if (error_code)
 	{
 		if (error_code == 10)
-		{
 			printf("syntax error near unexpected token '%s'\n", tokens->str);
-		}
 		else if (!tokens->next)
-		{
 			printf("syntax error near unexpected token 'newline'\n");
-		}
 		else
-		{
 			printf("syntax error near unexpected token '%s'\n",
 				tokens->next->str);
-		}
 		tools->exit_status = 2;
 		return (NULL);
 	}

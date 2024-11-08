@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/07 01:58:52 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/07 23:36:58 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	check_cd_arguments(t_tools *tools, t_simple_cmds *cmd)
 	if (strcmp(path, "\0") == 0)
 	{
 		tools->exit_status = 0;
-		return (1);
+		return (0);
 	}
 	if (chdir(path) != 0)
 	{

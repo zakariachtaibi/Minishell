@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/06 23:46:01 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/08 02:10:53 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,11 @@ void minishell_loop(t_tools **tools, t_lexical **tokens,
         dup2((*tools)->std_out, 1);
         dup2((*tools)->std_in, 0);
         free(input);
-        free_lexical(*tokens);
         free_cmds(cmds);
+        if (*tokens)
+            free_lexical(*tokens); 
     }
 }
-
-void free_env_var(t_env_var *env_vars)
-{
-    t_env_var *tmp;
-
-    while (env_vars)
-    {
-        tmp = env_vars;
-        env_vars = env_vars->next;
-        free(tmp->key);
-        free(tmp->value);
-        free(tmp);
-    }
-}
-
 
 int main(int ac, char **av, char **envp)
 {
@@ -102,7 +88,7 @@ int main(int ac, char **av, char **envp)
     minishell_loop(&tools, &tokens, &cmds);
     e = tools->exit_status;
     cleanup_readline();
-    free_lexical(tokens);
+    // free_lexical(tokens);
     free_cmds(&cmds);
     free_tools(tools);
     return (e);

@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/06 22:43:50 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/08 00:04:17 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ t_lexical	*check_node(char *str, int i)
 		return (NULL);
 	}
 	node->i = i;
-	if (!strcmp(str, "|"))
+	if (!ft_strcmp(str, "|"))
 		node->token = TOKEN_PIPE;
-	else if (!strcmp(str, "<"))
+	else if (!ft_strcmp(str, "<"))
 		node->token = TOKEN_REDIRECT_IN;
-	else if (!strcmp(str, "<<"))
+	else if (!ft_strcmp(str, "<<"))
 		node->token = TOKEN_HEREDOC;
-	else if (!strcmp(str, ">"))
+	else if (!ft_strcmp(str, ">"))
 		node->token = TOKEN_REDIRECT_OUT;
-	else if (!strcmp(str, ">>"))
+	else if (!ft_strcmp(str, ">>"))
 		node->token = TOKEN_APPEND;
 	else
 		node->token = TOKEN_WORD;

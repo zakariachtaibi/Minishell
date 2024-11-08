@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/07 01:55:41 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/07 23:37:59 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ void			check_env_vars(t_env_var **current);
 void			ft_free(char **arr);
 void			free_cmds(t_simple_cmds **cmds);
 void			free_tools(t_tools *tools);
+void			free_env_var(t_env_var *env_vars);
 void			cleanup_readline(void);
 int				is_valid_identifier(const char *str);
 void			increment_SHLVL(t_tools **tools);

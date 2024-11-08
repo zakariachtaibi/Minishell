@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/07 01:57:20 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/08 02:03:58 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 	}
 	ft_putstr_fd(buff, 1);
 	printf("\n");
-	tools->working_dir_path = ft_strdup(buff);
+	tools->working_dir_path = buff;
 	free(buff);
 	return (0);
 }
