@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/07 23:37:59 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 02:14:19 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,9 @@ t_simple_cmds	*init_cmd(void);
 char			**allocate_envp_array(int count);
 void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
 					t_lexical *tokens);
-void			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools);
+void			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens);
 int				execute_if_absolute_path(t_simple_cmds *current_cmd,
-					t_tools **tools);
+					t_tools **tools, t_lexical *tokens);
 void			execute(char *cmd_path, t_simple_cmds *current_cmd,
 					t_tools **tools);
 int				execute_from_path(char **split, t_simple_cmds *current_cmd,

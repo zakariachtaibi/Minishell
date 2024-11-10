@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/08 01:55:00 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 02:43:27 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void    redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
         input = readline("> ");
         if (!input)
             break;
-        if (strcmp(input, (*redir)->str) == 0)
+        if (ft_strcmp(input, (*redir)->str) == 0)
         {
             free(input);
             break;

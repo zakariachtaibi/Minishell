@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/08 02:20:09 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 02:38:42 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,73 +32,80 @@ void	setup_child_signals(void)
 	signal(SIGQUIT, handle_sigaquit_child);
 }
 
-int	execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools)
+int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
 {
-	struct stat	statbuf;
-	pid_t		pid;
-	int			status;
+    struct stat statbuf;
+    pid_t pid;
+    int status;
+    char **env_array;
 
-	if (stat(current_cmd->str[0], &statbuf) == 0)
-	{
-		if (S_ISDIR(statbuf.st_mode))
-		{
-			write(2, "minishell: ", 12);
-			write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
-			write(2, ": is a directory\n", 17);
-			(*tools)->exit_status = 126;
-			return (1);
-		}
-		if (access(current_cmd->str[0], X_OK) == 0)
-		{
-			pid = fork();
-			if (pid == 0)
-			{
-				execve(current_cmd->str[0], current_cmd->str,
-					convert_env_vars_to_array((*tools)->env_vars));
-				free_tools(*tools);
-				free_cmds(&current_cmd);
-				perror("execve");
-				exit(126);
-			}
-			else if (pid < 0)
-				perror("fork");
-			else
-			{
-				waitpid(pid, &status, 0);
-				(*tools)->exit_status = WEXITSTATUS(status);
-			}
-			return (1);
-		}
-		else
-		{
-			write(2, "minishell: ", 12);
-			write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
-			write(2, ": Permission denied\n", 20);
-			(*tools)->exit_status = 126;
-			return (1);
-		}
-	}
-	return (0);
+    if (stat(current_cmd->str[0], &statbuf) == 0)
+    {
+        if (S_ISDIR(statbuf.st_mode))
+        {
+            write(2, "minishell: ", 12);
+            write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+            write(2, ": is a directory\n", 17);
+            (*tools)->exit_status = 126;
+            return (1);
+        }
+        if (access(current_cmd->str[0], X_OK) == 0)
+        {
+            pid = fork();
+            if (pid == 0)
+            {
+                env_array = convert_env_vars_to_array((*tools)->env_vars);
+                execve(current_cmd->str[0], current_cmd->str, env_array);
+                ft_free(env_array);
+                free_lexical(tokens);
+                free_tools(*tools);
+                free_cmds(&current_cmd);
+                perror("execve");
+                exit(126);
+            }
+            else if (pid < 0)
+                perror("fork");
+            else
+            {
+                waitpid(pid, &status, 0);
+                (*tools)->exit_status = WEXITSTATUS(status);
+            }
+            return (1);
+        }
+        else
+        {
+            write(2, "minishell: ", 12);
+            write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+            write(2, ": Permission denied\n", 20);
+            (*tools)->exit_status = 126;
+            return (1);
+        }
+    }
+    return (0);
 }
 
-void	execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
+void execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
 {
-	pid_t	pid;
-	int		status;
+    pid_t pid;
+    int status;
+    char **env_array;
 
-	pid = fork();
-	if (pid == 0)
-	{
-		execve(cmd_path, current_cmd->str,
-			convert_env_vars_to_array((*tools)->env_vars));
-	}
-	else if (pid < 0)
-		perror("fork");
-	else
-	{
-		waitpid(pid, &status, 0);
-		(*tools)->exit_status = WEXITSTATUS(status);
-	}
+    pid = fork();
+    if (pid == 0)
+    {
+        env_array = convert_env_vars_to_array((*tools)->env_vars);
+        execve(cmd_path, current_cmd->str, env_array);
+        ft_free(env_array);
+        perror("execve");
+        exit(126);
+    }
+    else if (pid < 0)
+        perror("fork");
+    else
+    {
+        waitpid(pid, &status, 0);
+        (*tools)->exit_status = WEXITSTATUS(status);
+    }
 }
 
 int	execute_from_path(char **split, t_simple_cmds *current_cmd, t_tools **tools)
@@ -125,7 +132,7 @@ int	execute_from_path(char **split, t_simple_cmds *current_cmd, t_tools **tools)
 	return (0);
 }
 
-void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
+void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
 {
 	char	**split;
 
@@ -163,7 +170,7 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools)
 		(*tools)->exit_status = 127;
 		return ;
 	}
-	if (execute_if_absolute_path(current_cmd, tools))
+	if (execute_if_absolute_path(current_cmd, tools, tokens))
 		return ;
 	split = get_path_dirs((*tools)->env_vars);
 	if (split && execute_from_path(split, current_cmd, tools))
@@ -191,27 +198,27 @@ int	count_cmds(t_simple_cmds *list)
 	return (i);
 }
 
-void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
-		t_lexical *tokens)
+void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *tokens)
 {
-    int				pipe_fd[2];
-    int 			prev_pipe_read = STDIN_FILENO;
-    int 			status;
-    t_simple_cmds	*current_cmd;
-    pid_t 			pid;
-    pid_t 			last_pid = 0;
-	int				e;
+    int pipe_fd[2];
+    int prev_pipe_read = STDIN_FILENO;
+    int status;
+    t_simple_cmds *current_cmd;
+    pid_t pid;
+    pid_t last_pid = 0;
+    int e;
+    int builtin_executed = 0;
 
-	status = 0;
+    status = 0;
     current_cmd = cmds_head;
     while (current_cmd)
-    {		
+    {       
         if (current_cmd->next && pipe(pipe_fd) == -1)
         {
             perror("pipe");
             exit(EXIT_FAILURE);
         }
-        // Handle builtin without fork for the last command
+        
         if (current_cmd->builtin != NULL && current_cmd->next == NULL && 
             prev_pipe_read == STDIN_FILENO)
         {
@@ -223,13 +230,15 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
             if (current_cmd->fd_out != STDOUT_FILENO)
                 dup2(current_cmd->fd_out, STDOUT_FILENO);
             (*tools)->exit_status = current_cmd->builtin(*tools, current_cmd, tokens);
-			dup2(old_stdout, STDOUT_FILENO);
+            builtin_executed = 1;
+            dup2(old_stdout, STDOUT_FILENO);
             dup2(old_stdin, STDIN_FILENO);
             close(old_stdout);
             close(old_stdin);
             current_cmd = current_cmd->next;
             continue;
         }
+
         pid = fork();
         if (pid == 0)
         {
@@ -258,29 +267,31 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
                 dup2(current_cmd->fd_out, STDOUT_FILENO);
                 close(current_cmd->fd_out);
             }
+
             if (current_cmd->builtin != NULL)
-			{
-				e = current_cmd->builtin(*tools, current_cmd, tokens);
-				free_cmds(&cmds_head);
-				free_tools((*tools));
+            {
+                e = current_cmd->builtin(*tools, current_cmd, tokens);
+                free_cmds(&cmds_head);
+                free_tools((*tools));
+				free_lexical(tokens);
                 exit(e);
-			}
+            }
             else
-			{
-                execute_cmd(current_cmd, tools);
-				e = (*tools)->exit_status;
-				free_cmds(&cmds_head);
-				if (tokens)
-					free_lexical(tokens);
-				free_tools((*tools));
-				exit(e);
-			}
+            {
+                execute_cmd(current_cmd, tools, tokens);
+                e = (*tools)->exit_status;
+                free_cmds(&cmds_head);
+                if (tokens)
+                    free_lexical(tokens);
+                free_tools((*tools));
+                exit(e);
+            }
         }
         else if (pid < 0)
         {
             perror("fork");
-			free_cmds(&cmds_head);
-			free_env_var((*tools)->env_vars);
+            free_cmds(&cmds_head);
+            free_env_var((*tools)->env_vars);
             exit(EXIT_FAILURE);
         }
         else
@@ -292,21 +303,21 @@ void	execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
                 close(pipe_fd[1]);
                 prev_pipe_read = pipe_fd[0];
             }
-            last_pid = pid;  // Update last_pid for each command
+            last_pid = pid;
         }
         current_cmd = current_cmd->next;
     }
-    // Wait for the last process first to get its exit status
-    waitpid(last_pid, &status, 0);
-    if (WIFEXITED(status))
-        (*tools)->exit_status = WEXITSTATUS(status);
-    // else if (WIFSIGNALED(status))
-    //     (*tools)->exit_status = WTERMSIG(status) + 128;
-
+    
+    if (!builtin_executed)
+    {
+        waitpid(last_pid, &status, 0);
+        if (WIFEXITED(status))
+            (*tools)->exit_status = WEXITSTATUS(status);
+    }
+    
     while (wait(NULL) > 0)
         continue;
-
-    // Reset exit status to 0 if the last command was a heredoc
+        
     if (cmds_head && cmds_head->next == NULL && cmds_head->fd_in != STDIN_FILENO)
-		(*tools)->exit_status = 0;
+        (*tools)->exit_status = 0;
 }

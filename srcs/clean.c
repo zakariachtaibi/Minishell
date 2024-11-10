@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:55:22 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/08 01:03:33 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 01:59:24 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	free_tools(t_tools *tools)
 	}
 	free(tools->var_name);
 	free(tools->var_value);
-	free(tools->working_dir_path);
 	if (tools->std_out > 2)
 		close(tools->std_out);
 	if (tools->std_in > 2)

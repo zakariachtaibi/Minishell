@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 10:26:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/20 20:59:02 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/10 02:20:45 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,37 +37,44 @@ char	**allocate_envp_array(int count)
 	return (envp);
 }
 
-void	fill_envp_array(char **envp, t_env_var *env_vars, int count)
+
+char **convert_env_vars_to_array(t_env_var *env_vars)
 {
-	t_env_var	*temp;
-	int			i;
-	char		*temp_value;
+    int count;
+    char **envp;
+    t_env_var *temp;
+    int i;
+    char *temp_str;
 
-	temp = env_vars;
-	i = 0;
-	while (i < count)
-	{
-		envp[i] = ft_strjoin(temp->key, "=");
-		temp_value = envp[i];
-		envp[i] = ft_strjoin(envp[i], temp->value);
-		free(temp_value);
-		temp = temp->next;
-		i++;
-	}
-	envp[count] = NULL;
-}
+    count = count_env_vars(env_vars);
+    envp = allocate_envp_array(count);
+    if (!envp)
+        return (NULL);
 
-char	**convert_env_vars_to_array(t_env_var *env_vars)
-{
-	int		count;
-	char	**envp;
-
-	count = count_env_vars(env_vars);
-	envp = allocate_envp_array(count);
-	if (!envp)
-		return (NULL);
-	fill_envp_array(envp, env_vars, count);
-	return (envp);
+    temp = env_vars;
+    i = 0;
+    while (i < count)
+    {
+        temp_str = ft_strjoin(temp->key, "=");
+        if (!temp_str)
+        {
+            ft_free(envp);
+            return (NULL);
+        }
+        envp[i] = ft_strjoin(temp_str, temp->value);
+        free(temp_str);
+        if (!envp[i])
+        {
+            while (--i >= 0)
+                free(envp[i]);
+            free(envp);
+            return (NULL);
+        }
+        temp = temp->next;
+        i++;
+    }
+    envp[count] = NULL;
+    return (envp);
 }
 
 char	**get_path_dirs(t_env_var *env_vars)
