@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 02:44:24 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 21:00:16 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -344,7 +344,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
     i = count_str;
     while (*temp && (*temp)->token == TOKEN_WORD)
     {
-        if (strcmp((*temp)->str, "export") == 0)
+        if (ft_strcmp((*temp)->str, "export") == 0)
             export_flag = 1;
         expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
         tools->export_flag = flag;
@@ -425,6 +425,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 			{
 				printf("%s : ambiguous redirect\n", (temp)->str);
 				tools->exit_status = 1;
+                free_cmds(&current_cmd);
 				return (NULL);
 			}
 		}
@@ -433,6 +434,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 		{
 			perror("minishell");
 			tools->exit_status = 1;
+            free_cmds(&current_cmd);
 			return (NULL);
 		}
 		while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)

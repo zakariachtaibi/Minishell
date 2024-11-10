@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 02:14:19 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 20:09:17 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef enum e_token
 	TOKEN_APPEND,
 	TOKEN_WORD
 }	t_token;
+
 
 typedef enum e_builtin
 {

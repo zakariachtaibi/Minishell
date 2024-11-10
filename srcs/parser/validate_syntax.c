@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/08 00:12:19 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 18:33:43 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 			printf("syntax error near unexpected token '%s'\n",
 				tokens->next->str);
 		tools->exit_status = 2;
+		free_lexical(tokens);
 		return (NULL);
 	}
 	return (tokens);

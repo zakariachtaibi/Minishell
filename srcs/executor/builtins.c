@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/08 02:03:58 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:26:48 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,16 @@ int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 int	builtin_exit(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	int	exit_status;
+	(void)tokens;
 
 	exit_status = tools->exit_status;
 	if (cmd->str[1] == NULL)
 	{
 		cleanup_readline();
-		if (cmd)
-			free_cmds(&cmd);
-		if (tools)
-			free_tools(tools);
-		if (tokens)
-			free_lexical(tokens);
+        if (tokens)
+            free_lexical(tokens);
+        free_cmds(&cmd);
+        free_tools(tools);
 		exit(exit_status);
 	}
 	if (!is_numeric(cmd->str[1]))
@@ -59,6 +58,11 @@ int	builtin_exit(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(cmd->str[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
+		cleanup_readline();
+        if (tokens)
+            free_lexical(tokens);
+        free_cmds(&cmd);
+        free_tools(tools);
 		exit(2);
 	}
 	if (cmd->str[2] != NULL)

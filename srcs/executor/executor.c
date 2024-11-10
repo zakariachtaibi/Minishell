@@ -6,30 +6,53 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 02:38:42 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/10 21:10:48 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	handle_sigint_child(int sig)
+typedef struct s_signal_data
 {
-	(void)sig;
-	printf("\n");
-	exit(130);
+    t_simple_cmds   *cmds;
+    t_tools         *tools;
+    t_lexical       *tokens;
+} t_signal_data;
+
+static t_signal_data sig_data;
+
+void cleanup_and_exit(int exit_code)
+{
+    if (sig_data.cmds)
+        free_cmds(&sig_data.cmds);
+    if (sig_data.tokens)
+        free_lexical(sig_data.tokens);
+    if (sig_data.tools)
+        free_tools(sig_data.tools);
+    exit(exit_code);
 }
 
-void	handle_sigaquit_child(int test)
+void handle_sigint_child(int sig)
 {
-	(void)test;
-	printf("Quit (core dumped)\n");
-	exit(131);
+    (void)sig;
+    printf("\n");
+    cleanup_and_exit(130);
 }
 
-void	setup_child_signals(void)
+void handle_sigquit_child(int test)
 {
-	signal(SIGINT, handle_sigint_child);
-	signal(SIGQUIT, handle_sigaquit_child);
+    (void)test;
+    printf("Quit (core dumped)\n");
+    cleanup_and_exit(131);
+}
+
+void setup_child_signals(t_simple_cmds *cmds, t_tools *tools, t_lexical *tokens)
+{
+    sig_data.cmds = cmds;
+    sig_data.tools = tools;
+    sig_data.tokens = tokens;
+    signal(SIGINT, handle_sigint_child);
+    signal(SIGQUIT, handle_sigquit_child);
 }
 
 int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
@@ -238,36 +261,31 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
             current_cmd = current_cmd->next;
             continue;
         }
-
         pid = fork();
         if (pid == 0)
         {
-            setup_child_signals();
+            setup_child_signals(cmds_head, *tools, tokens);
             if (prev_pipe_read != STDIN_FILENO)
             {
                 dup2(prev_pipe_read, STDIN_FILENO);
                 close(prev_pipe_read);
             }
-
             if (current_cmd->next)
             {
                 close(pipe_fd[0]);
                 dup2(pipe_fd[1], STDOUT_FILENO);
                 close(pipe_fd[1]);
             }
-
             if (current_cmd->fd_in != STDIN_FILENO)
             {
                 dup2(current_cmd->fd_in, STDIN_FILENO);
                 close(current_cmd->fd_in);
             }
-
             if (current_cmd->fd_out != STDOUT_FILENO)
             {
                 dup2(current_cmd->fd_out, STDOUT_FILENO);
                 close(current_cmd->fd_out);
             }
-
             if (current_cmd->builtin != NULL)
             {
                 e = current_cmd->builtin(*tools, current_cmd, tokens);
@@ -281,9 +299,9 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
                 execute_cmd(current_cmd, tools, tokens);
                 e = (*tools)->exit_status;
                 free_cmds(&cmds_head);
+                free_tools((*tools));
                 if (tokens)
                     free_lexical(tokens);
-                free_tools((*tools));
                 exit(e);
             }
         }
@@ -307,17 +325,14 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         }
         current_cmd = current_cmd->next;
     }
-    
     if (!builtin_executed)
     {
         waitpid(last_pid, &status, 0);
-        if (WIFEXITED(status))
+        if (WIFEXITED(status) && (*tools)->exit_status != 1)
             (*tools)->exit_status = WEXITSTATUS(status);
     }
-    
     while (wait(NULL) > 0)
         continue;
-        
     if (cmds_head && cmds_head->next == NULL && cmds_head->fd_in != STDIN_FILENO)
         (*tools)->exit_status = 0;
 }

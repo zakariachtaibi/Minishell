@@ -1,15 +1,8 @@
 
-use had cmd kamla -> bach tester leaks en meme temps f linux
+khedmi bhad cmd li lta7t bach tester leaks en meme temps f linux
 
-valgrind --suppressions=readline.supp --leak-check=full --show-leak-kinds=all ./minishell
+hadi ----------> valgrind --suppressions=readline.supp --leak-check=full --show-leak-kinds=all ./minishell
 
+echo '"abc"' -> huda
 
-minishell> export a="ls    -la"
-minishell> echo $a
-ls -la
-minishell> echo $a"$a" 
-ls -lals    -la
-
-echo '"abc"'
-
-cntrl c -> exit status
+cntrl c -> exit status -> dyali
