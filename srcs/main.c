@@ -20,7 +20,8 @@ char *remove_consecutive_quotes(char *str) {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
-
+    if (str_len < 4)
+        return(str);
     while (i < str_len) {
         if (str[i] == '"' && str[i + 1] == '"') {
             i += 2;
@@ -32,7 +33,6 @@ char *remove_consecutive_quotes(char *str) {
             result[j++] = str[i++];
         }
     }
-
     result[j] = '\0';
     return result;
 }
@@ -57,15 +57,18 @@ void minishell_loop(t_tools **tools, t_lexical **tokens,
         if (ft_strcmp(input, "") && ft_strcmp(input, "\n"))
             add_history(input);
         input = validat_input(input, (*tools));
-        input = remove_consecutive_quotes(input);
         if (input == NULL)
         {
             free(input); 
             continue;
         }
+        input = remove_consecutive_quotes(input);
+        if(!*input)
+            input=ft_strdup("");
         *tokens = tokenize(input);
         if (*tokens == NULL)
         {
+        
             free(input);
             continue;
         }
@@ -76,6 +79,7 @@ void minishell_loop(t_tools **tools, t_lexical **tokens,
             continue;
         }
         *cmds = process_tokens((*tokens), (*tools));
+       
         execute_commands((*cmds), tools, (*tokens));
         dup2((*tools)->std_out, 1);
         dup2((*tools)->std_in, 0);

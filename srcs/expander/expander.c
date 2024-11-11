@@ -24,7 +24,7 @@ char	*expand_single_quote(const char *current_word, size_t *j)
 		temp_str[0] = current_word[*j];
 		temp_str[1] = '\0';
 		new_expanded_word = ft_strjoin(expanded_word, temp_str);
-		free(expanded_word);  // Free old expanded_word
+		free(expanded_word);
 		expanded_word = new_expanded_word;
 		(*j)++;
 	}
@@ -46,11 +46,10 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 	expanded_word = ft_strdup("");
 	while (current_word[*j])
 	{
-		
 		if (current_word[*j] == '$' && heredoc_flag == 0)
 		{
 			(*j)++;
-			if(ft_isdigit(current_word[*j]))
+			if (ft_isdigit(current_word[*j]))
 				(*j)++;
 			else if (current_word[*j] == '$')
 			{
@@ -63,7 +62,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 				(*j)++;
 			}
 			else if (current_word[*j] == '\'')
-				return(expanded_word);
+				return (expanded_word);
 			else if (ft_isalnum(current_word[*j]) || current_word[*j] == '_')
 			{
 				var_start = *j;
@@ -82,7 +81,6 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 			}
 			new_expanded_word = ft_strjoin(expanded_word, var_value);
 			free(expanded_word);
-			// free(var_value);
 			expanded_word = new_expanded_word;
 		}
 		else
@@ -90,9 +88,9 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 			temp_str[0] = current_word[*j];
 			temp_str[1] = '\0';
 			(*j)++;
-		new_expanded_word = ft_strjoin(expanded_word, temp_str);
-		free(expanded_word);
-		expanded_word = new_expanded_word;
+			new_expanded_word = ft_strjoin(expanded_word, temp_str);
+			free(expanded_word);
+			expanded_word = new_expanded_word;
 		}
 	}
 	(*j)++;
@@ -157,14 +155,13 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		}
 		else if (current_word[j] == '"')
 		{
-			// j++;
 			new_expansion = expand_double_quote(tools, current_word, &j,
 					heredoc_flag);
 			*flag = 0;
 		}
 		else if (current_word[j] == '$' && heredoc_flag == 0)
 		{
-			if(j + 1 < len && ft_isdigit(current_word[j + 1]))
+			if (j + 1 < len && ft_isdigit(current_word[j + 1]))
 				j += 2;
 			else if (j + 1 < len && current_word[j + 1] == '$')
 			{
@@ -204,4 +201,3 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 	}
 	return (expanded_word);
 }
-

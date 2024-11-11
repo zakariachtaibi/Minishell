@@ -121,7 +121,7 @@ void    redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
             free(input);
             break;
         }
-        if ((*redir)->filename_flag == 2)
+        if ((*redir)->filename_flag != 2)
         {
             char *expanded = expand_inside_heredoc(tools, input);
             free(input);

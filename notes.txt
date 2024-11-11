@@ -3,6 +3,9 @@ khedmi bhad cmd li lta7t bach tester leaks en meme temps f linux
 
 hadi ----------> valgrind --suppressions=readline.supp --leak-check=full --show-leak-kinds=all ./minishell
 
-echo '"abc"' -> huda
-
 cntrl c -> exit status -> dyali
+exit 02121221212121121212121212121212121121212121654564645454542745125445
+<<''
+hchouai@e2r13p3:~/Minishell$ export ls="'ll'"
+hchouai@e2r13p3:~/Minishell$ echo $ls
+'ll'

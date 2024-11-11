@@ -229,9 +229,9 @@ int handle_redirections(t_tools **tools, t_lexical **temp,
         if (*temp && (*temp)->token == TOKEN_WORD)
         {
             filename = copy_node(*temp);
-            if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str, '\'')))
+            if (!(ft_strchr(filename->str, '"')) || !(ft_strchr(filename->str, '\'')))
                 filename->filename_flag = 2;
-            
+
             char *expanded = expand_vars((*tools), filename->str, &flag, heredoc_flag);
             free(filename->str);
             filename->str = expanded;
