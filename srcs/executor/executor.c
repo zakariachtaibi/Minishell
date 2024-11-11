@@ -169,7 +169,7 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
 	{
 		if (!current_cmd->str[1])
 		{
-			write(2, "bash: .: filename argument required\n", 37);
+			write(2, "minishell: .: filename argument required\n", 42);
 			write(2, ".: usage: . filename [arguments]\n", 33);
 			(*tools)->exit_status = 2;
 			return ;
@@ -177,19 +177,19 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
 	}
 	if (ft_strcmp(current_cmd->str[0], "..") == 0)
 	{
-		write(2, "bash: ..: command not found\n", 29);
+		write(2, "minishell: ..: command not found\n", 34);
 		(*tools)->exit_status = 127;
 		return ;
 	}
 	if(ft_strcmp(current_cmd->str[0],"minishell") == 0)
 	{
-		write(2, "bash: : command not found\n", 27);
+		write(2, "minishell: command not found\n", 30);
 		(*tools)->exit_status = 127;
 		return ;
 	}
 	if (current_cmd->str[0][0] == '\0')
 	{
-		write(2, "bash: : command not found\n", 27);
+		write(2, "minishell: command not found\n", 30);
 		(*tools)->exit_status = 127;
 		return ;
 	}

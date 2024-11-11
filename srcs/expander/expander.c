@@ -19,8 +19,7 @@ char	*expand_single_quote(const char *current_word, size_t *j)
 	char	*new_expanded_word;
 
 	expanded_word = ft_strdup("");
-	(*j)++;
-	while (current_word[*j] && current_word[*j] != '\'')
+	while (current_word[*j])
 	{
 		temp_str[0] = current_word[*j];
 		temp_str[1] = '\0';
@@ -47,6 +46,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 	expanded_word = ft_strdup("");
 	while (current_word[*j])
 	{
+		
 		if (current_word[*j] == '$' && heredoc_flag == 0)
 		{
 			(*j)++;
@@ -63,10 +63,7 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 				(*j)++;
 			}
 			else if (current_word[*j] == '\'')
-			{
-				printf("heeeeeere");
 				return(expanded_word);
-			}
 			else if (ft_isalnum(current_word[*j]) || current_word[*j] == '_')
 			{
 				var_start = *j;

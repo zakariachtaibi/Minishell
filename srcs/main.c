@@ -12,6 +12,30 @@
 
 #include "../includes/minishell.h"
 
+char *remove_consecutive_quotes(char *str) {
+    int str_len = strlen(str);
+    int i = 0, j = 0;
+    char *result = malloc(str_len + 1); 
+    if (!result) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    while (i < str_len) {
+        if (str[i] == '"' && str[i + 1] == '"') {
+            i += 2;
+        }
+        else if (str[i] == '\'' && str[i + 1] == '\'') {
+            i += 2;
+        }
+        else {
+            result[j++] = str[i++];
+        }
+    }
+
+    result[j] = '\0';
+    return result;
+}
 void minishell_loop(t_tools **tools, t_lexical **tokens,
 				t_simple_cmds **cmds)
 {
@@ -33,6 +57,7 @@ void minishell_loop(t_tools **tools, t_lexical **tokens,
         if (ft_strcmp(input, "") && ft_strcmp(input, "\n"))
             add_history(input);
         input = validat_input(input, (*tools));
+        input = remove_consecutive_quotes(input);
         if (input == NULL)
         {
             free(input); 

@@ -15,10 +15,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 
 bool	is_quote(char c) {
@@ -266,37 +262,42 @@ int	ft_strlen_array(char **array)
 	return (i);
 }
 
-char *unescape_quotes(char *str)
-{
-    int     length;
-	int     i;
-    int     j;
-    char    *result;
-	
-	length = 0;
-	i = -1;
+char *unescape_quotes(char *str) {
+    int length = 0;
+    int i = 0;
+    int j = 0;
+    char *result;
+    
     if (!str)
-	 return (NULL);
-	while (str[++i])
-	{
-		if (str[i] != '"')
-            length++;
-	}
-   result = malloc(length + 1);
-    if (!result)
-    {
-        perror("malloc");
-        exit(EXIT_FAILURE);
+        return NULL;
+    
+    int str_len = strlen(str);
+    if (str_len < 2) {
+        return strdup(str); 
     }
-    j = 0;
-    i = -1;
-    while (str[++i])
-    {
-        if (str[i] != '"' && str[i] != '\'')
-            result[j++] = str[i];
+
+    if ((str[0] == '"' && str[str_len - 1] == '"') || (str[0] == '\'' && str[str_len - 1] == '\'')) {
+            length = str_len - 2;
+        result = malloc(length + 1);
+        if (!result) {
+            perror("malloc");
+            exit(EXIT_FAILURE);
+        }
+             while (++i < str_len - 1)
+            {
+                result[j++] = str[i];
+            }
+        result[j] = '\0'; 
+        }
+     else {
+        result = strdup(str);
+        if (!result) {
+            perror("malloc");
+            exit(EXIT_FAILURE);
+        }
     }
-    result[j] = '\0';
-    return (result);
+    
+    return result;
 }
 
 void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
