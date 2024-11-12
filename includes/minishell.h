@@ -30,6 +30,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
+#include <stdbool.h>
 
 typedef enum e_token
 {
@@ -188,5 +189,9 @@ void			cleanup_readline(void);
 int				is_valid_identifier(const char *str);
 void			increment_SHLVL(t_tools **tools);
 t_tools			*init_tools(void);
-
+int				is_space(char *str);
+char **split_ignoring_quotes(const char *str);
+bool	is_quote(char c) ;
+int count_words(const char *str);
+char *extract_word(const char **str);
 #endif

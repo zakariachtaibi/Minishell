@@ -121,14 +121,14 @@ void    redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
             free(input);
             break;
         }
-        if ((*redir)->filename_flag != 2)
+        if ((*redir)->filename_flag == 2)
         {
             char *expanded = expand_inside_heredoc(tools, input);
+			if(!expanded)
+				expanded=ft_strdup("");
             free(input);
             input = expanded;
         }
-        if (!input)
-            input = ft_strdup("");
         write(fd, input, strlen(input));
         write(fd, "\n", 1);
         free(input);

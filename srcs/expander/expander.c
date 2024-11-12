@@ -19,7 +19,8 @@ char	*expand_single_quote(const char *current_word, size_t *j)
 	char	*new_expanded_word;
 
 	expanded_word = ft_strdup("");
-	while (current_word[*j])
+	(*j)++;
+	while (current_word[*j] && current_word[*j] != '\'')
 	{
 		temp_str[0] = current_word[*j];
 		temp_str[1] = '\0';
@@ -43,8 +44,9 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 	char	*var_name;
 
 	temp_str[0] = '\0';
+	var_value = NULL;
 	expanded_word = ft_strdup("");
-	while (current_word[*j])
+	while (current_word[*j] && current_word[*j] != '"')
 	{
 		if (current_word[*j] == '$' && heredoc_flag == 0)
 		{
@@ -141,6 +143,8 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 	size_t	len;
 	char	*new_expansion;
 	char	*temp_word;
+	int in = 0;
+	char **tmp;
 
 	j = 0;
 	expanded_word = NULL;
@@ -155,6 +159,7 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		}
 		else if (current_word[j] == '"')
 		{
+			j++;
 			new_expansion = expand_double_quote(tools, current_word, &j,
 					heredoc_flag);
 			*flag = 0;
@@ -174,6 +179,15 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 						+ 1] == '_'))
 			{
 				new_expansion = expand_variable(tools, current_word, &j);
+				if(is_space(new_expansion) == 1)
+				{
+					in = 0;
+					tmp = split_ignoring_quotes(new_expansion);
+					free(new_expansion);
+					new_expansion = ft_strdup(*tmp);
+					ft_free(tmp);
+				}
+				printf("------%s\n", new_expansion);
 				*flag = 1;
 			}
 			else

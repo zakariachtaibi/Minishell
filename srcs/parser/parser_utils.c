@@ -85,6 +85,7 @@ void	delete_node(t_lexical **head, t_lexical *node_to_delete)
 	if (node_to_delete->prev != NULL)
 		node_to_delete->prev->next = node_to_delete->next;
 	free(node_to_delete->str);
+	free(node_to_delete);
 }
 
 char	*ft_strndup(const char *src, size_t n)

@@ -176,8 +176,12 @@ char	*unescape_spaces(char *str, int flag)
 
 	i = 0;
 	j = 0;
-	if (!str || str[0] == '\0')
-		return (NULL);
+    if(!str)
+    {
+        return(NULL);
+    }
+	if (str[0] == '\0')
+		return (ft_strdup("\0"));
 	result = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!result)
 		return (NULL);
@@ -225,13 +229,16 @@ int handle_redirections(t_tools **tools, t_lexical **temp,
         (*current_cmd)->num_redirections++;
         if (heredoc_flag == 1)
             (*current_cmd)->num_redirections_heredoc++;
+        t_lexical *node_todel = copy_node(*temp);
         *temp = (*temp)->next;
+        delete_node(&token, node_todel);
         if (*temp && (*temp)->token == TOKEN_WORD)
         {
             filename = copy_node(*temp);
-            if (!(ft_strchr(filename->str, '"')) || !(ft_strchr(filename->str, '\'')))
+            if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str, '\'')))
                 filename->filename_flag = 2;
-
+            else    
+                filename->filename_flag = 0;
             char *expanded = expand_vars((*tools), filename->str, &flag, heredoc_flag);
             free(filename->str);
             filename->str = expanded;
@@ -262,44 +269,6 @@ int	ft_strlen_array(char **array)
 	return (i);
 }
 
-char *unescape_quotes(char *str) {
-    int length = 0;
-    int i = 0;
-    int j = 0;
-    char *result;
-    
-    if (!str)
-        return NULL;
-    
-    int str_len = strlen(str);
-    if (str_len < 2) {
-        return strdup(str); 
-    }
-
-    if ((str[0] == '"' && str[str_len - 1] == '"') || (str[0] == '\'' && str[str_len - 1] == '\'')) {
-            length = str_len - 2;
-        result = malloc(length + 1);
-        if (!result) {
-            perror("malloc");
-            exit(EXIT_FAILURE);
-        }
-             while (++i < str_len - 1)
-            {
-                result[j++] = str[i];
-            }
-        result[j] = '\0'; 
-        }
-     else {
-        result = strdup(str);
-        if (!result) {
-            perror("malloc");
-            exit(EXIT_FAILURE);
-        }
-    }
-    
-    return result;
-}
-
 void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
 {
     int word_count;
@@ -309,11 +278,11 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
     char **new_str;
     char *expanded;
     int flag;
-    char **tmp;
+    // char **tmp;
     int in;
     int heredoc_flag;
     int export_flag;
-    char *cleaned;
+    // char *cleaned;
 
     flag = 0;
     in = 0;
@@ -351,50 +320,20 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
         tools->export_flag = flag;
         if (expanded)
         {
-            // Ignore quotes in the expanded string
-            cleaned = unescape_quotes(expanded);
-            free(expanded);
-            if ((is_space(cleaned) == 1) && (export_flag != 1))
-            {
-                in = 0;
-                tmp = split_ignoring_quotes(cleaned);
-                while (tmp[in])
-                {
-                    if (i >= (word_count + count_str))
-                    {
-                        int new_size = (word_count + count_str) * 2; // Double the size
-                        new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
-                        if (!new_str)
-                        {
-                            perror("realloc");
-                            exit(EXIT_FAILURE);
-                        }
-                        (*current_cmd)->str = new_str;
-                        word_count = new_size - count_str; 
-                    }
-                    (*current_cmd)->str[i] = ft_strdup(tmp[in]);
-                    in++;
-                    i++;
-                }
-                free(cleaned);
-                ft_free(tmp);
-            } else
-            {
-                if (i >= (word_count + count_str))
-                {
-                    int new_size = (word_count + count_str) * 2; // Double the size
-                    new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
-                    if (!new_str)
-                    {
-                        perror("realloc");
-                        exit(EXIT_FAILURE);
-                    }
-                    (*current_cmd)->str = new_str;
-                    word_count = new_size - count_str; 
-                }
-                (*current_cmd)->str[i] = cleaned;
+                // if (i >= (word_count + count_str))
+                // {
+                //     int new_size = (word_count + count_str) * 2; // Double the size
+                //     new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
+                //     if (!new_str)
+                //     {
+                //         perror("realloc");
+                //         exit(EXIT_FAILURE);
+                //     }
+                //     (*current_cmd)->str = new_str;
+                //     word_count = new_size - count_str; 
+                // }
+                (*current_cmd)->str[i] = expanded;
                 i++;
-            }
         }
         *temp = (*temp)->next;
     }
