@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 16:36:08 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/10 21:35:42 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/13 20:18:01 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void handle_sigint(int sig)
     {
         printf("\n");
         rl_on_new_line();
-        rl_replace_line("", 0);
+        // rl_replace_line("", 0);
         rl_redisplay();
     }
 }

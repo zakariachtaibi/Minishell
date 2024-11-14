@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/07 01:58:29 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/13 20:34:43 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 		if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in])))
 			|| key[in] == 32)
 		{
+			printf("----------%s\n", str[*i]);
 			print_error(str[*i], key, value, tools);
 			return ;
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 21:00:16 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/14 20:44:17 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ int handle_redirections(t_tools **tools, t_lexical **temp,
     
     flag = 0;
     heredoc_flag = 0;
-    (*current_cmd)->num_redirections_heredoc = 0;
+    // (*current_cmd)->num_redirections_heredoc = 0;
     if (check_token(*temp, &heredoc_flag))
     {
         redir = copy_node(*temp);
@@ -278,7 +278,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
     char **new_str;
     char *expanded;
     int flag;
-    // char **tmp;
+    char **tmp;
     int in;
     int heredoc_flag;
     int export_flag;
@@ -320,20 +320,51 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
         tools->export_flag = flag;
         if (expanded)
         {
-                // if (i >= (word_count + count_str))
-                // {
-                //     int new_size = (word_count + count_str) * 2; // Double the size
-                //     new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
-                //     if (!new_str)
-                //     {
-                //         perror("realloc");
-                //         exit(EXIT_FAILURE);
-                //     }
-                //     (*current_cmd)->str = new_str;
-                //     word_count = new_size - count_str; 
-                // }
-                (*current_cmd)->str[i] = expanded;
-                i++;
+                if (((flag== 1) && is_space(expanded) == 1) && (export_flag != 1))
+			{
+				in = 0;
+				tmp = split_ignoring_quotes(expanded);
+				
+				// resize_cmd_lst(current_cmd, tmp);
+				while (tmp[in])
+				{
+					if (i >= (word_count + count_str))
+					{
+    					int new_size = (word_count + count_str) * 2; // Double the size
+						new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
+						if (!new_str) 
+						{
+							perror("realloc");
+							exit(EXIT_FAILURE);
+						}
+						(*current_cmd)->str = new_str;
+						word_count = new_size - count_str; 
+					}
+					(*current_cmd)->str[i] = ft_strdup(tmp[in]);
+					in++;
+					i++;
+				}
+				
+				free(expanded);
+				ft_free(tmp);
+			}
+			else
+			{
+				if (i >= (word_count + count_str))
+					{
+    					int new_size = (word_count + count_str) * 2; // Double the size
+						new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
+						if (!new_str) 
+						{
+							perror("realloc");
+							exit(EXIT_FAILURE);
+						}
+						(*current_cmd)->str = new_str;
+						word_count = new_size - count_str; 
+					}
+				(*current_cmd)->str[i] = expanded;
+				i++;
+			}
         }
         *temp = (*temp)->next;
     }

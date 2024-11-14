@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/05 15:27:44 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/14 20:39:13 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,6 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 	size_t	len;
 	char	*new_expansion;
 	char	*temp_word;
-	int in = 0;
-	char **tmp;
 
 	j = 0;
 	expanded_word = NULL;
@@ -155,6 +153,7 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		if (current_word[j] == '\'')
 		{
 			new_expansion = expand_single_quote(current_word, &j);
+			// quote_flag=1;
 			*flag = 0;
 		}
 		else if (current_word[j] == '"')
@@ -179,15 +178,6 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 						+ 1] == '_'))
 			{
 				new_expansion = expand_variable(tools, current_word, &j);
-				if(is_space(new_expansion) == 1)
-				{
-					in = 0;
-					tmp = split_ignoring_quotes(new_expansion);
-					free(new_expansion);
-					new_expansion = ft_strdup(*tmp);
-					ft_free(tmp);
-				}
-				printf("------%s\n", new_expansion);
 				*flag = 1;
 			}
 			else
