@@ -6,51 +6,26 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 21:10:48 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/15 02:04:41 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-typedef struct s_signal_data
-{
-    t_simple_cmds   *cmds;
-    t_tools         *tools;
-    t_lexical       *tokens;
-} t_signal_data;
-
-static t_signal_data sig_data;
-
-void cleanup_and_exit(int exit_code)
-{
-    if (sig_data.cmds)
-        free_cmds(&sig_data.cmds);
-    if (sig_data.tokens)
-        free_lexical(sig_data.tokens);
-    if (sig_data.tools)
-        free_tools(sig_data.tools);
-    exit(exit_code);
-}
-
 void handle_sigint_child(int sig)
 {
     (void)sig;
     printf("\n");
-    cleanup_and_exit(130);
 }
 
 void handle_sigquit_child(int test)
 {
     (void)test;
     printf("Quit (core dumped)\n");
-    cleanup_and_exit(131);
 }
 
-void setup_child_signals(t_simple_cmds *cmds, t_tools *tools, t_lexical *tokens)
+void setup_child_signals()
 {
-    sig_data.cmds = cmds;
-    sig_data.tools = tools;
-    sig_data.tokens = tokens;
     signal(SIGINT, handle_sigint_child);
     signal(SIGQUIT, handle_sigquit_child);
 }
@@ -161,7 +136,7 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
 
 	if (!current_cmd || !current_cmd->str || !current_cmd->str[0])
 	{
-		(*tools)->exit_status = 0;  // Set exit status to 0 for pure redirections
+		(*tools)->exit_status = 0;
 		return;
 	}
 
@@ -264,7 +239,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         pid = fork();
         if (pid == 0)
         {
-            setup_child_signals(cmds_head, *tools, tokens);
+            setup_child_signals();
             if (prev_pipe_read != STDIN_FILENO)
             {
                 dup2(prev_pipe_read, STDIN_FILENO);

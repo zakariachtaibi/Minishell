@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 15:26:48 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/15 01:51:12 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@ int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 	}
 	if (getcwd(buff, 1024) == NULL)
 	{
+		char *pwd_value = get_env_value(tools->env_vars, "PWD");
+		if (pwd_value)
+		{
+			ft_putstr_fd(pwd_value, 1);
+            ft_putstr_fd("\n", 1);
+			free(buff);
+            return (0);
+		}
 		perror("getcwd");
 		free(buff);
 		return (1);
@@ -133,7 +141,7 @@ int	builtin_env(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 	{
 		if (!current)
 		{
-			printf("No environment variables set.\n");
+			ft_putstr_fd("No environment variables set.\n", 2);
 			return (0);
 		}
 		while (current)
@@ -171,8 +179,8 @@ int	builtin_echo(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 	search_for_argn(cmd, &flag, &j);
 	while (cmd->str[j])
 	{
-		if (strcmp(cmd->str[j], "~") == 0)
-			ft_putstr_fd("/Users/hchouai", 1);
+		if (ft_strcmp(cmd->str[j], "~") == 0)
+			ft_putstr_fd("/Users/zchtaibi", 1);
 		else
 			ft_putstr_fd(cmd->str[j], 1);
 		if (cmd->str[j + 1] != NULL)
