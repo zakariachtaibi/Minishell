@@ -6,16 +6,31 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 21:24:05 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/16 02:38:44 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+int sig_flag = 0;
+
+void handle_sigint(int sig)
+{
+    if (sig == SIGINT)
+    {
+        printf("\n");
+        sig_flag = 1;
+        rl_on_new_line();
+        rl_replace_line("", 0);
+        rl_redisplay();
+    }
+}
+
 void minishell_loop(t_tools **tools, t_lexical **tokens,
 				t_simple_cmds **cmds)
 {
-    char *input;
+    char    *input;
+    int     e;
 
     while (1)
     {
@@ -23,13 +38,17 @@ void minishell_loop(t_tools **tools, t_lexical **tokens,
         signal(SIGQUIT, SIG_IGN);
         input = readline("minishell> ");
         signal(SIGINT, SIG_IGN);
+        if (sig_flag == 1)
+            (*tools)->exit_status = 130;
         if (!input)
         {
             printf("exit\n");
+            e = (*tools)->exit_status;
             free_tools(*tools);
-			exit(0);
+			exit(e);
             break;
         }
+        sig_flag = 0;
         if (ft_strcmp(input, "") && ft_strcmp(input, "\n"))
             add_history(input);
         input = validat_input(input, (*tools));
@@ -38,7 +57,6 @@ void minishell_loop(t_tools **tools, t_lexical **tokens,
             free(input); 
             continue;
         }
-        // input = remove_consecutive_quotes(input);
         if(!*input)
             input=ft_strdup("");
         *tokens = tokenize(input);
@@ -55,7 +73,6 @@ void minishell_loop(t_tools **tools, t_lexical **tokens,
             continue;
         }
         *cmds = process_tokens((*tokens), (*tools));
-       
         execute_commands((*cmds), tools, (*tokens));
         dup2((*tools)->std_out, 1);
         dup2((*tools)->std_in, 0);

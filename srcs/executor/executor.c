@@ -6,22 +6,25 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/15 02:04:41 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/16 18:03:48 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+
 void handle_sigint_child(int sig)
 {
     (void)sig;
     printf("\n");
+    exit(130);
 }
 
 void handle_sigquit_child(int test)
 {
     (void)test;
     printf("Quit (core dumped)\n");
+    exit(131);
 }
 
 void setup_child_signals()
@@ -206,6 +209,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
     pid_t last_pid = 0;
     int e;
     int builtin_executed = 0;
+    int child_exit_status;
 
     status = 0;
     current_cmd = cmds_head;
@@ -266,7 +270,7 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
                 e = current_cmd->builtin(*tools, current_cmd, tokens);
                 free_cmds(&cmds_head);
                 free_tools((*tools));
-				free_lexical(tokens);
+                free_lexical(tokens);
                 exit(e);
             }
             else
@@ -300,11 +304,15 @@ void execute_commands(t_simple_cmds *cmds_head, t_tools **tools, t_lexical *toke
         }
         current_cmd = current_cmd->next;
     }
-    if (!builtin_executed)
+    if (!builtin_executed )
     {
         waitpid(last_pid, &status, 0);
-        if (WIFEXITED(status) && (*tools)->exit_status != 1)
-            (*tools)->exit_status = WEXITSTATUS(status);
+        if (WIFEXITED(status))
+        {
+            child_exit_status = WEXITSTATUS(status);
+            if (child_exit_status != 0)
+                (*tools)->exit_status = child_exit_status;
+        }
     }
     while (wait(NULL) > 0)
         continue;

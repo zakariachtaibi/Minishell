@@ -6,7 +6,7 @@
 #    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/15 01:46:05 by zchtaibi         ###   ########.fr        #
+#    Updated: 2024/11/16 02:24:05 by zchtaibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,6 @@ SRCS = srcs/main.c \
 		srcs/executor/executor_utils.c\
 		srcs/expander/expander_utils.c\
 		srcs/parser/redirections_checker.c\
-		srcs/signals/signals.c\
 		srcs/executor/builtins_utils2.c\
 		srcs/main_utils.c\
 		srcs/clean.c\

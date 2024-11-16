@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 20:09:17 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:48:39 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,4 +194,6 @@ char **split_ignoring_quotes(const char *str);
 bool	is_quote(char c) ;
 int count_words(const char *str);
 char *extract_word(const char **str);
+// int get_exit_status(void);
+// void set_exit_status(int status);
 #endif
