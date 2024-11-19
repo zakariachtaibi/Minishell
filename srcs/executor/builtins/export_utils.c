@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/13 20:34:43 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/20 00:10:24 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 void	handle_plus_equal(t_tools *tools, char *str, char **key, char **value)
 {
@@ -75,7 +75,6 @@ void	process_export(t_tools *tools, char **str, int *i)
 		if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in])))
 			|| key[in] == 32)
 		{
-			printf("----------%s\n", str[*i]);
 			print_error(str[*i], key, value, tools);
 			return ;
 		}

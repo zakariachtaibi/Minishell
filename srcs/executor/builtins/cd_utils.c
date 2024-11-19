@@ -6,11 +6,11 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 09:11:49 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/07 23:36:58 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/20 00:10:20 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 int	check_cd_arguments(t_tools *tools, t_simple_cmds *cmd)
 {

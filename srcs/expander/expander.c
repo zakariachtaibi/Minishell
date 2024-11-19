@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/14 20:39:13 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:39:04 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,10 @@ char	*expand_double_quote(t_tools *tools, const char *current_word,
 					var_value = ft_strdup("");
 			}
 			else
-			{
 				var_value = ft_strdup("$");
-			}
 			new_expanded_word = ft_strjoin(expanded_word, var_value);
 			free(expanded_word);
+			// free(var_value);
 			expanded_word = new_expanded_word;
 		}
 		else
@@ -153,7 +152,6 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 		if (current_word[j] == '\'')
 		{
 			new_expansion = expand_single_quote(current_word, &j);
-			// quote_flag=1;
 			*flag = 0;
 		}
 		else if (current_word[j] == '"')

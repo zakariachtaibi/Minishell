@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 18:33:43 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:21:46 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,19 @@ t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 	if (error_code)
 	{
 		if (error_code == 10)
-			printf("syntax error near unexpected token '%s'\n", tokens->str);
+		{
+			ft_putstr_fd("syntax error near unexpected token '", 2);
+			ft_putstr_fd(tokens->str, 2);
+			ft_putstr_fd("\'\n", 2);
+		}
 		else if (!tokens->next)
-			printf("syntax error near unexpected token 'newline'\n");
+			ft_putstr_fd("syntax error near unexpected token 'newline'\n", 2);
 		else
-			printf("syntax error near unexpected token '%s'\n",
-				tokens->next->str);
+		{
+			ft_putstr_fd("syntax error near unexpected token '", 2);
+			ft_putstr_fd(tokens->next->str, 2);
+			ft_putstr_fd("\'\n", 2);
+		}
 		tools->exit_status = 2;
 		free_lexical(tokens);
 		return (NULL);

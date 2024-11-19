@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:36:42 by hchouai           #+#    #+#             */
-/*   Updated: 2024/10/21 13:29:40 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/18 16:12:17 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	has_unclosed_quotes_or_parentheses(char *temp, t_tools *tools)
 	}
 	if ((quote % 2 != 0) || (dquote % 2 != 0) || (parentheses != 0))
 	{
-		printf("Error: Unclosed quotes or parentheses\n");
+		ft_putstr_fd("Error: Unclosed quotes or parentheses\n", 2);
 		tools->exit_status = 2;
 		return (1);
 	}
@@ -60,9 +60,9 @@ void	init_vars(int *single_quote_open, int *double_quote_open,
 
 int	has_semicolon(char *input, t_tools *tools)
 {
-	if ((strchr(input, ';')) || (strchr(input, '\\')))
+	if ((ft_strchr(input, ';')) || (ft_strchr(input, '\\')))
 	{
-		printf("Error: invalid input\n");
+		ft_putstr_fd("Error: invalid input\n", 2);
 		tools->exit_status = 2;
 		return (1);
 	}

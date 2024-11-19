@@ -6,11 +6,11 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 10:26:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/10 02:20:45 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/20 00:13:47 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 int	count_env_vars(t_env_var *env_vars)
 {
@@ -37,7 +37,6 @@ char	**allocate_envp_array(int count)
 	return (envp);
 }
 
-
 char **convert_env_vars_to_array(t_env_var *env_vars)
 {
     int count;
@@ -50,7 +49,6 @@ char **convert_env_vars_to_array(t_env_var *env_vars)
     envp = allocate_envp_array(count);
     if (!envp)
         return (NULL);
-
     temp = env_vars;
     i = 0;
     while (i < count)

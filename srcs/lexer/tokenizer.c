@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/13 21:18:16 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/18 16:13:20 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ t_lexical	*tokenize(char *input)
 	int			in_quotes;
 	char		token[1024];
 	char		quote_char;
-	// int			break_flag = 0;
 
 	head = NULL;
 	current = NULL;
@@ -75,13 +74,8 @@ t_lexical	*tokenize(char *input)
 					quote_char = input[i];
 				}
 				else if (in_quotes && input[i] == quote_char)
-				{
-					// break_flag=1;
 					in_quotes = 0;
-				}
 				token[j++] = input[i++];
-				// if(break_flag)
-				// 	break ;
 			}
 			else if (!in_quotes && (input[i] == '>' || input[i] == '<'
 					|| input[i] == '|'))

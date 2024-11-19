@@ -6,7 +6,7 @@
 #    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/16 02:24:05 by zchtaibi         ###   ########.fr        #
+#    Updated: 2024/11/20 00:14:37 by zchtaibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,19 +41,23 @@ SRCS = srcs/main.c \
 		srcs/lexer/validate_input.c\
 		srcs/parser/validate_syntax.c\
 		srcs/parser/builtins_checker.c\
-		srcs/executor/builtins.c\
-		srcs/executor/executor.c\
+		srcs/executor/builtins/builtins.c\
+		srcs/executor/no-builtins/executor.c\
 		srcs/expander/expander.c\
-		srcs/executor/builtins_utils.c\
-		srcs/executor/builtins_utils1.c\
+		srcs/executor/builtins/builtins_utils.c\
+		srcs/executor/builtins/builtins_utils1.c\
 		libft/ft_isalnum.c\
 		libft/ft_isalpha.c\
-		srcs/executor/export_utils.c\
-		srcs/executor/cd_utils.c\
-		srcs/executor/executor_utils.c\
+		libft/ft_strncpy.c\
+		srcs/executor/builtins/export_utils.c\
+		srcs/executor/builtins/cd_utils.c\
+		srcs/executor/no-builtins/executor_utils.c\
+		srcs/executor/no-builtins/executor_utils1.c\
+		srcs/executor/no-builtins/executor_utils2.c\
+		srcs/executor/no-builtins/executor_signals.c\
 		srcs/expander/expander_utils.c\
 		srcs/parser/redirections_checker.c\
-		srcs/executor/builtins_utils2.c\
+		srcs/executor/builtins/builtins_utils2.c\
 		srcs/main_utils.c\
 		srcs/clean.c\
 

@@ -6,11 +6,11 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:42:32 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/04 18:21:31 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/20 00:10:11 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 void	sort_env_vars(t_env_var *copy)
 {

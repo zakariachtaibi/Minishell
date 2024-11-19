@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/15 16:52:22 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/20 00:24:31 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,7 @@ void    redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
     *redir = (*redir)->next;
     if ((*current_cmd)->num_redirections_heredoc > 16)
     {
-        printf("minishell: maximum here-document count exceeded is %d\n",
-            (*current_cmd)->num_redirections_heredoc);
+		ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
         free(ttname);
         exit(2);
     }

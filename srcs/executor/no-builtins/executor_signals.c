@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   executor_signals.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/03 20:53:56 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/18 17:26:15 by zchtaibi         ###   ########.fr       */
+/*   Created: 2024/11/19 21:24:50 by zchtaibi          #+#    #+#             */
+/*   Updated: 2024/11/20 00:13:38 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../includes/minishell.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+void handle_sigint_child(int sig)
 {
-	while (n > 0 && *s1 && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-		n--;
-	}
-	if (n == 0)
-		return (0);
-	return ((unsigned char)(*s1) - (unsigned char)(*s2));
+    (void)sig;
+    ft_putstr_fd("\n", 2);
+    exit(130);
+}
+
+void handle_sigquit_child(int test)
+{
+    (void)test;
+    ft_putstr_fd("Quit (core dumped)\n", 2);
+    exit(131);
+}
+
+void setup_child_signals()
+{
+    signal(SIGINT, handle_sigint_child);
+    signal(SIGQUIT, handle_sigquit_child);
 }

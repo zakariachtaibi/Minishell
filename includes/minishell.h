@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/15 17:48:39 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/20 00:18:58 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,22 @@ typedef struct s_simple_cmds
 	int						fd_out;
 }	t_simple_cmds;
 
+typedef struct s_exec
+{
+	int				pipe_fd[2];
+	int				prev_pipe_read;
+	int				status;
+	t_simple_cmds	*current_cmd;
+	pid_t			pid;
+	pid_t			last_pid;
+	int				e;
+	int				builtin_executed;
+	int				child_exit_status;
+	t_simple_cmds	*cmds_head;
+	t_tools			**tools;
+	t_lexical		*tokens;
+}	t_exec;
+
 int				(*get_builtin_func(t_builtin type))(t_tools *tools,
 					t_simple_cmds *cmds, t_lexical *tokens);
 void			get_env_vars(t_tools *tools, char **envp);
@@ -113,12 +129,6 @@ char			**allocate_envp_array(int count);
 void			execute_commands(t_simple_cmds *cmds_head, t_tools **tools,
 					t_lexical *tokens);
 void			execute_cmd(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens);
-int				execute_if_absolute_path(t_simple_cmds *current_cmd,
-					t_tools **tools, t_lexical *tokens);
-void			execute(char *cmd_path, t_simple_cmds *current_cmd,
-					t_tools **tools);
-int				execute_from_path(char **split, t_simple_cmds *current_cmd,
-					t_tools **tools);
 int				builtin_echo(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
 int				builtin_cd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
 int				builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens);
@@ -173,6 +183,7 @@ char			**convert_env_vars_to_array(t_env_var *env_vars);
 void			sort_env_vars(t_env_var *copy);	
 void			free_env_vars(t_env_var *copy);
 void			free_env_var(t_env_var *env_vars);
+void			child_exit_cleanup(t_exec *ctx);
 void			setup_signal(void);
 void			handle_sigint(int sig);
 void			sigint2(int sig);
@@ -190,10 +201,14 @@ int				is_valid_identifier(const char *str);
 void			increment_SHLVL(t_tools **tools);
 t_tools			*init_tools(void);
 int				is_space(char *str);
-char **split_ignoring_quotes(const char *str);
-bool	is_quote(char c) ;
-int count_words(const char *str);
-char *extract_word(const char **str);
-// int get_exit_status(void);
-// void set_exit_status(int status);
+char			**split_ignoring_quotes(const char *str);
+bool			is_quote(char c) ;
+int				count_words(const char *str);
+char			*extract_word(const char **str);
+void			setup_child_signals();
+void			parent_pipe_handle(t_exec *ctx);
+void			init_execution_context(t_exec *ctx, t_simple_cmds *cmds_head,
+				t_tools **tools, t_lexical *tokens);
+void			wait_processes(t_exec *ctx);
+
 #endif

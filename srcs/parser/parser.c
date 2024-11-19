@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/15 16:53:55 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:33:23 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,6 @@ int handle_redirections(t_tools **tools, t_lexical **temp,
     
     flag = 0;
     heredoc_flag = 0;
-    // (*current_cmd)->num_redirections_heredoc = 0;
     if (check_token(*temp, &heredoc_flag))
     {
         redir = copy_node(*temp);
@@ -282,7 +281,7 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
     int in;
     int heredoc_flag;
     int export_flag;
-    // char *cleaned;
+    int new_size;
 
     flag = 0;
     in = 0;
@@ -324,13 +323,11 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
 			{
 				in = 0;
 				tmp = split_ignoring_quotes(expanded);
-				
-				// resize_cmd_lst(current_cmd, tmp);
 				while (tmp[in])
 				{
 					if (i >= (word_count + count_str))
 					{
-    					int new_size = (word_count + count_str) * 2; // Double the size
+    					new_size = (word_count + count_str) * 2;
 						new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
 						if (!new_str) 
 						{
@@ -344,7 +341,6 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
 					in++;
 					i++;
 				}
-				
 				free(expanded);
 				ft_free(tmp);
 			}
@@ -394,7 +390,8 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 			flag = handle_redirections(&tools, &temp, &current_cmd, tokens);
 			if (flag == 1)
 			{
-				printf("%s : ambiguous redirect\n", (temp)->str);
+                ft_putstr_fd((temp)->str, 2);
+                ft_putstr_fd(" : ambiguous redirect\n", 2);
 				tools->exit_status = 1;
                 free_cmds(&current_cmd);
 				return (NULL);

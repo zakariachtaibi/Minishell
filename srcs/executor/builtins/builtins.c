@@ -6,11 +6,11 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/15 01:51:12 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/20 00:10:17 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
@@ -39,7 +39,7 @@ int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 		return (1);
 	}
 	ft_putstr_fd(buff, 1);
-	printf("\n");
+	ft_putstr_fd("\n", 1);
 	tools->working_dir_path = buff;
 	free(buff);
 	return (0);

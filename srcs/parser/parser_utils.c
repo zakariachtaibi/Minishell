@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/08 01:28:21 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:25:56 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,6 @@ t_lexical	*copy_node(t_lexical *src)
 	dest->prev = NULL;
 	if (src->str != NULL)
 	{
-		// if (dest->str == NULL)
-		// {
-		// 	free_lexical(dest);
-		// 	return (NULL);
-		// }
 		dest->str = ft_strdup(src->str);
 	}
 	else
@@ -99,7 +94,7 @@ char	*ft_strndup(const char *src, size_t n)
 	dup = (char *)malloc(len + 1);
 	if (!dup)
 		return (NULL);
-	strncpy(dup, src, len);
+	ft_strncpy(dup, src, len);
 	dup[len] = '\0';
 	return (dup);
 }

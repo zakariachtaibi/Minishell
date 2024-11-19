@@ -6,17 +6,26 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:51:51 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/03 23:32:50 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/19 22:02:24 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	child_exit_cleanup(t_exec *ctx)
+{
+	free_cmds(&ctx->cmds_head);
+	free_tools(*ctx->tools);
+	free_lexical(ctx->tokens);
+}
 
 t_tools	*init_tools(void)
 {
 	t_tools	*new_tool;
 
 	new_tool = malloc(sizeof(t_tools));
+	if (!new_tool)
+		return (NULL);
 	new_tool->env_vars = NULL;
 	new_tool->var_start = 0;
 	new_tool->var_len = 0;
@@ -39,7 +48,7 @@ void	set_env_var(const char *key, const char *value, t_tools **tools)
 	env_var = NULL;
 	while (current)
 	{
-		if (strcmp(current->key, key) == 0)
+		if (ft_strcmp(current->key, key) == 0)
 		{
 			env_var = current;
 			break ;
