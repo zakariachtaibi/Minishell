@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/20 00:09:56 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:55:50 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,19 @@ t_env_var	*copy_env_vars(t_env_var *env_vars)
 	return (copy);
 }
 
-void	add_new_env_var(t_tools *tools, char *key, char *value,
-		t_env_var *current, t_env_var *prev)
+void	add_new_env_var(t_tools *tools, char *key, char *value)
 {
 	t_env_var	*new_var;
+	t_env_var	*current;
+	t_env_var	*prev;
 
+	current = tools->env_vars;
+	prev = NULL;
+	while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) < 0)
+	{
+		prev = current;
+		current = current->next;
+	}
 	new_var = malloc(sizeof(t_env_var));
 	new_var->key = key;
 	new_var->value = value;
@@ -95,7 +103,6 @@ void	add_new_env_var(t_tools *tools, char *key, char *value,
 void	handle_env_var(t_tools **tools, char *key, char *value)
 {
 	t_env_var	*current;
-	t_env_var	*prev;
 
 	current = (*tools)->env_vars;
 	while (current)
@@ -109,12 +116,5 @@ void	handle_env_var(t_tools **tools, char *key, char *value)
 		}
 		current = current->next;
 	}
-	current = (*tools)->env_vars;
-	prev = NULL;
-	while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) < 0)
-	{
-		prev = current;
-		current = current->next;
-	}
-	add_new_env_var((*tools), key, value, current, prev);
+	add_new_env_var((*tools), key, value);
 }

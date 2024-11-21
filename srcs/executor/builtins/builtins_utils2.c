@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 13:11:55 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/20 00:10:14 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:02:33 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,17 @@ void	swap_values(char **ikey, char **ivalue, char **jkey, char **jvalue)
 	(*jvalue) = temp_value;
 }
 
+static void	validate_env(char *key, char *value)
+{
+	ft_putstr_fd("declare -x ", 1);
+	ft_putstr_fd(key, 1);
+	ft_putstr_fd("=", 1);
+	ft_putchar_fd('"', 1);
+	ft_putstr_fd(value, 1);
+	ft_putchar_fd('"', 1);
+	ft_putstr_fd("\n", 1);
+}
+
 void	check_env_vars(t_env_var **current)
 {
 	if ((*current)->value == NULL)
@@ -53,15 +64,7 @@ void	check_env_vars(t_env_var **current)
 			ft_putstr_fd("\n", 1);
 		}
 		else
-		{
-			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd((*current)->key, 1);
-			ft_putstr_fd("=", 1);
-			ft_putchar_fd('"', 1);
-			ft_putstr_fd((*current)->value, 1);
-			ft_putchar_fd('"', 1);
-			ft_putstr_fd("\n", 1);
-		}
+			validate_env((*current)->key, (*current)->value);
 	}
 }
 

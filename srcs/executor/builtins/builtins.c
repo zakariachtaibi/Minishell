@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/20 00:10:17 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:47:17 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,9 @@ int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 
 	(void)cmd;
 	(void)tokens;
-	buff = malloc(1024 * sizeof(char));
+	buff = get_current_working_directory(tools);
 	if (!buff)
-	{
-		perror("malloc");
 		return (1);
-	}
-	if (getcwd(buff, 1024) == NULL)
-	{
-		char *pwd_value = get_env_value(tools->env_vars, "PWD");
-		if (pwd_value)
-		{
-			ft_putstr_fd(pwd_value, 1);
-            ft_putstr_fd("\n", 1);
-			free(buff);
-            return (0);
-		}
-		perror("getcwd");
-		free(buff);
-		return (1);
-	}
 	ft_putstr_fd(buff, 1);
 	ft_putstr_fd("\n", 1);
 	tools->working_dir_path = buff;
@@ -48,29 +31,20 @@ int	builtin_pwd(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 int	builtin_exit(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	int	exit_status;
-	(void)tokens;
 
+	(void)tokens;
 	exit_status = tools->exit_status;
 	if (cmd->str[1] == NULL)
 	{
-		cleanup_readline();
-        if (tokens)
-            free_lexical(tokens);
-        free_cmds(&cmd);
-        free_tools(tools);
+		perform_exit_cleanup(cmd, tokens, tools);
 		exit(exit_status);
 	}
 	if (!is_numeric(cmd->str[1]))
 	{
-		ft_putstr_fd("exit\n", 2);
-		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd("exit\nminishell: exit: ", 2);
 		ft_putstr_fd(cmd->str[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
-		cleanup_readline();
-        if (tokens)
-            free_lexical(tokens);
-        free_cmds(&cmd);
-        free_tools(tools);
+		perform_exit_cleanup(cmd, tokens, tools);
 		exit(2);
 	}
 	if (cmd->str[2] != NULL)
@@ -85,86 +59,53 @@ int	builtin_exit(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 
 int	builtin_unset(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
-	int			i;
-	int			had_error;
-	t_env_var	*current;
-	t_env_var	*node_to_delete;
+	int	i;
+	int	had_error;
+
 	(void)tokens;
-	
 	i = 1;
 	had_error = 0;
 	while (cmd->str[i])
 	{
-		if (!is_valid_identifier(cmd->str[i]))
+		if (!validate_unset_identifier(cmd->str[i]))
 		{
-			fprintf(stderr, "minishell: unset: `%s': not a valid identifier\n",
-				cmd->str[i]);
 			had_error = 1;
 			i++;
 			continue ;
 		}
-		current = tools->env_vars;
-		node_to_delete = NULL;
-		while (current)
-		{
-			if (strcmp(current->key, cmd->str[i]) == 0)
-			{
-				node_to_delete = current;
-				break ;
-			}
-			current = current->next;
-		}
-		if (node_to_delete)
-		{
-			delete_node_env(&(tools->env_vars), node_to_delete);
-			if (tools->exit_status == 1)
-				had_error = 1;
-		}
+		if (remove_env_variable(tools, cmd->str[i]))
+			had_error = 1;
 		i++;
 	}
-	if (had_error)
-		tools->exit_status = 1;
-	else
-		tools->exit_status = 0;
+	tools->exit_status = had_error;
 	return (tools->exit_status);
 }
 
 int	builtin_env(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
-	int			i;
 	t_env_var	*current;
-	(void)tokens;
 
-	i = 1;
+	(void)tokens;
+	if (cmd->str[1] != NULL)
+		return (env_error(tools, cmd->str[1]));
 	current = tools->env_vars;
-	if (cmd->str[i] == NULL)
+	if (!current)
 	{
-		if (!current)
-		{
-			ft_putstr_fd("No environment variables set.\n", 2);
-			return (0);
-		}
-		while (current)
-		{
-			if (current->value)
-			{
-				ft_putstr_fd(current->key, 1);
-				ft_putstr_fd("=", 1);
-				ft_putstr_fd(current->value, 1);
-				ft_putstr_fd("\n", 1);
-			}
-			current = current->next;
-		}
+		ft_putstr_fd("No environment variables set.\n", 2);
 		return (0);
 	}
-	else
+	while (current)
 	{
-		ft_putstr_fd("env: ", 2);
-		ft_putstr_fd(cmd->str[i], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		tools->exit_status = 1;
+		if (current->value)
+		{
+			ft_putstr_fd(current->key, 1);
+			ft_putstr_fd("=", 1);
+			ft_putstr_fd(current->value, 1);
+			ft_putstr_fd("\n", 1);
+		}
+		current = current->next;
 	}
-	return (1);
+	return (0);
 }
 
 int	builtin_echo(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)

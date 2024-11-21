@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/20 00:18:58 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:54:23 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,7 @@ int				has_semicolon(char *input, t_tools *tools);
 int				is_numeric(char *str);
 void			add_redirection(t_lexical **redirections,
 					t_lexical *redir_node);
-void			add_new_env_var(t_tools *tools, char *key, char *value,
-					t_env_var *current, t_env_var *prev);
+void			add_new_env_var(t_tools *tools, char *key, char *value);
 t_lexical		*copy_node(t_lexical *src);
 t_env_var		*copy_env_vars(t_env_var *env_vars);
 void			delete_node(t_lexical **head, t_lexical *node_to_delete);
@@ -210,5 +209,10 @@ void			parent_pipe_handle(t_exec *ctx);
 void			init_execution_context(t_exec *ctx, t_simple_cmds *cmds_head,
 				t_tools **tools, t_lexical *tokens);
 void			wait_processes(t_exec *ctx);
+char			*get_current_working_directory(t_tools *tools);
+void			perform_exit_cleanup(t_simple_cmds *cmd, t_lexical *tokens, t_tools *tools);
+int				validate_unset_identifier(char *identifier);
+int				remove_env_variable(t_tools *tools, char *key);
+int				env_error(t_tools *tools, char *arg);
 
 #endif

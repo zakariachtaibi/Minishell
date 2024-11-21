@@ -6,7 +6,7 @@
 #    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/20 00:14:37 by zchtaibi         ###   ########.fr        #
+#    Updated: 2024/11/20 23:04:59 by zchtaibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS = srcs/main.c \
 		srcs/expander/expander.c\
 		srcs/executor/builtins/builtins_utils.c\
 		srcs/executor/builtins/builtins_utils1.c\
+		srcs/executor/builtins/builtins_utils3.c\
 		libft/ft_isalnum.c\
 		libft/ft_isalpha.c\
 		libft/ft_strncpy.c\
