@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
+#    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/20 23:04:59 by zchtaibi         ###   ########.fr        #
+#    Updated: 2024/11/22 00:28:37 by hchouai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SRCS = srcs/main.c \
 		srcs/executor/builtins/builtins_utils.c\
 		srcs/executor/builtins/builtins_utils1.c\
 		srcs/executor/builtins/builtins_utils3.c\
+		srcs/executor/builtins/builtins_utils4.c\
 		libft/ft_isalnum.c\
 		libft/ft_isalpha.c\
 		libft/ft_strncpy.c\

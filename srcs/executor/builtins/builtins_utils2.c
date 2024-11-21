@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 13:11:55 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/21 19:02:33 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:17:34 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,25 @@ int	is_valid_identifier(const char *str)
 		str++;
 	}
 	return (1);
+}
+
+void	check_valid_key(char *key, char *str, char *value, t_tools *tools)
+{
+	int	in;
+
+	in = 0;
+	while (key[in] != '\0')
+	{
+		if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in])))
+			|| key[in] == 32)
+		{
+			print_error(str, key, value, tools);
+			return ;
+		}
+		in++;
+	}
+	if (key[0] != '\0' || !key)
+		handle_env_var(&tools, key, value);
+	else if (key[0] == '\0')
+		print_error(str, key, value, tools);
 }

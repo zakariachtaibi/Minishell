@@ -6,105 +6,136 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/20 21:18:18 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/21 23:56:26 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
-bool	is_quote(char c) {
-    return (c == '"' || c == '\'');
+bool	is_quote(char c)
+{
+	return (c == '"' || c == '\'');
 }
 
-int count_words(const char *str) {
-    int count = 0;
-    bool in_word = false;
-    bool inside_quotes = false;
-    char quote_char = '\0';
+int	count_words(const char *str)
+{
+	int		count;
+	bool	in_word;
+	bool	inside_quotes;
+	char	quote_char;
 
-    while (*str) {
-        if (is_quote(*str) && !inside_quotes) {
-            inside_quotes = true;
-            quote_char = *str;
-            if (!in_word) {
-                in_word = true; // Starting a new word
-            }
-        } else if (*str == quote_char && inside_quotes) {
-            inside_quotes = false;
-            quote_char = '\0';
-        } else if (*str == ' ' && !inside_quotes) {
-            if (in_word) {
-                count++;
-                in_word = false; // End of the current word
-            }
-        } else if (!in_word) {
-            in_word = true; // Found a new word
-        }
-        str++;
-    }
-    if (in_word) {
-        count++; // Count the last word if any
-    }
-    return count;
+	count = 0;
+	in_word = false;
+	inside_quotes = false;
+	quote_char = '\0';
+	while (*str)
+	{
+		if (is_quote(*str) && !inside_quotes)
+		{
+			inside_quotes = true;
+			quote_char = *str;
+			if (!in_word)
+			{
+				in_word = true; // Starting a new word
+			}
+		}
+		else if (*str == quote_char && inside_quotes)
+		{
+			inside_quotes = false;
+			quote_char = '\0';
+		}
+		else if (*str == ' ' && !inside_quotes)
+		{
+			if (in_word)
+			{
+				count++;
+				in_word = false; // End of the current word
+			}
+		}
+		else if (!in_word)
+		{
+			in_word = true; // Found a new word
+		}
+		str++;
+	}
+	if (in_word)
+	{
+		count++; // Count the last word if any
+	}
+	return (count);
 }
 
-char *extract_word(const char **str) {
-    const char *start = *str;
-    bool inside_quotes = false;
-    char quote_char = '\0';
-    int length = 0;
+char	*extract_word(const char **str)
+{
+	const char	*start;
+	bool		inside_quotes;
+	char		quote_char;
+	int			length;
+	char		*word;
 
-    // Move through the word, handling quoted sections as needed
-    while (**str && (**str != ' ' || inside_quotes)) {
-        if (is_quote(**str) && !inside_quotes) {
-            inside_quotes = true;
-            quote_char = **str;
-        } else if (**str == quote_char && inside_quotes) {
-            inside_quotes = false;
-            quote_char = '\0';
-        }
-        (*str)++;
-        length++;
-    }
-
-    char *word = malloc(length + 1);
-    if (!word) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-    strncpy(word, start, length);
-    word[length] = '\0';
-
-    // Skip trailing spaces after the word
-    while (**str == ' ')
-        (*str)++;
-    return word;
+	start = *str;
+	inside_quotes = false;
+	quote_char = '\0';
+	length = 0;
+	// Move through the word, handling quoted sections as needed
+	while (**str && (**str != ' ' || inside_quotes))
+	{
+		if (is_quote(**str) && !inside_quotes)
+		{
+			inside_quotes = true;
+			quote_char = **str;
+		}
+		else if (**str == quote_char && inside_quotes)
+		{
+			inside_quotes = false;
+			quote_char = '\0';
+		}
+		(*str)++;
+		length++;
+	}
+	word = malloc(length + 1);
+	if (!word)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	strncpy(word, start, length);
+	word[length] = '\0';
+	// Skip trailing spaces after the word
+	while (**str == ' ')
+		(*str)++;
+	return (word);
 }
 
-char **split_ignoring_quotes(const char *str) {
-    int word_count = count_words(str);
-    char **result = malloc(sizeof(char *) * (word_count + 1));
-    if (!result) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
+char	**split_ignoring_quotes(const char *str)
+{
+	int		word_count;
+	char	**result;
+	int		i;
 
-    int i = 0;
-    while (*str) {
-        while (*str == ' ')
-            str++; // Skip initial spaces
-        if (*str) {
-            result[i++] = extract_word(&str); // Extract the next word
-        }
-    }
-    result[i] = NULL; // Null-terminate the array
-
-    return result;
+	word_count = count_words(str);
+	result = malloc(sizeof(char *) * (word_count + 1));
+	if (!result)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	i = 0;
+	while (*str)
+	{
+		while (*str == ' ')
+			str++; // Skip initial spaces
+		if (*str)
+		{
+			result[i++] = extract_word(&str); // Extract the next word
+		}
+	}
+	result[i] = NULL; // Null-terminate the array
+	return (result);
 }
 
 void	ft_free(char **arr)
@@ -123,6 +154,7 @@ void	ft_free(char **arr)
 int	is_space(char *str)
 {
 	int	i;
+
 	i = 0;
 	while (str[i] != '\0' && str[i] != '"')
 	{
@@ -176,10 +208,10 @@ char	*unescape_spaces(char *str, int flag)
 
 	i = 0;
 	j = 0;
-    if(!str)
-    {
-        return(NULL);
-    }
+	if (!str)
+	{
+		return (NULL);
+	}
 	if (str[0] == '\0')
 		return (ft_strdup("\0"));
 	result = malloc(sizeof(char) * (ft_strlen(str) + 1));
@@ -200,63 +232,66 @@ char	*unescape_spaces(char *str, int flag)
 	return (result);
 }
 
-void free_lexical_node(t_lexical *node)
+void	free_lexical_node(t_lexical *node)
 {
-    if (node)
-    {
-        free(node->str);
-        free(node);
-    }
+	if (node)
+	{
+		free(node->str);
+		free(node);
+	}
 }
 
-int handle_redirections(t_tools **tools, t_lexical **temp,
-        t_simple_cmds **current_cmd, t_lexical *token)
+int	handle_redirections(t_tools **tools, t_lexical **temp,
+		t_simple_cmds **current_cmd, t_lexical *token)
 {
-    t_lexical    *redir;
-    t_lexical    *filename;
-    char        *unescaped;
-    int            flag;
-    int            heredoc_flag;
-    (void)token;
-    
-    flag = 0;
-    heredoc_flag = 0;
-    if (check_token(*temp, &heredoc_flag))
-    {
-        redir = copy_node(*temp);
-        add_redirection((&(*current_cmd)->redirections), redir);
-        (*current_cmd)->num_redirections++;
-        if (heredoc_flag == 1)
-            (*current_cmd)->num_redirections_heredoc++;
-        t_lexical *node_todel = copy_node(*temp);
-        *temp = (*temp)->next;
-        delete_node(&token, node_todel);
-        if (*temp && (*temp)->token == TOKEN_WORD)
-        {
-            filename = copy_node(*temp);
-            if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str, '\'')))
-                filename->filename_flag = 2;
-            else    
-                filename->filename_flag = 0;
-            char *expanded = expand_vars((*tools), filename->str, &flag, heredoc_flag);
-            free(filename->str);
-            filename->str = expanded;
-            unescaped = unescape_spaces(filename->str, flag);
-            if (!unescaped)
-            {
-                free_lexical_node(filename);
-                return (1);
-            }
-            free(filename->str); 
-            filename->str = ft_strdup(unescaped);
-            free(unescaped);
-            add_redirection((&(*current_cmd)->redirections), filename);
-            *temp = (*temp)->next;
-        }
-    }
-    return (0);
-}
+	t_lexical	*redir;
+	t_lexical	*filename;
+	char		*unescaped;
+	int			flag;
+	int			heredoc_flag;
+	t_lexical	*node_todel;
+	char		*expanded;
 
+	(void)token;
+	flag = 0;
+	heredoc_flag = 0;
+	if (check_token(*temp, &heredoc_flag))
+	{
+		redir = copy_node(*temp);
+		add_redirection((&(*current_cmd)->redirections), redir);
+		(*current_cmd)->num_redirections++;
+		if (heredoc_flag == 1)
+			(*current_cmd)->num_redirections_heredoc++;
+		node_todel = copy_node(*temp);
+		*temp = (*temp)->next;
+		delete_node(&token, node_todel);
+		if (*temp && (*temp)->token == TOKEN_WORD)
+		{
+			filename = copy_node(*temp);
+			if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str,
+						'\'')))
+				filename->filename_flag = 2;
+			else
+				filename->filename_flag = 0;
+			expanded = expand_vars((*tools), filename->str, &flag,
+					heredoc_flag);
+			free(filename->str);
+			filename->str = expanded;
+			unescaped = unescape_spaces(filename->str, flag);
+			if (!unescaped)
+			{
+				free_lexical_node(filename);
+				return (1);
+			}
+			free(filename->str);
+			filename->str = ft_strdup(unescaped);
+			free(unescaped);
+			add_redirection((&(*current_cmd)->redirections), filename);
+			*temp = (*temp)->next;
+		}
+	}
+	return (0);
+}
 
 int	ft_strlen_array(char **array)
 {
@@ -268,58 +303,58 @@ int	ft_strlen_array(char **array)
 	return (i);
 }
 
-void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
+void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
+		t_tools *tools)
 {
-    int word_count;
-    t_lexical *word_temp;
-    int i;
-    int count_str;
-    char **new_str;
-    char *expanded;
-    int flag;
-    char **tmp;
-    int in;
-    int heredoc_flag;
-    int export_flag;
-    int new_size;
+	int			word_count;
+	t_lexical	*word_temp;
+	int			i;
+	int			count_str;
+	char		**new_str;
+	char		*expanded;
+	int			flag;
+	char		**tmp;
+	int			in;
+	int			heredoc_flag;
+	int			export_flag;
+	int			new_size;
 
-    flag = 0;
-    in = 0;
-    heredoc_flag = 0;
-    export_flag = 0;
-    word_temp = *temp;
-    word_count = 0;
-
-    while (word_temp && word_temp->token == TOKEN_WORD)
-    {
-        word_count++;
-        word_temp = word_temp->next;
-    }
-    if ((*current_cmd)->str)
-        count_str = ft_strlen_array((*current_cmd)->str);
-    else
-        count_str = 0;
-    new_str = malloc(sizeof(char *) * (word_count + count_str + 1));
-    if (!new_str)
-    {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-    i = -1;
-    while (++i < count_str)
-        new_str[i] = (*current_cmd)->str[i];
-    free((*current_cmd)->str);
-    (*current_cmd)->str = new_str;
-    i = count_str;
-    while (*temp && (*temp)->token == TOKEN_WORD)
-    {
-        if (ft_strcmp((*temp)->str, "export") == 0)
-            export_flag = 1;
-        expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
-        tools->export_flag = flag;
-        if (expanded)
-        {
-                if (((flag== 1) && is_space(expanded) == 1) && (export_flag != 1))
+	flag = 0;
+	in = 0;
+	heredoc_flag = 0;
+	export_flag = 0;
+	word_temp = *temp;
+	word_count = 0;
+	while (word_temp && word_temp->token == TOKEN_WORD)
+	{
+		word_count++;
+		word_temp = word_temp->next;
+	}
+	if ((*current_cmd)->str)
+		count_str = ft_strlen_array((*current_cmd)->str);
+	else
+		count_str = 0;
+	new_str = malloc(sizeof(char *) * (word_count + count_str + 1));
+	if (!new_str)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	i = -1;
+	while (++i < count_str)
+		new_str[i] = (*current_cmd)->str[i];
+	free((*current_cmd)->str);
+	(*current_cmd)->str = new_str;
+	i = count_str;
+	while (*temp && (*temp)->token == TOKEN_WORD)
+	{
+		if (ft_strcmp((*temp)->str, "export") == 0)
+			export_flag = 1;
+		expanded = expand_vars(tools, (*temp)->str, &flag, heredoc_flag);
+		tools->export_flag = flag;
+		if (expanded)
+		{
+			if (((flag == 1) && is_space(expanded) == 1) && (export_flag != 1))
 			{
 				in = 0;
 				tmp = split_ignoring_quotes(expanded);
@@ -327,15 +362,16 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
 				{
 					if (i >= (word_count + count_str))
 					{
-    					new_size = (word_count + count_str) * 2;
-						new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
-						if (!new_str) 
+						new_size = (word_count + count_str) * 2;
+						new_str = realloc(new_str, sizeof(char *) * (new_size
+									+ 1));
+						if (!new_str)
 						{
 							perror("realloc");
 							exit(EXIT_FAILURE);
 						}
 						(*current_cmd)->str = new_str;
-						word_count = new_size - count_str; 
+						word_count = new_size - count_str;
 					}
 					(*current_cmd)->str[i] = ft_strdup(tmp[in]);
 					in++;
@@ -347,24 +383,25 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools)
 			else
 			{
 				if (i >= (word_count + count_str))
+				{
+					new_size = (word_count + count_str) * 2;
+					// Double the size
+					new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
+					if (!new_str)
 					{
-    					int new_size = (word_count + count_str) * 2; // Double the size
-						new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
-						if (!new_str) 
-						{
-							perror("realloc");
-							exit(EXIT_FAILURE);
-						}
-						(*current_cmd)->str = new_str;
-						word_count = new_size - count_str; 
+						perror("realloc");
+						exit(EXIT_FAILURE);
 					}
+					(*current_cmd)->str = new_str;
+					word_count = new_size - count_str;
+				}
 				(*current_cmd)->str[i] = expanded;
 				i++;
 			}
-        }
-        *temp = (*temp)->next;
-    }
-    (*current_cmd)->str[i] = NULL;
+		}
+		*temp = (*temp)->next;
+	}
+	(*current_cmd)->str[i] = NULL;
 }
 
 t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
@@ -385,16 +422,16 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 		process_command(&temp, &current_cmd, &cmds_head);
 		while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)
 			handle_words(&temp, &current_cmd, tools);
-        current_cmd->num_redirections_heredoc = 0;
+		current_cmd->num_redirections_heredoc = 0;
 		while (temp && check_token(temp, &h_flag))
 		{
 			flag = handle_redirections(&tools, &temp, &current_cmd, tokens);
 			if (flag == 1)
 			{
-                ft_putstr_fd((temp)->str, 2);
-                ft_putstr_fd(" : ambiguous redirect\n", 2);
+				ft_putstr_fd((temp)->str, 2);
+				ft_putstr_fd(" : ambiguous redirect\n", 2);
 				tools->exit_status = 1;
-                free_cmds(&current_cmd);
+				free_cmds(&current_cmd);
 				return (NULL);
 			}
 		}
@@ -403,7 +440,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 		{
 			perror("minishell");
 			tools->exit_status = 1;
-            free_cmds(&current_cmd);
+			free_cmds(&current_cmd);
 			return (NULL);
 		}
 		while (temp && !check_token(temp, &h_flag) && temp->token != TOKEN_PIPE)

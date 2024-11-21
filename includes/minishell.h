@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/21 18:54:23 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:21:49 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,5 +214,9 @@ void			perform_exit_cleanup(t_simple_cmds *cmd, t_lexical *tokens, t_tools *tool
 int				validate_unset_identifier(char *identifier);
 int				remove_env_variable(t_tools *tools, char *key);
 int				env_error(t_tools *tools, char *arg);
+void			check_valid_key(char *key, char *str, char *value, t_tools *tools);
+void			print_error(char *str, char *key, char *value, t_tools *tools);
+int				check_cd_arg_count(t_tools *tools, t_simple_cmds *cmd);
+int				handle_home_path(t_tools *tools, char **path);
 
 #endif

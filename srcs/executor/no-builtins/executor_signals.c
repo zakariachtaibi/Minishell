@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   executor_signals.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 21:24:50 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/20 00:13:38 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:32:10 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void handle_sigint_child(int sig)
+void	handle_sigint_child(int sig)
 {
-    (void)sig;
-    ft_putstr_fd("\n", 2);
-    exit(130);
+	(void)sig;
+	ft_putstr_fd("\n", 2);
+	exit(130);
 }
 
-void handle_sigquit_child(int test)
+void	handle_sigquit_child(int test)
 {
-    (void)test;
-    ft_putstr_fd("Quit (core dumped)\n", 2);
-    exit(131);
+	(void)test;
+	ft_putstr_fd("Quit (core dumped)\n", 2);
+	exit(131);
 }
 
-void setup_child_signals()
+void	setup_child_signals(void)
 {
-    signal(SIGINT, handle_sigint_child);
-    signal(SIGQUIT, handle_sigquit_child);
+	signal(SIGINT, handle_sigint_child);
+	signal(SIGQUIT, handle_sigquit_child);
 }

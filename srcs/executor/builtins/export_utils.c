@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:59:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/20 00:10:24 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:18:18 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	handle_plus_equal(t_tools *tools, char *str, char **key, char **value)
 void	handle_equal(char *str, char **key, char **value)
 {
 	char	*equal_sign;
+
 	equal_sign = ft_strchr(str, '=');
 	*key = ft_substr(str, 0, equal_sign - str);
 	if (*(equal_sign + 1) == '\0')
@@ -41,26 +42,15 @@ void	handle_equal(char *str, char **key, char **value)
 		*value = ft_strtrim(equal_sign + 1, "\"");
 }
 
-void	print_error(char *str, char *key, char *value, t_tools *tools)
-{
-	printf("minishell: export `%s': not a valid identifier\n", str);
-	free(key);
-	if (value)
-		free(value);
-	tools->exit_status = 1;
-}
-
 void	process_export(t_tools *tools, char **str, int *i)
 {
 	char	*key;
 	char	*value;
 	char	*plus_equal_sign;
 	char	*equal_sign;
-	int		in;
 
 	plus_equal_sign = ft_strnstr(str[*i], "+=", ft_strlen(str[*i]));
 	equal_sign = ft_strchr(str[*i], '=');
-	in = 0;
 	if (plus_equal_sign)
 		handle_plus_equal(tools, str[*i], &key, &value);
 	else if (equal_sign)
@@ -70,20 +60,7 @@ void	process_export(t_tools *tools, char **str, int *i)
 		key = ft_strdup(str[*i]);
 		value = NULL;
 	}
-	while (key[in] != '\0')
-	{
-		if (!(ft_isalpha(key[in]) || (in > 0 && ft_isalnum(key[in])))
-			|| key[in] == 32)
-		{
-			print_error(str[*i], key, value, tools);
-			return ;
-		}
-		in++;
-	}
-	if (key[0] != '\0' || !key)
-		handle_env_var(&tools, key, value);
-	else if (key[0] == '\0')
-		print_error(str[*i], key, value, tools);
+	check_valid_key(key, str[*i], value, tools);
 }
 
 void	print_sorted_env(t_tools *tools)

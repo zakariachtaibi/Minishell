@@ -78,7 +78,7 @@ t_lexical	*tokenize(char *input)
 				token[j++] = input[i++];
 			}
 			else if (!in_quotes && (input[i] == '>' || input[i] == '<'
-					|| input[i] == '|'))
+						|| input[i] == '|'))
 			{
 				if (j > 0)
 				{

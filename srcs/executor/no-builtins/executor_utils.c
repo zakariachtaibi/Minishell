@@ -37,42 +37,42 @@ char	**allocate_envp_array(int count)
 	return (envp);
 }
 
-char **convert_env_vars_to_array(t_env_var *env_vars)
+char	**convert_env_vars_to_array(t_env_var *env_vars)
 {
-    int count;
-    char **envp;
-    t_env_var *temp;
-    int i;
-    char *temp_str;
+	int			count;
+	char		**envp;
+	t_env_var	*temp;
+	int			i;
+	char		*temp_str;
 
-    count = count_env_vars(env_vars);
-    envp = allocate_envp_array(count);
-    if (!envp)
-        return (NULL);
-    temp = env_vars;
-    i = 0;
-    while (i < count)
-    {
-        temp_str = ft_strjoin(temp->key, "=");
-        if (!temp_str)
-        {
-            ft_free(envp);
-            return (NULL);
-        }
-        envp[i] = ft_strjoin(temp_str, temp->value);
-        free(temp_str);
-        if (!envp[i])
-        {
-            while (--i >= 0)
-                free(envp[i]);
-            free(envp);
-            return (NULL);
-        }
-        temp = temp->next;
-        i++;
-    }
-    envp[count] = NULL;
-    return (envp);
+	count = count_env_vars(env_vars);
+	envp = allocate_envp_array(count);
+	if (!envp)
+		return (NULL);
+	temp = env_vars;
+	i = 0;
+	while (i < count)
+	{
+		temp_str = ft_strjoin(temp->key, "=");
+		if (!temp_str)
+		{
+			ft_free(envp);
+			return (NULL);
+		}
+		envp[i] = ft_strjoin(temp_str, temp->value);
+		free(temp_str);
+		if (!envp[i])
+		{
+			while (--i >= 0)
+				free(envp[i]);
+			free(envp);
+			return (NULL);
+		}
+		temp = temp->next;
+		i++;
+	}
+	envp[count] = NULL;
+	return (envp);
 }
 
 char	**get_path_dirs(t_env_var *env_vars)

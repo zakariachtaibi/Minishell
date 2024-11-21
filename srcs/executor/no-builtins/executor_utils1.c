@@ -3,92 +3,95 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 21:20:05 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/20 00:18:45 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:32:48 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static int execute_if_absolute_path(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
+static int	execute_if_absolute_path(t_simple_cmds *current_cmd,
+									t_tools **tools,
+									t_lexical *tokens)
 {
-    struct stat statbuf;
-    pid_t pid;
-    int status;
-    char **env_array;
+	struct stat	statbuf;
+	pid_t		pid;
+	int			status;
+	char		**env_array;
 
-    if (stat(current_cmd->str[0], &statbuf) == 0)
-    {
-        if (S_ISDIR(statbuf.st_mode))
-        {
-            write(2, "minishell: ", 12);
-            write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
-            write(2, ": is a directory\n", 17);
-            (*tools)->exit_status = 126;
-            return (1);
-        }
-        if (access(current_cmd->str[0], X_OK) == 0)
-        {
-            pid = fork();
-            if (pid == 0)
-            {
-                env_array = convert_env_vars_to_array((*tools)->env_vars);
-                execve(current_cmd->str[0], current_cmd->str, env_array);
-                ft_free(env_array);
-                free_lexical(tokens);
-                free_tools(*tools);
-                free_cmds(&current_cmd);
-                perror("execve");
-                exit(126);
-            }
-            else if (pid < 0)
-                perror("fork");
-            else
-            {
-                waitpid(pid, &status, 0);
-                (*tools)->exit_status = WEXITSTATUS(status);
-            }
-            return (1);
-        }
-        else
-        {
-            write(2, "minishell: ", 12);
-            write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
-            write(2, ": Permission denied\n", 20);
-            (*tools)->exit_status = 126;
-            return (1);
-        }
-    }
-    return (0);
+	if (stat(current_cmd->str[0], &statbuf) == 0)
+	{
+		if (S_ISDIR(statbuf.st_mode))
+		{
+			write(2, "minishell: ", 12);
+			write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+			write(2, ": is a directory\n", 17);
+			(*tools)->exit_status = 126;
+			return (1);
+		}
+		if (access(current_cmd->str[0], X_OK) == 0)
+		{
+			pid = fork();
+			if (pid == 0)
+			{
+				env_array = convert_env_vars_to_array((*tools)->env_vars);
+				execve(current_cmd->str[0], current_cmd->str, env_array);
+				ft_free(env_array);
+				free_lexical(tokens);
+				free_tools(*tools);
+				free_cmds(&current_cmd);
+				perror("execve");
+				exit(126);
+			}
+			else if (pid < 0)
+				perror("fork");
+			else
+			{
+				waitpid(pid, &status, 0);
+				(*tools)->exit_status = WEXITSTATUS(status);
+			}
+			return (1);
+		}
+		else
+		{
+			write(2, "minishell: ", 12);
+			write(2, current_cmd->str[0], ft_strlen(current_cmd->str[0]));
+			write(2, ": Permission denied\n", 20);
+			(*tools)->exit_status = 126;
+			return (1);
+		}
+	}
+	return (0);
 }
 
-static void execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
+static void	execute(char *cmd_path, t_simple_cmds *current_cmd, t_tools **tools)
 {
-    pid_t pid;
-    int status;
-    char **env_array;
+	pid_t	pid;
+	int		status;
+	char	**env_array;
 
-    pid = fork();
-    if (pid == 0)
-    {
-        env_array = convert_env_vars_to_array((*tools)->env_vars);
-        execve(cmd_path, current_cmd->str, env_array);
-        ft_free(env_array);
-        perror("execve");
-        exit(126);
-    }
-    else if (pid < 0)
-        perror("fork");
-    else
-    {
-        waitpid(pid, &status, 0);
-        (*tools)->exit_status = WEXITSTATUS(status);
-    }
+	pid = fork();
+	if (pid == 0)
+	{
+		env_array = convert_env_vars_to_array((*tools)->env_vars);
+		execve(cmd_path, current_cmd->str, env_array);
+		ft_free(env_array);
+		perror("execve");
+		exit(126);
+	}
+	else if (pid < 0)
+		perror("fork");
+	else
+	{
+		waitpid(pid, &status, 0);
+		(*tools)->exit_status = WEXITSTATUS(status);
+	}
 }
 
-static int	execute_from_path(char **split, t_simple_cmds *current_cmd, t_tools **tools)
+static int	execute_from_path(char **split, t_simple_cmds *current_cmd,
+		t_tools **tools)
 {
 	char	*full_cmd;
 	char	*cmd_path;
@@ -112,14 +115,15 @@ static int	execute_from_path(char **split, t_simple_cmds *current_cmd, t_tools *
 	return (0);
 }
 
-void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
+void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools,
+		t_lexical *tokens)
 {
 	char	**split;
 
 	if (!current_cmd || !current_cmd->str || !current_cmd->str[0])
 	{
 		(*tools)->exit_status = 0;
-		return;
+		return ;
 	}
 	if (ft_strcmp(current_cmd->str[0], ".") == 0)
 	{
@@ -137,7 +141,7 @@ void	execute_cmd(t_simple_cmds *current_cmd, t_tools **tools, t_lexical *tokens)
 		(*tools)->exit_status = 127;
 		return ;
 	}
-	if(ft_strcmp(current_cmd->str[0],"minishell") == 0)
+	if (ft_strcmp(current_cmd->str[0], "minishell") == 0)
 	{
 		write(2, "minishell: command not found\n", 30);
 		(*tools)->exit_status = 127;

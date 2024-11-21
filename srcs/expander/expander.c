@@ -172,7 +172,7 @@ char	*expand_vars(t_tools *tools, char *current_word, int *flag,
 				*flag = 1;
 			}
 			else if (j + 1 < len && (current_word[j + 1] == '?'
-					|| ft_isalnum(current_word[j + 1]) || current_word[j
+						|| ft_isalnum(current_word[j + 1]) || current_word[j
 						+ 1] == '_'))
 			{
 				new_expansion = expand_variable(tools, current_word, &j);

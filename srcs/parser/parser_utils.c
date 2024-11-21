@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void	    add_redirection(t_lexical **redirections, t_lexical *redir_node)
+void	add_redirection(t_lexical **redirections, t_lexical *redir_node)
 {
 	t_lexical	*current;
 

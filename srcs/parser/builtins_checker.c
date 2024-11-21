@@ -32,7 +32,8 @@ t_builtin	check_builtins_type(char *str)
 		return (BUILTIN_NONE);
 }
 
-int	(*get_builtin_func(t_builtin type))(t_tools *tools, t_simple_cmds *cmds, t_lexical *tokens)
+int (*get_builtin_func(t_builtin type))(t_tools *tools, t_simple_cmds *cmds,
+		t_lexical *tokens)
 {
 	if (type == BUILTIN_ECHO)
 		return (builtin_echo);

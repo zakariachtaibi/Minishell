@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 22:05:15 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/20 00:33:18 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:32:58 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	parent_pipe_handle(t_exec *ctx)
 	ctx->last_pid = ctx->pid;
 }
 
-void init_execution_context(t_exec *ctx, t_simple_cmds *cmds_head,
+void	init_execution_context(t_exec *ctx, t_simple_cmds *cmds_head,
 		t_tools **tools, t_lexical *tokens)
 {
 	ctx->cmds_head = cmds_head;
