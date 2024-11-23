@@ -6,7 +6,7 @@
 #    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/23 20:18:00 by zchtaibi         ###   ########.fr        #
+#    Updated: 2024/11/23 21:28:44 by zchtaibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,10 +64,6 @@ SRCS = srcs/main.c \
 		srcs/executor/builtins/builtins_utils2.c\
 		srcs/main_utils.c\
 		srcs/clean.c\
-
-
-
-
 
 OBJS = $(SRCS:.c=.o)
 

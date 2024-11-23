@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/23 20:17:32 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/23 21:00:37 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef enum e_token
 	TOKEN_WORD
 }							t_token;
 
-
 typedef enum e_builtin
 {
 	BUILTIN_ECHO,
@@ -60,16 +59,15 @@ typedef struct s_lexical
 	struct s_lexical		*prev;
 	int						i;
 	int						filename_flag;
-}
-							t_lexical;
+}							t_lexical;
 typedef struct s_tokenizer
 {
-	t_lexical	*head;
-	t_lexical	*current;
-	char		token[1024];
-	int			i;
-	int			j;
-}	t_tokenizer;
+	t_lexical				*head;
+	t_lexical				*current;
+	char					token[1024];
+	int						i;
+	int						j;
+}							t_tokenizer;
 
 typedef struct s_env_var
 {
@@ -195,8 +193,8 @@ void						handle_env_var(t_tools **tools, char *key,
 void						handle_command_not_found(t_simple_cmds *current_cmd,
 								t_tools **tools);
 t_lexical					*tokenize(char *input);
-t_lexical					*add_node_to_list(t_lexical **head, t_lexical **current,
-								char *token, int i);
+t_lexical					*add_node_to_list(t_lexical **head,
+								t_lexical **current, char *token, int i);
 char						*expand_vars(t_tools *tools, char *temp, int *flag,
 								int heredoc_flag);
 char						*expand_double_quote(t_tools *tools,

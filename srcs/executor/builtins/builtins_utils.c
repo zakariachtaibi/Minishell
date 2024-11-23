@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/21 18:55:50 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/23 22:53:53 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,10 @@ void	handle_env_var(t_tools **tools, char *key, char *value)
 	{
 		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
 		{
-			free(current->value);
-			current->value = value;
+			if (!current->value)
+				free(current->value);
+			if (value)
+				current->value = value;
 			free(key);
 			return ;
 		}
