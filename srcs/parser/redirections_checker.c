@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_checker.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/20 21:57:10 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/23 22:39:14 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,9 @@ void	redir_out(t_simple_cmds **current_cmd, t_lexical **redir)
 	*redir = (*redir)->next;
 	if ((*current_cmd)->fd_out != 1 && (*current_cmd)->fd_out != -1)
 		close((*current_cmd)->fd_out);
-	(*current_cmd)->fd_out = open((*redir)->str, O_WRONLY | O_CREAT | O_TRUNC,
-			0644);
+	if((*current_cmd)->fd_in != -1)
+		(*current_cmd)->fd_out = open((*redir)->str, O_WRONLY | O_CREAT | O_TRUNC,
+				0644);
 }
 
 void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
