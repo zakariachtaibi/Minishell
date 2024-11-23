@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/21 23:56:26 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/23 22:11:52 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,7 @@ int	count_words(const char *str)
 			inside_quotes = true;
 			quote_char = *str;
 			if (!in_word)
-			{
-				in_word = true; // Starting a new word
-			}
+				in_word = true;
 		}
 		else if (*str == quote_char && inside_quotes)
 		{
@@ -53,19 +51,15 @@ int	count_words(const char *str)
 			if (in_word)
 			{
 				count++;
-				in_word = false; // End of the current word
+				in_word = false;
 			}
 		}
 		else if (!in_word)
-		{
-			in_word = true; // Found a new word
-		}
+			in_word = true;
 		str++;
 	}
 	if (in_word)
-	{
-		count++; // Count the last word if any
-	}
+		count++;
 	return (count);
 }
 
@@ -81,7 +75,6 @@ char	*extract_word(const char **str)
 	inside_quotes = false;
 	quote_char = '\0';
 	length = 0;
-	// Move through the word, handling quoted sections as needed
 	while (**str && (**str != ' ' || inside_quotes))
 	{
 		if (is_quote(**str) && !inside_quotes)
@@ -105,7 +98,6 @@ char	*extract_word(const char **str)
 	}
 	strncpy(word, start, length);
 	word[length] = '\0';
-	// Skip trailing spaces after the word
 	while (**str == ' ')
 		(*str)++;
 	return (word);
@@ -128,13 +120,13 @@ char	**split_ignoring_quotes(const char *str)
 	while (*str)
 	{
 		while (*str == ' ')
-			str++; // Skip initial spaces
+			str++;
 		if (*str)
 		{
-			result[i++] = extract_word(&str); // Extract the next word
+			result[i++] = extract_word(&str); 
 		}
 	}
-	result[i] = NULL; // Null-terminate the array
+	result[i] = NULL;
 	return (result);
 }
 
@@ -354,10 +346,10 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		tools->export_flag = flag;
 		if (expanded)
 		{
-			if (((flag == 1) && is_space(expanded) == 1) && (export_flag != 1))
+			if (((flag == 1) && is_space(expanded) == 1) && ((export_flag != 1) || (export_flag == 1 && flag == 1)))
 			{
 				in = 0;
-				tmp = split_ignoring_quotes(expanded);
+				tmp = ft_split(expanded, ' ');
 				while (tmp[in])
 				{
 					if (i >= (word_count + count_str))
