@@ -6,72 +6,62 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 10:26:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/20 00:13:47 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:58:18 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int	count_env_vars(t_env_var *env_vars)
+static char	*create_env_string(char *key, char *value)
 {
-	int			count;
-	t_env_var	*temp;
+	char	*temp_str;
+	char	*result;
 
-	count = 0;
-	temp = env_vars;
-	while (temp)
-	{
-		count++;
-		temp = temp->next;
-	}
-	return (count);
+	temp_str = ft_strjoin(key, "=");
+	if (!temp_str)
+		return (NULL);
+	result = ft_strjoin(temp_str, value);
+	free(temp_str);
+	return (result);
 }
 
-char	**allocate_envp_array(int count)
+int	fill_envp_array(char **envp, t_env_var *env_vars, int count)
 {
-	char	**envp;
+	int			i;
+	char		*env_str;
+	t_env_var	*temp;
 
-	envp = malloc((count + 1) * sizeof(char *));
-	if (!envp)
-		return (NULL);
-	return (envp);
+	i = 0;
+	temp = env_vars;
+	while (i < count)
+	{
+		env_str = create_env_string(temp->key, temp->value);
+		if (!env_str)
+			return (0);
+		envp[i] = env_str;
+		temp = temp->next;
+		i++;
+	}
+	envp[count] = NULL;
+	return (1);
 }
 
 char	**convert_env_vars_to_array(t_env_var *env_vars)
 {
 	int			count;
 	char		**envp;
-	t_env_var	*temp;
-	int			i;
-	char		*temp_str;
 
 	count = count_env_vars(env_vars);
 	envp = allocate_envp_array(count);
 	if (!envp)
 		return (NULL);
-	temp = env_vars;
-	i = 0;
-	while (i < count)
+	if (!fill_envp_array(envp, env_vars, count))
 	{
-		temp_str = ft_strjoin(temp->key, "=");
-		if (!temp_str)
-		{
-			ft_free(envp);
-			return (NULL);
-		}
-		envp[i] = ft_strjoin(temp_str, temp->value);
-		free(temp_str);
-		if (!envp[i])
-		{
-			while (--i >= 0)
-				free(envp[i]);
-			free(envp);
-			return (NULL);
-		}
-		temp = temp->next;
-		i++;
+		while (--count >= 0)
+			free(envp[count]);
+		free(envp);
+		return (NULL);
 	}
-	envp[count] = NULL;
 	return (envp);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 22:05:15 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/22 00:32:58 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/23 17:57:15 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,29 @@ void	init_execution_context(t_exec *ctx, t_simple_cmds *cmds_head,
 	ctx->prev_pipe_read = STDIN_FILENO;
 	ctx->current_cmd = cmds_head;
 	ctx->builtin_executed = 0;
+}
+
+int	count_env_vars(t_env_var *env_vars)
+{
+	int			count;
+	t_env_var	*temp;
+
+	count = 0;
+	temp = env_vars;
+	while (temp)
+	{
+		count++;
+		temp = temp->next;
+	}
+	return (count);
+}
+
+char	**allocate_envp_array(int count)
+{
+	char	**envp;
+
+	envp = malloc((count + 1) * sizeof(char *));
+	if (!envp)
+		return (NULL);
+	return (envp);
 }

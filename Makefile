@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
+#    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/22 00:28:37 by hchouai          ###   ########.fr        #
+#    Updated: 2024/11/23 20:18:00 by zchtaibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS = srcs/main.c \
 		libft/ft_strtrim.c\
 		libft/ft_strcmp.c\
 		srcs/lexer/tokenizer.c\
+		srcs/lexer/tokenizer_utils.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\
 		srcs/lexer/errors_checker.c\
@@ -56,6 +57,7 @@ SRCS = srcs/main.c \
 		srcs/executor/no-builtins/executor_utils.c\
 		srcs/executor/no-builtins/executor_utils1.c\
 		srcs/executor/no-builtins/executor_utils2.c\
+		srcs/executor/no-builtins/executor_utils3.c\
 		srcs/executor/no-builtins/executor_signals.c\
 		srcs/expander/expander_utils.c\
 		srcs/parser/redirections_checker.c\

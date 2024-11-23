@@ -6,128 +6,85 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:10:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/18 16:13:20 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/23 20:18:28 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_lexical	*check_node(char *str, int i)
+static int	handle_operator_token(t_tokenizer *tok, char *input)
 {
-	t_lexical	*node;
-
-	node = malloc(sizeof(t_lexical));
-	if (!node)
-		return (NULL);
-	node->str = ft_strdup(str);
-	if (!node->str)
+	if (tok->j > 0)
 	{
-		free(node);
-		return (NULL);
+		tok->token[tok->j] = '\0';
+		if (!add_node_to_list(&tok->head, &tok->current, tok->token, tok->i))
+			return (0);
+		tok->j = 0;
 	}
-	node->i = i;
-	if (!ft_strcmp(str, "|"))
-		node->token = TOKEN_PIPE;
-	else if (!ft_strcmp(str, "<"))
-		node->token = TOKEN_REDIRECT_IN;
-	else if (!ft_strcmp(str, "<<"))
-		node->token = TOKEN_HEREDOC;
-	else if (!ft_strcmp(str, ">"))
-		node->token = TOKEN_REDIRECT_OUT;
-	else if (!ft_strcmp(str, ">>"))
-		node->token = TOKEN_APPEND;
+	tok->token[tok->j++] = input[tok->i++];
+	if ((tok->token[0] == '>' && input[tok->i] == '>')
+		|| (tok->token[0] == '<' && input[tok->i] == '<'))
+		tok->token[tok->j++] = input[tok->i++];
+	return (1);
+}
+
+static int	process_single_token(t_tokenizer *tok, char *input)
+{
+	char	quote_char;
+
+	if (input[tok->i] == '"' || input[tok->i] == '\'')
+	{
+		quote_char = input[tok->i];
+		tok->token[tok->j++] = input[tok->i++];
+		while (input[tok->i] && input[tok->i] != quote_char)
+			tok->token[tok->j++] = input[tok->i++];
+		if (input[tok->i])
+			tok->token[tok->j++] = input[tok->i++];
+	}
+	else if (input[tok->i] == '>' || input[tok->i] == '<'
+		|| input[tok->i] == '|')
+		return (0);
 	else
-		node->token = TOKEN_WORD;
-	node->next = NULL;
-	node->prev = NULL;
-	return (node);
+		tok->token[tok->j++] = input[tok->i++];
+	return (1);
+}
+
+static int	process_token(t_tokenizer *tok, char *input)
+{
+	tok->j = 0;
+	while (input[tok->i] && input[tok->i] != ' ' && input[tok->i] != '\t')
+	{
+		if (!process_single_token(tok, input))
+		{
+			if (!handle_operator_token(tok, input))
+				return (0);
+			break ;
+		}
+	}
+	if (tok->j > 0)
+	{
+		tok->token[tok->j] = '\0';
+		if (!add_node_to_list(&tok->head, &tok->current, tok->token, tok->i))
+			return (0);
+	}
+	return (1);
 }
 
 t_lexical	*tokenize(char *input)
 {
-	t_lexical	*head;
-	t_lexical	*current;
-	t_lexical	*node;
-	int			i;
-	int			j;
-	int			in_quotes;
-	char		token[1024];
-	char		quote_char;
+	t_tokenizer	tok;
 
-	head = NULL;
-	current = NULL;
-	i = 0;
-	in_quotes = 0;
-	quote_char = 0;
-	while (input[i])
+	tok.head = NULL;
+	tok.current = NULL;
+	tok.i = 0;
+	while (input[tok.i])
 	{
-		while (input[i] == ' ' || input[i] == '\t')
-			i++;
-		j = 0;
-		while (input[i])
-		{
-			if (input[i] == '"' || input[i] == '\'')
-			{
-				if (!in_quotes)
-				{
-					in_quotes = 1;
-					quote_char = input[i];
-				}
-				else if (in_quotes && input[i] == quote_char)
-					in_quotes = 0;
-				token[j++] = input[i++];
-			}
-			else if (!in_quotes && (input[i] == '>' || input[i] == '<'
-						|| input[i] == '|'))
-			{
-				if (j > 0)
-				{
-					token[j] = '\0';
-					node = check_node(token, i);
-					if (!node)
-					{
-						free_lexical(head);
-						return (NULL);
-					}
-					if (current)
-					{
-						current->next = node;
-						node->prev = current;
-					}
-					else
-						head = node;
-					current = node;
-					j = 0;
-				}
-				token[j++] = input[i++];
-				if ((token[0] == '>' && input[i] == '>') || (token[0] == '<'
-						&& input[i] == '<'))
-					token[j++] = input[i++];
-				break ;
-			}
-			else if (!in_quotes && (input[i] == ' ' || input[i] == '\t'))
-				break ;
-			else
-				token[j++] = input[i++];
-		}
-		if (j > 0)
-		{
-			token[j] = '\0';
-			node = check_node(token, i);
-			if (!node)
-			{
-				free_lexical(head);
-				return (NULL);
-			}
-			if (current)
-			{
-				current->next = node;
-				node->prev = current;
-			}
-			else
-				head = node;
-			current = node;
-		}
+		while (input[tok.i] == ' ' || input[tok.i] == '\t')
+			tok.i++;
+		if (!input[tok.i])
+			break ;
+		if (!process_token(&tok, input))
+			return (NULL);
 	}
-	return (head);
+	return (tok.head);
 }
