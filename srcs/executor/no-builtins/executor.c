@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/22 00:31:58 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/24 21:12:16 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,18 @@ static void	execute_child_process(t_exec *ctx)
 	{
 		ctx->e = ctx->current_cmd->builtin(*ctx->tools, ctx->current_cmd,
 				ctx->tokens);
-		child_exit_cleanup(ctx);
+		free_cmds(&ctx->cmds_head);
+		free_tools(*ctx->tools);
+		free_lexical(ctx->tokens);
 		exit(ctx->e);
 	}
 	else
 	{
 		execute_cmd(ctx->current_cmd, ctx->tools, ctx->tokens);
 		ctx->e = (*ctx->tools)->exit_status;
-		child_exit_cleanup(ctx);
+		free_cmds(&ctx->cmds_head);
+		free_tools(*ctx->tools);
+		free_lexical(ctx->tokens);
 		exit(ctx->e);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/23 22:40:48 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/24 21:32:50 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,16 @@ void	process_shell_input(t_tools **tools, t_lexical **tokens,
 	dup2((*tools)->std_out, 1);
 	dup2((*tools)->std_in, 0);
 	free(input);
-	free_cmds(cmds);
 	if (*tokens != NULL)
+	{
 		free_lexical(*tokens);
+		*tokens = NULL;
+	}
+	if (*cmds != NULL)
+	{
+		free_cmds(cmds);
+		*cmds = NULL;
+	}
 }
 
 void	handle_shell_signals(void)

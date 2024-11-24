@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
+#    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/23 21:28:44 by zchtaibi         ###   ########.fr        #
+#    Updated: 2024/11/24 20:55:55 by hchouai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,11 +64,12 @@ SRCS = srcs/main.c \
 		srcs/executor/builtins/builtins_utils2.c\
 		srcs/main_utils.c\
 		srcs/clean.c\
+		srcs/parser/redirection_checker_utils.c\
 
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 LDFLAGS = -lreadline
 
 all: $(NAME)

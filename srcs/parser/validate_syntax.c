@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/18 16:21:46 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/24 21:28:01 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,30 @@ int	has_invalid_redirections(t_lexical **tokens)
 	return (0);
 }
 
+static void	print_syntax_error(char *token, int is_newline)
+{
+	ft_putstr_fd("syntax error near unexpected token '", 2);
+	if (is_newline)
+		ft_putstr_fd("newline", 2);
+	else
+		ft_putstr_fd(token, 2);
+	ft_putstr_fd("'\n", 2);
+}
+
+static int	handle_syntax_error(t_lexical *tokens, int error_code,
+				t_tools *tools)
+{
+	if (error_code == 10)
+		print_syntax_error(tokens->str, 0);
+	else if (!tokens->next->next)
+		print_syntax_error(NULL, 1);
+	else
+		print_syntax_error(tokens->next->str, 0);
+	tools->exit_status = 2;
+	free_lexical(tokens);
+	return (0);
+}
+
 t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 {
 	t_lexical	*temp;
@@ -44,22 +68,7 @@ t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 	error_code = has_invalid_redirections(&temp);
 	if (error_code)
 	{
-		if (error_code == 10)
-		{
-			ft_putstr_fd("syntax error near unexpected token '", 2);
-			ft_putstr_fd(tokens->str, 2);
-			ft_putstr_fd("\'\n", 2);
-		}
-		else if (!tokens->next)
-			ft_putstr_fd("syntax error near unexpected token 'newline'\n", 2);
-		else
-		{
-			ft_putstr_fd("syntax error near unexpected token '", 2);
-			ft_putstr_fd(tokens->next->str, 2);
-			ft_putstr_fd("\'\n", 2);
-		}
-		tools->exit_status = 2;
-		free_lexical(tokens);
+		handle_syntax_error(tokens, error_code, tools);
 		return (NULL);
 	}
 	return (tokens);

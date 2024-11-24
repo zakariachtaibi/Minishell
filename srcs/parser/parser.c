@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/23 22:27:36 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/24 21:29:12 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -430,7 +430,7 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 		check_and_set_redirections(current_cmd, &tools);
 		if ((((current_cmd)->fd_out == -1) || ((current_cmd)->fd_in == -1)))
 		{
-			perror("minishell");
+			ft_putstr_fd("Minishell : No such file or directory\n", 2);
 			tools->exit_status = 1;
 			free_cmds(&current_cmd);
 			return (NULL);

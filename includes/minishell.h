@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/23 21:00:37 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:55:38 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,5 +259,7 @@ void						prints_error(char *cmd, char *msg,
 int							check_cd_arg_count(t_tools *tools,
 								t_simple_cmds *cmd);
 int							handle_home_path(t_tools *tools, char **path);
+void						redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
+		t_tools *tools);
 
 #endif

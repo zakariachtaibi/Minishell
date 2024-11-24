@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:55:22 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/23 20:24:15 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/24 21:31:18 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	free_cmds(t_simple_cmds **cmds)
 	t_simple_cmds	*next;
 	int				i;
 
+	if (!cmds || !*cmds)
+		return ;
 	current = *cmds;
 	i = -1;
 	while (current)
@@ -101,4 +103,5 @@ void	free_cmds(t_simple_cmds **cmds)
 		free(current);
 		current = next;
 	}
+	cmds = NULL;
 }
