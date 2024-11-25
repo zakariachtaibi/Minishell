@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/24 21:29:12 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/25 14:59:03 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,147 +15,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-bool	is_quote(char c)
-{
-	return (c == '"' || c == '\'');
-}
-
-int	count_words(const char *str)
-{
-	int		count;
-	bool	in_word;
-	bool	inside_quotes;
-	char	quote_char;
-
-	count = 0;
-	in_word = false;
-	inside_quotes = false;
-	quote_char = '\0';
-	while (*str)
-	{
-		if (is_quote(*str) && !inside_quotes)
-		{
-			inside_quotes = true;
-			quote_char = *str;
-			if (!in_word)
-				in_word = true;
-		}
-		else if (*str == quote_char && inside_quotes)
-		{
-			inside_quotes = false;
-			quote_char = '\0';
-		}
-		else if (*str == ' ' && !inside_quotes)
-		{
-			if (in_word)
-			{
-				count++;
-				in_word = false;
-			}
-		}
-		else if (!in_word)
-			in_word = true;
-		str++;
-	}
-	if (in_word)
-		count++;
-	return (count);
-}
-
-char	*extract_word(const char **str)
-{
-	const char	*start;
-	bool		inside_quotes;
-	char		quote_char;
-	int			length;
-	char		*word;
-
-	start = *str;
-	inside_quotes = false;
-	quote_char = '\0';
-	length = 0;
-	while (**str && (**str != ' ' || inside_quotes))
-	{
-		if (is_quote(**str) && !inside_quotes)
-		{
-			inside_quotes = true;
-			quote_char = **str;
-		}
-		else if (**str == quote_char && inside_quotes)
-		{
-			inside_quotes = false;
-			quote_char = '\0';
-		}
-		(*str)++;
-		length++;
-	}
-	word = malloc(length + 1);
-	if (!word)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	strncpy(word, start, length);
-	word[length] = '\0';
-	while (**str == ' ')
-		(*str)++;
-	return (word);
-}
-
-char	**split_ignoring_quotes(const char *str)
-{
-	int		word_count;
-	char	**result;
-	int		i;
-
-	word_count = count_words(str);
-	result = malloc(sizeof(char *) * (word_count + 1));
-	if (!result)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	i = 0;
-	while (*str)
-	{
-		while (*str == ' ')
-			str++;
-		if (*str)
-		{
-			result[i++] = extract_word(&str); 
-		}
-	}
-	result[i] = NULL;
-	return (result);
-}
-
-void	ft_free(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
-
-int	is_space(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0' && str[i] != '"')
-	{
-		if (str[i] == ' ')
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 void	process_command(t_lexical **temp, t_simple_cmds **current_cmd,
 		t_simple_cmds **cmds_head)
@@ -192,45 +51,39 @@ int	check_token(t_lexical *temp, int *heredoc_flag)
 		return (0);
 }
 
-char	*unescape_spaces(char *str, int flag)
+int handle_filename(t_tools **tools, t_lexical **temp, t_simple_cmds **current_cmd, int heredoc_flag;)
 {
-	char	*result;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	if (!str)
-	{
-		return (NULL);
-	}
-	if (str[0] == '\0')
-		return (ft_strdup("\0"));
-	result = malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!result)
-		return (NULL);
-	if (!str || str[0] == '\0')
-		return (NULL);
-	while (str[i])
-	{
-		if (str[i] == ' ' && flag == 1)
+	t_lexical	*filename;
+	char		*expanded;
+	char		*unescaped;
+	int			flag;
+	
+	flag = 0;
+	if (*temp && (*temp)->token == TOKEN_WORD)
 		{
-			free(result);
-			return (NULL);
+			filename = copy_node(*temp);
+			if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str,
+						'\'')))
+				filename->filename_flag = 2;
+			else
+				filename->filename_flag = 0;
+			expanded = expand_vars((*tools), filename->str, &flag,
+					heredoc_flag);
+			free(filename->str);
+			filename->str = expanded;
+			unescaped = unescape_spaces(filename->str, flag);
+			if (!unescaped)
+			{
+				free_lexical_node(filename);
+				return (1);
+			}
+			free(filename->str);
+			filename->str = ft_strdup(unescaped);
+			free(unescaped);
+			add_redirection((&(*current_cmd)->redirections), filename);
+			*temp = (*temp)->next;
 		}
-		result[j++] = str[i++];
-	}
-	result[j] = '\0';
-	return (result);
-}
-
-void	free_lexical_node(t_lexical *node)
-{
-	if (node)
-	{
-		free(node->str);
-		free(node);
-	}
+	return (0);
 }
 
 int	handle_redirections(t_tools **tools, t_lexical **temp,
@@ -283,16 +136,6 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 		}
 	}
 	return (0);
-}
-
-int	ft_strlen_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array && array[i])
-		i++;
-	return (i);
 }
 
 void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,

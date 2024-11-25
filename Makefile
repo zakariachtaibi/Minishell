@@ -6,7 +6,7 @@
 #    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/24 20:55:55 by hchouai          ###   ########.fr        #
+#    Updated: 2024/11/25 14:45:44 by hchouai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRCS = srcs/main.c \
 		srcs/lexer/tokenizer_utils.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\
+		srcs/parser/parser_utils2.c\
 		srcs/lexer/errors_checker.c\
 		srcs/lexer/validate_input.c\
 		srcs/parser/validate_syntax.c\
