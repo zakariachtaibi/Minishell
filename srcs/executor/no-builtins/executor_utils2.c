@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 22:05:15 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/23 17:57:15 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/27 02:17:41 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	init_execution_context(t_exec *ctx, t_simple_cmds *cmds_head,
 	ctx->prev_pipe_read = STDIN_FILENO;
 	ctx->current_cmd = cmds_head;
 	ctx->builtin_executed = 0;
+	ctx->status = 0;
+	ctx->last_pid = 0;
 }
 
 int	count_env_vars(t_env_var *env_vars)

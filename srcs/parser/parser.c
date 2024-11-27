@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/25 14:59:03 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/26 01:57:06 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	check_token(t_lexical *temp, int *heredoc_flag)
 		return (0);
 }
 
-int handle_filename(t_tools **tools, t_lexical **temp, t_simple_cmds **current_cmd, int heredoc_flag;)
+int handle_filename(t_tools **tools, t_lexical **temp, t_simple_cmds **current_cmd, int heredoc_flag)
 {
 	t_lexical	*filename;
 	char		*expanded;
