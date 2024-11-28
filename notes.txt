@@ -1,1 +1,3 @@
 
+leaks in ft_strlen inft_strjoin test: echo "$HOME$$11111$1111"
+in xexpand double quotes

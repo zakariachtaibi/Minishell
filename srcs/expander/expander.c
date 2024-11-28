@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/18 17:39:04 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/27 21:02:10 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,66 +33,79 @@ char	*expand_single_quote(const char *current_word, size_t *j)
 	return (expanded_word);
 }
 
+char *get_vars(const char *current_word, size_t *j, t_tools *tools)
+{
+	size_t	var_start;
+	char	*var_name;
+	char	*var_value;
+
+	var_value = NULL;
+	var_start = *j;
+	while (current_word[*j] && (ft_isalnum(current_word[*j])
+		|| current_word[*j] == '_'))
+			(*j)++;
+		var_name = ft_strndup(&current_word[var_start], *j - var_start);
+		var_value = get_vars_value(var_name, tools);
+		free(var_name);
+		if (!var_value)
+			var_value = ft_strdup("");
+	return(var_value);
+}
+
+char *expand_plain2(const char *current_word, char *expanded_word,  size_t *j)
+{
+	char	temp_str[2];
+	char	*new_expanded_word;
+	
+	temp_str[0] = '\0';
+	temp_str[0] = current_word[*j];
+	temp_str[1] = '\0';
+	(*j)++;
+	new_expanded_word = ft_strjoin(expanded_word, temp_str);
+	free(expanded_word);
+	expanded_word = new_expanded_word;
+	return(expanded_word);
+}
+
+char *expand_if_dollar(const char *current_word, char *expanded_word,  size_t *j, t_tools *tools)
+{
+	char	*new_expanded_word;
+	char	*var_value;
+
+	var_value = NULL;
+	(*j)++;
+	if (ft_isdigit(current_word[*j]) || current_word[*j] == '$' || current_word[*j] == '?')
+	{
+		if (current_word[*j] == '$')
+			var_value = ft_itoa(getpid());
+		else if (current_word[*j] == '?')
+			var_value = ft_itoa(tools->exit_status);
+			(*j)++;
+	}
+	else if (current_word[*j] == '\'')
+		return (expanded_word);
+	else if (ft_isalnum(current_word[*j]) || current_word[*j] == '_')
+		var_value = get_vars(current_word, j, tools);
+	else
+		var_value = ft_strdup("$");
+	new_expanded_word = ft_strjoin(expanded_word, var_value);
+	free(expanded_word);
+	expanded_word = new_expanded_word;
+	return (expanded_word);
+}
+
 char	*expand_double_quote(t_tools *tools, const char *current_word,
 		size_t *j, int heredoc_flag)
 {
 	char	*expanded_word;
-	char	*new_expanded_word;
-	char	*var_value;
-	char	temp_str[2];
-	size_t	var_start;
-	char	*var_name;
 
-	temp_str[0] = '\0';
-	var_value = NULL;
 	expanded_word = ft_strdup("");
 	while (current_word[*j] && current_word[*j] != '"')
 	{
 		if (current_word[*j] == '$' && heredoc_flag == 0)
-		{
-			(*j)++;
-			if (ft_isdigit(current_word[*j]))
-				(*j)++;
-			else if (current_word[*j] == '$')
-			{
-				var_value = ft_itoa(getpid());
-				(*j)++;
-			}
-			else if (current_word[*j] == '?')
-			{
-				var_value = ft_itoa(tools->exit_status);
-				(*j)++;
-			}
-			else if (current_word[*j] == '\'')
-				return (expanded_word);
-			else if (ft_isalnum(current_word[*j]) || current_word[*j] == '_')
-			{
-				var_start = *j;
-				while (current_word[*j] && (ft_isalnum(current_word[*j])
-						|| current_word[*j] == '_'))
-					(*j)++;
-				var_name = ft_strndup(&current_word[var_start], *j - var_start);
-				var_value = get_vars_value(var_name, tools);
-				free(var_name);
-				if (!var_value)
-					var_value = ft_strdup("");
-			}
-			else
-				var_value = ft_strdup("$");
-			new_expanded_word = ft_strjoin(expanded_word, var_value);
-			free(expanded_word);
-			// free(var_value);
-			expanded_word = new_expanded_word;
-		}
+			expanded_word = expand_if_dollar(current_word, expanded_word, j, tools);
 		else
-		{
-			temp_str[0] = current_word[*j];
-			temp_str[1] = '\0';
-			(*j)++;
-			new_expanded_word = ft_strjoin(expanded_word, temp_str);
-			free(expanded_word);
-			expanded_word = new_expanded_word;
-		}
+			expanded_word = expand_plain2(current_word, expanded_word, j);
 	}
 	(*j)++;
 	return (expanded_word);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
+#    By: mac <mac@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/11/26 01:57:21 by zchtaibi         ###   ########.fr        #
+#    Updated: 2024/11/27 20:32:29 by mac              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,7 @@ SRCS = srcs/main.c \
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 LDFLAGS = -lreadline
 
 all: $(NAME)
