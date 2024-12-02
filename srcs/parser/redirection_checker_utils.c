@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_checker_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:53:02 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/24 20:57:45 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/11/29 16:57:12 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 	char	*ttname;
 	char	*temp;
 	char	*temp2;
+	pid_t	pid_c;
+	int		status;
 
 	ttname = ttyname(1);
 	temp = ft_substr(ttname, 9, ft_strlen(ttname));
@@ -116,20 +118,35 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 		free(ttname);
 		exit(2);
 	}
-	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
-		close((*current_cmd)->fd_in);
-	fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
+	pid_c = fork();
+	if (pid_c == 0)
 	{
-		perror("minishell");
-		free(ttname);
+		fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd == -1)
+		{
+			perror("minishell");
+			free(ttname);
+			return ;
+		}
+		heredoc_loop(redir, tools, fd);
+		close(fd);
+		exit(0);
+	}
+	else if (pid_c < 0)
+	{
+		perror("fork fail!");
 		return ;
 	}
-	heredoc_loop(redir, tools, fd);
-	close(fd);
-	if ((*current_cmd)->fd_in != -1)
-		(*current_cmd)->fd_in = open(ttname, O_RDONLY);
-	if (unlink(ttname) == -1)
-		perror("minishell: failed to remove heredoc temp file");
-	free(ttname);
+	else
+	{
+		waitpid(pid_c, &status, 0);
+		if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
+			close((*current_cmd)->fd_in);
+		if ((*current_cmd)->fd_in != -1)
+			(*current_cmd)->fd_in = open(ttname, O_RDONLY);
+		if (unlink(ttname) == -1)
+			perror("minishell: failed to remove heredoc temp file");
+		free(ttname);
+	}
 }
+

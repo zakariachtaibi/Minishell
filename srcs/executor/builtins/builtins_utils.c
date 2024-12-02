@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/23 22:53:53 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/11/28 21:57:36 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	add_new_env_var(t_tools *tools, char *key, char *value)
 	new_var = malloc(sizeof(t_env_var));
 	new_var->key = key;
 	new_var->value = value;
+	// free(value);
 	new_var->next = current;
 	if (prev)
 		prev->next = new_var;

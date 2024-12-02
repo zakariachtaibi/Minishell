@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:26:03 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/27 21:02:10 by mac              ###   ########.fr       */
+/*   Updated: 2024/11/28 21:57:49 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char *expand_if_dollar(const char *current_word, char *expanded_word,  size_t *j
 			var_value = ft_itoa(getpid());
 		else if (current_word[*j] == '?')
 			var_value = ft_itoa(tools->exit_status);
-			(*j)++;
+		(*j)++;
 	}
 	else if (current_word[*j] == '\'')
 		return (expanded_word);
