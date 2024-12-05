@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/29 17:25:37 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/05 02:12:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,11 +231,12 @@ void						free_tools(t_tools *tools);
 void						free_env_var(t_env_var *env_vars);
 void						cleanup_readline(void);
 int							is_valid_identifier(const char *str);
-void						increment_SHLVL(t_tools **tools);
+void						increment_shlvl(t_tools **tools);
 t_tools						*init_tools(void);
 int							is_space(char *str);
 char						**split_ignoring_quotes(const char *str);
 bool						is_quote(char c);
+void						handle_sigint_child(int sig);
 int							count_words(const char *str);
 char						*extract_word(const char **str);
 void						setup_child_signals(void);

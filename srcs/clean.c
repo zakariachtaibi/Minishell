@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:55:22 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/17 02:07:44 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/05 02:11:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,18 @@ void	free_lexical(t_lexical *head)
 
 void	free_cmds(t_simple_cmds **cmds)
 {
-	t_simple_cmds *current;
-	t_simple_cmds *next;
+	t_simple_cmds	*current;
+	t_simple_cmds	*next;
+	int				i;
 
 	current = *cmds;
+	i = -1;
 	while (current)
 	{
 		next = current->next;
 		if (current->str)
 		{
-			for (int i = 0; current->str[i]; i++)
+			while (current->str[++i])
 				free(current->str[i]);
 			free(current->str);
 		}

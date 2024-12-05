@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/30 18:24:17 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/05 02:04:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,12 @@ static void	redirect_io(t_exec *ctx)
 static void	execute_child_process(t_exec *ctx)
 {
 	setup_child_signals();
+	if (ctx->current_cmd->redirections)
+	{
+		if (ctx->current_cmd->redirections->token == TOKEN_HEREDOC)
+			redir_heredoc(&ctx->current_cmd, &ctx->current_cmd->redirections,
+				*ctx->tools);
+	}
 	redirect_io(ctx);
 	if (ctx->current_cmd->builtin != NULL)
 	{
@@ -74,7 +80,6 @@ static void	execute_child_process(t_exec *ctx)
 		free_cmds(&ctx->cmds_head);
 		free_tools(*ctx->tools);
 		free_lexical(ctx->tokens);
-		exit(ctx->e);
 	}
 	else
 	{
@@ -83,8 +88,8 @@ static void	execute_child_process(t_exec *ctx)
 		free_cmds(&ctx->cmds_head);
 		free_tools(*ctx->tools);
 		free_lexical(ctx->tokens);
-		exit(ctx->e);
 	}
+	exit(ctx->e);
 }
 
 static void	handle_command_execution(t_exec *ctx)

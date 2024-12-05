@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/29 17:26:47 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/05 02:12:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_sigint(int sig)
 		ft_putstr_fd("\n", 1);
 		g_sig_flag = 1;
 		rl_on_new_line();
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -100,7 +100,7 @@ int	initialize_shell(t_tools **tools, char **envp)
 	(*tools)->std_out = dup(1);
 	(*tools)->std_in = dup(0);
 	get_env_vars(*tools, envp);
-	increment_SHLVL(tools);
+	increment_shlvl(tools);
 	return (0);
 }
 
