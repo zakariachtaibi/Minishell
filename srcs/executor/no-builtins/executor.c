@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/05 02:04:46 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/12 14:26:32 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,32 @@ static int	handle_last_builtin(t_exec *ctx)
 	return (0);
 }
 
-static void	redirect_io(t_exec *ctx)
+static void redirect_io(t_exec *ctx)
 {
-	if (ctx->prev_pipe_read != STDIN_FILENO)
-	{
-		dup2(ctx->prev_pipe_read, STDIN_FILENO);
-		close(ctx->prev_pipe_read);
-	}
-	if (ctx->current_cmd->next)
-	{
-		close(ctx->pipe_fd[0]);
-		dup2(ctx->pipe_fd[1], STDOUT_FILENO);
-		close(ctx->pipe_fd[1]);
-	}
-	if (ctx->current_cmd->fd_in != STDIN_FILENO)
-	{
-		dup2(ctx->current_cmd->fd_in, STDIN_FILENO);
-		close(ctx->current_cmd->fd_in);
-	}
-	if (ctx->current_cmd->fd_out != STDOUT_FILENO)
-	{
-		dup2(ctx->current_cmd->fd_out, STDOUT_FILENO);
-		close(ctx->current_cmd->fd_out);
-	}
+    if (ctx->prev_pipe_read != STDIN_FILENO)
+    {
+        dup2(ctx->prev_pipe_read, STDIN_FILENO);
+        close(ctx->prev_pipe_read);
+        ctx->prev_pipe_read = -1; // Avoid reuse after closing
+    }
+    if (ctx->current_cmd->next)
+    {
+        close(ctx->pipe_fd[0]); // Close the read end of the pipe
+        dup2(ctx->pipe_fd[1], STDOUT_FILENO);
+        close(ctx->pipe_fd[1]); // Close the write end after duplication
+    }
+    if (ctx->current_cmd->fd_in != STDIN_FILENO)
+    {
+        dup2(ctx->current_cmd->fd_in, STDIN_FILENO);
+        close(ctx->current_cmd->fd_in);
+    }
+    if (ctx->current_cmd->fd_out != STDOUT_FILENO)
+    {
+        dup2(ctx->current_cmd->fd_out, STDOUT_FILENO);
+        close(ctx->current_cmd->fd_out);
+    }
 }
+
 
 static void	execute_child_process(t_exec *ctx)
 {
@@ -77,18 +79,15 @@ static void	execute_child_process(t_exec *ctx)
 	{
 		ctx->e = ctx->current_cmd->builtin(*ctx->tools, ctx->current_cmd,
 				ctx->tokens);
-		free_cmds(&ctx->cmds_head);
-		free_tools(*ctx->tools);
-		free_lexical(ctx->tokens);
 	}
 	else
 	{
 		execute_cmd(ctx->current_cmd, ctx->tools, ctx->tokens);
 		ctx->e = (*ctx->tools)->exit_status;
-		free_cmds(&ctx->cmds_head);
-		free_tools(*ctx->tools);
-		free_lexical(ctx->tokens);
 	}
+	free_cmds(&ctx->cmds_head);
+	free_tools(*ctx->tools);
+	free_lexical(ctx->tokens);
 	exit(ctx->e);
 }
 

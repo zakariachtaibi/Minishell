@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/18 16:25:56 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:22:52 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ t_simple_cmds	*init_cmd(void)
 	new_cmd->fd_out = 1;
 	return (new_cmd);
 }
-
 t_lexical	*copy_node(t_lexical *src)
 {
 	t_lexical	*dest;
@@ -60,12 +59,16 @@ t_lexical	*copy_node(t_lexical *src)
 	dest->i = src->i;
 	dest->next = NULL;
 	dest->prev = NULL;
+	dest->str = NULL;
 	if (src->str != NULL)
 	{
 		dest->str = ft_strdup(src->str);
+		if (dest->str == NULL)
+		{
+			free(dest);
+			return (NULL);
+		}
 	}
-	else
-		dest->str = NULL;
 	return (dest);
 }
 

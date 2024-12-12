@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/05 01:48:17 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/10 16:01:48 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 	{
 		redir = copy_node(*temp);
 		add_redirection((&(*current_cmd)->redirections), redir);
-		// free_lexical(redir);
 		(*current_cmd)->num_redirections++;
 		if (heredoc_flag == 1)
 			(*current_cmd)->num_redirections_heredoc++;

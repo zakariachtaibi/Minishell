@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_checker_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:53:02 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/05 00:52:25 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/12 14:50:54 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ char	*expand_inside_heredoc(t_tools *tools, char *input)
 	return (expanded_word);
 }
 
-void	heredoc_loop(t_lexical **redir, t_tools *tools, int fd)
+void	heredoc_loop(t_simple_cmds **current_cmd, t_lexical **redir, t_tools *tools, int fd)
 {
 	char	*input;
 	char	*expanded;
+	(void)current_cmd;
 
 	while (1)
 	{
@@ -128,7 +129,10 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 			free(ttname);
 			return ;
 		}
-		heredoc_loop(redir, tools, fd);
+		heredoc_loop(current_cmd, redir, tools, fd);
+		free(ttname);
+		// free_cmds(current_cmd);
+		// free_tools(tools);
 		close(fd);
 		exit(0);
 	}

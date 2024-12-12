@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils4.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 00:19:15 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/22 00:22:03 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/11 16:00:09 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	print_error(char *str, char *key, char *value, t_tools *tools)
 {
-	printf("minishell: export `%s': not a valid identifier\n", str);
+	ft_putstr_fd("minishell: export `", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 	free(key);
 	if (value)
 		free(value);

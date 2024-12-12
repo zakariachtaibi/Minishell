@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_checker.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:30:41 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/04 17:32:06 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:04:21 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ void	check_and_set_redirections(t_simple_cmds *current_cmd, t_tools **tools)
 			redir_out(&current_cmd, &redir);
 		else if (redir->token == TOKEN_APPEND)
 			redir_append(&current_cmd, &redir);
-		// else if (redir->token == TOKEN_HEREDOC)
-		// 	redir_heredoc(&current_cmd, &redir, (*tools));
 		redir = redir->next;
 	}
 }
