@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/05 02:03:35 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/12 14:06:12 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void	add_new_env_var(t_tools *tools, char *key, char *value)
 	new_var = malloc(sizeof(t_env_var));
 	new_var->key = key;
 	new_var->value = value;
-	// free(value);
 	new_var->next = current;
 	if (prev)
 		prev->next = new_var;

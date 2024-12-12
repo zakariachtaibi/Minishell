@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/05 02:04:46 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/12 15:29:39 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,15 @@ static void	execute_child_process(t_exec *ctx)
 	{
 		ctx->e = ctx->current_cmd->builtin(*ctx->tools, ctx->current_cmd,
 				ctx->tokens);
-		free_cmds(&ctx->cmds_head);
-		free_tools(*ctx->tools);
-		free_lexical(ctx->tokens);
 	}
 	else
 	{
 		execute_cmd(ctx->current_cmd, ctx->tools, ctx->tokens);
 		ctx->e = (*ctx->tools)->exit_status;
-		free_cmds(&ctx->cmds_head);
-		free_tools(*ctx->tools);
-		free_lexical(ctx->tokens);
 	}
+	free_cmds(&ctx->cmds_head);
+	free_tools(*ctx->tools);
+	free_lexical(ctx->tokens);
 	exit(ctx->e);
 }
 
