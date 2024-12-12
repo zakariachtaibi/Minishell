@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 11:55:58 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 14:06:32 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/12 19:44:26 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,14 @@
 
 void	get_env_vars(t_tools *tools, char **envp)
 {
-	t_env_var	*head;
-	char		*equal_sign;
 	t_env_var	*new_var;
 
 	tools->env_vars = NULL;
-	head = NULL;
 	while (*envp)
 	{
-		equal_sign = ft_strchr(*envp, '=');
-		if (equal_sign)
-		{
-			new_var = malloc(sizeof(t_env_var));
-			new_var->key = ft_substr(*envp, 0, equal_sign - *envp);
-			new_var->value = ft_strdup(equal_sign + 1);
-			new_var->next = NULL;
-			if (tools->env_vars == NULL)
-			{
-				tools->env_vars = new_var;
-				head = new_var;
-			}
-			else
-			{
-				head->next = new_var;
-				head = new_var;
-			}
-		}
+		new_var = create_env_var(*envp);
+		if (new_var)
+			append_env_var(&tools->env_vars, new_var);
 		envp++;
 	}
 }

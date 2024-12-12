@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 15:17:56 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/12 19:51:10 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,13 +147,11 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 	int			flag;
 	char		**tmp;
 	int			in;
-	int			heredoc_flag;
 	int			export_flag;
 	int			new_size;
 
 	flag = 0;
 	in = 0;
-	heredoc_flag = 0;
 	export_flag = 0;
 	word_temp = *temp;
 	word_count = 0;

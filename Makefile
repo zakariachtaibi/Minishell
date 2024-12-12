@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
+#    By: mac <mac@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/12/12 14:50:24 by hchouai          ###   ########.fr        #
+#    Updated: 2024/12/12 19:52:05 by mac              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ SRCS = srcs/main.c \
 		srcs/executor/no-builtins/executor_signals.c\
 		srcs/expander/expander_utils.c\
 		srcs/expander/expander_utils1.c\
+		srcs/expander/expander_utils2.c\
 		srcs/parser/redirections_checker.c\
 		srcs/executor/builtins/builtins_utils2.c\
 		srcs/main_utils.c\

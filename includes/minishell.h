@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 15:07:53 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/12 19:40:35 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,4 +274,11 @@ char						*expand_plain2(const char *current_word, char *expanded_word,
 		size_t *j);
 char						*expand_single_quote(const char *current_word, size_t *j);
 char						*expand_variable(t_tools *tools, const char *current_word, size_t *j);
+char						*handle_single_quote(const char *current_word, size_t *j, int *flag);
+char						*handle_double_quote(t_tools *tools, const char *current_word,
+		size_t *j);
+char						*handle_dollar_sign(t_tools *tools, const char *current_word, size_t *j,
+		size_t len);
+t_env_var 					*create_env_var(const char *env_entry);
+void 						append_env_var(t_env_var **head, t_env_var *new_var);
 #endif
