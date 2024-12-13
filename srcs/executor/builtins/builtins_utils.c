@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 14:06:12 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/13 02:13:27 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,10 @@ void	handle_env_var(t_tools **tools, char *key, char *value)
 			if (!current->value)
 				free(current->value);
 			if (value)
+			{
+				free(current->value);
 				current->value = value;
+			}
 			free(key);
 			return ;
 		}

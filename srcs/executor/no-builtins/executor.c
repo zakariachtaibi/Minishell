@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 15:29:39 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/13 02:51:10 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static void	redirect_io(t_exec *ctx)
 	{
 		dup2(ctx->prev_pipe_read, STDIN_FILENO);
 		close(ctx->prev_pipe_read);
+		ctx->prev_pipe_read = -1;
 	}
 	if (ctx->current_cmd->next)
 	{

@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 20:00:58 by zchtaibi          #+#    #+#             */
-/*   Updated: 2024/11/23 20:18:50 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:01:59 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ t_lexical	*add_node_to_list(t_lexical **head, t_lexical **current,
 	node = check_node(token, i);
 	if (!node)
 	{
-		free_lexical(*head);
+		if (*head)
+			free_lexical(*head);
 		return (NULL);
 	}
 	if (*current)
