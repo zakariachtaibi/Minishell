@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:53:02 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 02:15:03 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/13 02:49:45 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 		}
 		heredoc_loop(current_cmd, redir, tools, fd);
 		free(ttname);
+		free_tools(tools);
+		free_lexical((*current_cmd)->redirections);
 		close(fd);
 		exit(0);
 	}
