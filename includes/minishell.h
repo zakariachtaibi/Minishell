@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/05 02:12:45 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/12 19:40:35 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ typedef struct s_tools
 	int						std_out;
 	int						std_in;
 	int						export_flag;
+	int						flag;
+	int						heredoc_flag;
 }							t_tools;
 
 typedef struct s_simple_cmds
@@ -195,11 +197,9 @@ void						handle_command_not_found(t_simple_cmds *current_cmd,
 t_lexical					*tokenize(char *input);
 t_lexical					*add_node_to_list(t_lexical **head,
 		t_lexical **current, char *token, int i);
-char						*expand_vars(t_tools *tools, char *temp, int *flag,
-		int heredoc_flag);
+char						*expand_vars(t_tools *tools, char *temp);
 char						*expand_double_quote(t_tools *tools,
-		const char *current_word, size_t *j,
-		int heredoc_flag);
+		const char *current_word, size_t *j);
 char						*expand_plain_text(const char *current_word,
 		size_t *j);
 char						*expand_variable(t_tools *tools,
@@ -266,5 +266,19 @@ void						redir_heredoc(t_simple_cmds **current_cmd,
 int							ft_strlen_array(char **array);
 char						*unescape_spaces(char *str, int flag);
 void						free_lexical_node(t_lexical *node);
-
+char						*get_vars(const char *current_word, size_t *j,
+		t_tools *tools);
+char						*expand_if_dollar(const char *current_word, char *expanded_word,
+		size_t *j, t_tools *tools);
+char						*expand_plain2(const char *current_word, char *expanded_word,
+		size_t *j);
+char						*expand_single_quote(const char *current_word, size_t *j);
+char						*expand_variable(t_tools *tools, const char *current_word, size_t *j);
+char						*handle_single_quote(const char *current_word, size_t *j, int *flag);
+char						*handle_double_quote(t_tools *tools, const char *current_word,
+		size_t *j);
+char						*handle_dollar_sign(t_tools *tools, const char *current_word, size_t *j,
+		size_t len);
+t_env_var 					*create_env_var(const char *env_entry);
+void 						append_env_var(t_env_var **head, t_env_var *new_var);
 #endif
