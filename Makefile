@@ -6,7 +6,7 @@
 #    By: mac <mac@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/12/12 19:52:05 by mac              ###   ########.fr        #
+#    Updated: 2024/12/13 14:36:04 by mac              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,11 +34,13 @@ SRCS = srcs/main.c \
 		libft/ft_strnstr.c\
 		libft/ft_strtrim.c\
 		libft/ft_strcmp.c\
+		libft/ft_strndup.c\
 		srcs/lexer/tokenizer.c\
 		srcs/lexer/tokenizer_utils.c\
 		srcs/parser/parser.c\
 		srcs/parser/parser_utils.c\
 		srcs/parser/parser_utils2.c\
+		srcs/parser/parser_utils3.c\
 		srcs/lexer/errors_checker.c\
 		srcs/lexer/validate_input.c\
 		srcs/parser/validate_syntax.c\

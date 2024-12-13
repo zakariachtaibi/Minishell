@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 16:19:56 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/18 16:25:56 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:06:55 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,4 @@ void	delete_node(t_lexical **head, t_lexical *node_to_delete)
 		node_to_delete->prev->next = node_to_delete->next;
 	free(node_to_delete->str);
 	free(node_to_delete);
-}
-
-char	*ft_strndup(const char *src, size_t n)
-{
-	size_t	len;
-	char	*dup;
-
-	len = ft_strlen(src);
-	if (len > n)
-		len = n;
-	dup = (char *)malloc(len + 1);
-	if (!dup)
-		return (NULL);
-	ft_strncpy(dup, src, len);
-	dup[len] = '\0';
-	return (dup);
 }

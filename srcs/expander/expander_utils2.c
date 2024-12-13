@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:07:54 by mac               #+#    #+#             */
-/*   Updated: 2024/12/12 19:53:21 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/12 19:58:53 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,5 @@ char	*handle_dollar_sign(t_tools *tools, const char *current_word, size_t *j,
 			return (ft_strdup("$"));
 		return (ft_strdup(""));
 	}
+	return (ft_strdup(""));
 }

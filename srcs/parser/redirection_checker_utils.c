@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_checker_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:53:02 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/05 00:52:25 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/13 13:57:07 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ char	*expand_var(char *input, size_t *i, t_tools *tools, size_t len)
 		new_expansion = ft_itoa(getpid());
 		*i += 2;
 	}
-	else if (*i + 1 < len && (input[*i + 1] == '?' || ft_isalnum(input[*i
-					+ 1]) || input[*i + 1] == '_'))
+	else if (*i + 1 < len && (input[*i + 1] == '?' || ft_isalnum(input[*i + 1])
+			|| input[*i + 1] == '_'))
 		new_expansion = expand_variable(tools, input, i);
 	else
 	{
@@ -36,35 +36,6 @@ char	*expand_var(char *input, size_t *i, t_tools *tools, size_t len)
 		*i += 1;
 	}
 	return (new_expansion);
-}
-
-char	*expand_inside_heredoc(t_tools *tools, char *input)
-{
-	char	*expanded_word;
-	size_t	i;
-	char	*new_expansion;
-	char	*temp_word;
-	size_t	len;
-
-	i = 0;
-	len = ft_strlen(input);
-	expanded_word = ft_strdup("");
-	while (i < len)
-	{
-		new_expansion = NULL;
-		if (input[i] == '$')
-			new_expansion = expand_var(input, &i, tools, len);
-		else
-			new_expansion = expand_plain_text(input, &i);
-		if (new_expansion && *new_expansion)
-		{
-			temp_word = ft_strjoin(expanded_word, new_expansion);
-			free(expanded_word);
-			free(new_expansion);
-			expanded_word = temp_word;
-		}
-	}
-	return (expanded_word);
 }
 
 void	heredoc_loop(t_lexical **redir, t_tools *tools, int fd)
@@ -96,21 +67,43 @@ void	heredoc_loop(t_lexical **redir, t_tools *tools, int fd)
 	}
 }
 
+void	handle_heredoc_child(t_lexical **redir, t_tools *tools, char *ttname)
+{
+	int	fd;
+
+	fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror("minishell");
+		free(ttname);
+		exit(1);
+	}
+	heredoc_loop(redir, tools, fd);
+	close(fd);
+	free(ttname);
+	exit(0);
+}
+
+void	manage_heredoc_parent(t_simple_cmds **current_cmd, char *ttname,
+		int status)
+{
+	waitpid(-1, &status, 0);
+	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
+		close((*current_cmd)->fd_in);
+	if ((*current_cmd)->fd_in != -1)
+		(*current_cmd)->fd_in = open(ttname, O_RDONLY);
+	if (unlink(ttname) == -1)
+		perror("minishell: failed to remove heredoc temp file");
+	free(ttname);
+}
+
 void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 		t_tools *tools)
 {
-	int		fd;
 	char	*ttname;
-	char	*temp;
-	char	*temp2;
 	pid_t	pid_c;
-	int		status;
 
-	ttname = ttyname(1);
-	temp = ft_substr(ttname, 9, ft_strlen(ttname));
-	temp2 = ft_strjoin("/tmp/", temp);
-	free(temp);
-	ttname = temp2;
+	ttname = generate_temporary_filename();
 	*redir = (*redir)->next;
 	if ((*current_cmd)->num_redirections_heredoc > 16)
 	{
@@ -120,33 +113,12 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 	}
 	pid_c = fork();
 	if (pid_c == 0)
-	{
-		fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			perror("minishell");
-			free(ttname);
-			return ;
-		}
-		heredoc_loop(redir, tools, fd);
-		close(fd);
-		exit(0);
-	}
+		handle_heredoc_child(redir, tools, ttname);
 	else if (pid_c < 0)
 	{
 		perror("fork fail!");
+		free(ttname);
 		return ;
 	}
-	else
-	{
-		waitpid(pid_c, &status, 0);
-		if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
-			close((*current_cmd)->fd_in);
-		if ((*current_cmd)->fd_in != -1)
-			(*current_cmd)->fd_in = open(ttname, O_RDONLY);
-		if (unlink(ttname) == -1)
-			perror("minishell: failed to remove heredoc temp file");
-		free(ttname);
-	}
+	manage_heredoc_parent(current_cmd, ttname, 0);
 }
-

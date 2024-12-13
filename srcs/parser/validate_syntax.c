@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:36:11 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/24 21:28:01 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/13 13:57:46 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,15 @@ t_lexical	*validate_syntax(t_lexical *tokens, t_tools *tools)
 		return (NULL);
 	}
 	return (tokens);
+}
+
+char	*generate_temporary_filename(void)
+{
+	char	*temp;
+	char	*temp2;
+
+	temp = ft_substr(ttyname(1), 9, ft_strlen(ttyname(1)));
+	temp2 = ft_strjoin("/tmp/", temp);
+	free(temp);
+	return (temp2);
 }

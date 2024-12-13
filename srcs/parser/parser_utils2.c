@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 14:41:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/25 14:44:54 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/13 14:16:37 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,11 @@ char	*unescape_spaces(char *str, int flag)
 	i = 0;
 	j = 0;
 	if (!str)
-	{
 		return (NULL);
-	}
 	if (str[0] == '\0')
 		return (ft_strdup("\0"));
 	result = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!result)
-		return (NULL);
-	if (!str || str[0] == '\0')
 		return (NULL);
 	while (str[i])
 	{

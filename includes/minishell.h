@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 19:40:35 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/13 14:35:23 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,4 +281,8 @@ char						*handle_dollar_sign(t_tools *tools, const char *current_word, size_t *
 		size_t len);
 t_env_var 					*create_env_var(const char *env_entry);
 void 						append_env_var(t_env_var **head, t_env_var *new_var);
+char						*expand_inside_heredoc(t_tools *tools, char *input);
+char						*generate_temporary_filename(void);
+char	*expand_var(char *input, size_t *i, t_tools *tools, size_t len);
+void handle_words(t_lexical **temp, t_simple_cmds **current_cmd, t_tools *tools);
 #endif
