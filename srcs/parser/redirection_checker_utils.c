@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_checker_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:53:02 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 19:20:17 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/13 23:04:13 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,46 +38,11 @@ char	*expand_var(char *input, size_t *i, t_tools *tools, size_t len)
 	return (new_expansion);
 }
 
-<<<<<<< HEAD
 void	heredoc_loop(t_lexical **redir, t_tools *tools, int fd)
-=======
-char	*expand_inside_heredoc(t_tools *tools, char *input)
-{
-	char	*expanded_word;
-	size_t	i;
-	char	*new_expansion;
-	char	*temp_word;
-	size_t	len;
-
-	i = 0;
-	len = ft_strlen(input);
-	expanded_word = ft_strdup("");
-	while (i < len)
-	{
-		new_expansion = NULL;
-		if (input[i] == '$')
-			new_expansion = expand_var(input, &i, tools, len);
-		else
-			new_expansion = expand_plain_text(input, &i);
-		if (new_expansion && *new_expansion)
-		{
-			temp_word = ft_strjoin(expanded_word, new_expansion);
-			free(expanded_word);
-			free(new_expansion);
-			expanded_word = temp_word;
-		}
-	}
-	return (expanded_word);
-}
-
-void	heredoc_loop(t_simple_cmds **current_cmd, t_lexical **redir,
-		t_tools *tools, int fd)
->>>>>>> refs/remotes/origin/main
 {
 	char	*input;
 	char	*expanded;
 
-	(void)current_cmd;
 	while (1)
 	{
 		input = readline("> ");
@@ -148,25 +113,7 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 	}
 	pid_c = fork();
 	if (pid_c == 0)
-<<<<<<< HEAD
 		handle_heredoc_child(redir, tools, ttname);
-=======
-	{
-		fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			perror("minishell");
-			free(ttname);
-			return ;
-		}
-		heredoc_loop(current_cmd, redir, tools, fd);
-		free(ttname);
-		free_tools(tools);
-		free_lexical((*current_cmd)->redirections);
-		close(fd);
-		exit(0);
-	}
->>>>>>> refs/remotes/origin/main
 	else if (pid_c < 0)
 	{
 		perror("fork fail!");

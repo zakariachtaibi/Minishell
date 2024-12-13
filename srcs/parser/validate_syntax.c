@@ -46,7 +46,7 @@ static void	print_syntax_error(char *token, int is_newline)
 }
 
 static int	handle_syntax_error(t_lexical *tokens, int error_code,
-				t_tools *tools)
+		t_tools *tools)
 {
 	if (error_code == 10)
 		print_syntax_error(tokens->str, 0);

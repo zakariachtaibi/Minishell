@@ -26,9 +26,8 @@ void	redir_out(t_simple_cmds **current_cmd, t_lexical **redir)
 	if ((*current_cmd)->fd_out != 1 && (*current_cmd)->fd_out != -1)
 		close((*current_cmd)->fd_out);
 	if ((*current_cmd)->fd_in != -1)
-		(*current_cmd)->fd_out = open((*redir)->str, O_WRONLY | O_CREAT
-				| O_TRUNC,
-				0644);
+		(*current_cmd)->fd_out = open((*redir)->str,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 }
 
 void	redir_append(t_simple_cmds **current_cmd, t_lexical **redir)

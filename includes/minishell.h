@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/13 14:35:23 by mac              ###   ########.fr       */
-=======
-/*   Updated: 2024/12/13 02:08:51 by zchtaibi         ###   ########.fr       */
->>>>>>> refs/remotes/origin/main
+/*   Updated: 2024/12/13 23:20:50 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +237,6 @@ int							is_space(char *str);
 char						**split_ignoring_quotes(const char *str);
 bool						is_quote(char c);
 void						handle_sigint_child(int sig);
-int							count_words(const char *str);
 char						*extract_word(const char **str);
 void						setup_child_signals(void);
 void						parent_pipe_handle(t_exec *ctx);
@@ -289,4 +284,14 @@ char						*handle_dollar_sign(t_tools *tools,
 t_env_var					*create_env_var(const char *env_entry);
 void						append_env_var(t_env_var **head,
 								t_env_var *new_var);
+void						handle_words(t_lexical **temp,
+								t_simple_cmds **current_cmd, t_tools *tools);
+char						*expand_var(char *input, size_t *i, t_tools *tools,
+								size_t len);
+char						*expand_inside_heredoc(t_tools *tools, char *input);
+char						*generate_temporary_filename(void);
+void						count_words(t_lexical **temp, int *word_count);
+void						initialize_str_array(t_simple_cmds **current_cmd,
+								int word_count,
+								int *count_str, char ***new_str);
 #endif

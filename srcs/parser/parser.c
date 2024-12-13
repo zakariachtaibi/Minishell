@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 19:20:11 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/13 20:01:32 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,110 +135,6 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 	return (0);
 }
 
-<<<<<<< HEAD
-=======
-void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
-		t_tools *tools)
-{
-	int			word_count;
-	t_lexical	*word_temp;
-	int			i;
-	int			count_str;
-	char		**new_str;
-	char		*expanded;
-	int			flag;
-	char		**tmp;
-	int			in;
-	int			export_flag;
-	int			new_size;
-
-	flag = 0;
-	in = 0;
-	export_flag = 0;
-	word_temp = *temp;
-	word_count = 0;
-	while (word_temp && word_temp->token == TOKEN_WORD)
-	{
-		word_count++;
-		word_temp = word_temp->next;
-	}
-	if ((*current_cmd)->str)
-		count_str = ft_strlen_array((*current_cmd)->str);
-	else
-		count_str = 0;
-	new_str = malloc(sizeof(char *) * (word_count + count_str + 1));
-	if (!new_str)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	i = -1;
-	while (++i < count_str)
-		new_str[i] = (*current_cmd)->str[i];
-	free((*current_cmd)->str);
-	(*current_cmd)->str = new_str;
-	i = count_str;
-	while (*temp && (*temp)->token == TOKEN_WORD)
-	{
-		if (ft_strcmp((*temp)->str, "export") == 0)
-			export_flag = 1;
-		expanded = expand_vars(tools, (*temp)->str);
-		tools->export_flag = flag;
-		if (expanded)
-		{
-			if (((tools->flag == 1) && is_space(expanded) == 1)
-				&& ((export_flag != 1) || (export_flag == 1
-						&& tools->flag == 1)))
-			{
-				in = 0;
-				tmp = ft_split(expanded, ' ');
-				while (tmp[in])
-				{
-					if (i >= (word_count + count_str))
-					{
-						new_size = (word_count + count_str) * 2;
-						new_str = realloc(new_str, sizeof(char *) * (new_size
-									+ 1));
-						if (!new_str)
-						{
-							perror("realloc");
-							exit(EXIT_FAILURE);
-						}
-						(*current_cmd)->str = new_str;
-						word_count = new_size - count_str;
-					}
-					(*current_cmd)->str[i] = ft_strdup(tmp[in]);
-					in++;
-					i++;
-				}
-				free(expanded);
-				ft_free(tmp);
-			}
-			else
-			{
-				if (i >= (word_count + count_str))
-				{
-					new_size = (word_count + count_str) * 2;
-					// Double the size
-					new_str = realloc(new_str, sizeof(char *) * (new_size + 1));
-					if (!new_str)
-					{
-						perror("realloc");
-						exit(EXIT_FAILURE);
-					}
-					(*current_cmd)->str = new_str;
-					word_count = new_size - count_str;
-				}
-				(*current_cmd)->str[i] = expanded;
-				i++;
-			}
-		}
-		*temp = (*temp)->next;
-	}
-	(*current_cmd)->str[i] = NULL;
-}
-
->>>>>>> refs/remotes/origin/main
 t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 {
 	t_simple_cmds	*cmds_head;
