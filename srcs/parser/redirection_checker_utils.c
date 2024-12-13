@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:53:02 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 14:50:54 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/13 02:15:03 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ char	*expand_var(char *input, size_t *i, t_tools *tools, size_t len)
 		new_expansion = ft_itoa(getpid());
 		*i += 2;
 	}
-	else if (*i + 1 < len && (input[*i + 1] == '?' || ft_isalnum(input[*i
-					+ 1]) || input[*i + 1] == '_'))
+	else if (*i + 1 < len && (input[*i + 1] == '?' || ft_isalnum(input[*i + 1])
+			|| input[*i + 1] == '_'))
 		new_expansion = expand_variable(tools, input, i);
 	else
 	{
@@ -67,12 +67,13 @@ char	*expand_inside_heredoc(t_tools *tools, char *input)
 	return (expanded_word);
 }
 
-void	heredoc_loop(t_simple_cmds **current_cmd, t_lexical **redir, t_tools *tools, int fd)
+void	heredoc_loop(t_simple_cmds **current_cmd, t_lexical **redir,
+		t_tools *tools, int fd)
 {
 	char	*input;
 	char	*expanded;
-	(void)current_cmd;
 
+	(void)current_cmd;
 	while (1)
 	{
 		input = readline("> ");
@@ -131,8 +132,6 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 		}
 		heredoc_loop(current_cmd, redir, tools, fd);
 		free(ttname);
-		// free_cmds(current_cmd);
-		// free_tools(tools);
 		close(fd);
 		exit(0);
 	}
@@ -153,4 +152,3 @@ void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
 		free(ttname);
 	}
 }
-

@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:05:43 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 20:18:44 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/13 02:13:27 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	handle_env_var(t_tools **tools, char *key, char *value)
 				free(current->value);
 			if (value)
 			{
-				free(current->value);		
+				free(current->value);
 				current->value = value;
 			}
 			free(key);

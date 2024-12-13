@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/12 20:17:37 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/13 02:15:56 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,37 +51,38 @@ int	check_token(t_lexical *temp, int *heredoc_flag)
 		return (0);
 }
 
-int handle_filename(t_tools **tools, t_lexical **temp, t_simple_cmds **current_cmd, int heredoc_flag)
+int	handle_filename(t_tools **tools, t_lexical **temp,
+		t_simple_cmds **current_cmd, int heredoc_flag)
 {
 	t_lexical	*filename;
 	char		*expanded;
 	char		*unescaped;
-	(void) heredoc_flag;
-	
+
+	(void)heredoc_flag;
 	(*tools)->flag = 0;
 	if (*temp && (*temp)->token == TOKEN_WORD)
+	{
+		filename = copy_node(*temp);
+		if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str,
+					'\'')))
+			filename->filename_flag = 2;
+		else
+			filename->filename_flag = 0;
+		expanded = expand_vars((*tools), filename->str);
+		free(filename->str);
+		filename->str = expanded;
+		unescaped = unescape_spaces(filename->str, (*tools)->flag);
+		if (!unescaped)
 		{
-			filename = copy_node(*temp);
-			if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str,
-						'\'')))
-				filename->filename_flag = 2;
-			else
-				filename->filename_flag = 0;
-			expanded = expand_vars((*tools), filename->str);
-			free(filename->str);
-			filename->str = expanded;
-			unescaped = unescape_spaces(filename->str, (*tools)->flag);
-			if (!unescaped)
-			{
-				free_lexical_node(filename);
-				return (1);
-			}
-			free(filename->str);
-			filename->str = ft_strdup(unescaped);
-			free(unescaped);
-			add_redirection((&(*current_cmd)->redirections), filename);
-			*temp = (*temp)->next;
+			free_lexical_node(filename);
+			return (1);
 		}
+		free(filename->str);
+		filename->str = ft_strdup(unescaped);
+		free(unescaped);
+		add_redirection((&(*current_cmd)->redirections), filename);
+		*temp = (*temp)->next;
+	}
 	return (0);
 }
 
@@ -183,7 +184,9 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 		tools->export_flag = flag;
 		if (expanded)
 		{
-			if (((tools->flag == 1) && is_space(expanded) == 1) && ((export_flag != 1) || (export_flag == 1 && tools->flag == 1)))
+			if (((tools->flag == 1) && is_space(expanded) == 1)
+				&& ((export_flag != 1) || (export_flag == 1
+						&& tools->flag == 1)))
 			{
 				in = 0;
 				tmp = ft_split(expanded, ' ');
@@ -247,12 +250,14 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 	while (temp)
 	{
 		process_command(&temp, &current_cmd, &cmds_head);
-		while (temp && !check_token(temp, &tools->heredoc_flag) && temp->token != TOKEN_PIPE)
+		while (temp && !check_token(temp, &tools->heredoc_flag)
+			&& temp->token != TOKEN_PIPE)
 			handle_words(&temp, &current_cmd, tools);
 		current_cmd->num_redirections_heredoc = 0;
 		while (temp && check_token(temp, &tools->heredoc_flag))
 		{
-			tools->flag = handle_redirections(&tools, &temp, &current_cmd, tokens);
+			tools->flag = handle_redirections(&tools, &temp, &current_cmd,
+					tokens);
 			if (tools->flag == 1)
 			{
 				ft_putstr_fd((temp)->str, 2);
@@ -270,7 +275,8 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 			free_cmds(&current_cmd);
 			return (NULL);
 		}
-		while (temp && !check_token(temp, &tools->heredoc_flag) && temp->token != TOKEN_PIPE)
+		while (temp && !check_token(temp, &tools->heredoc_flag)
+			&& temp->token != TOKEN_PIPE)
 			handle_words(&temp, &current_cmd, tools);
 		check_and_set_builtin(current_cmd);
 	}

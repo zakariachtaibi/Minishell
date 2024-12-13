@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:07:54 by mac               #+#    #+#             */
-/*   Updated: 2024/12/12 19:53:21 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/13 02:25:10 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*handle_dollar_sign(t_tools *tools, const char *current_word, size_t *j,
 		return (NULL);
 	}
 	else if (*j + 1 < len && current_word[*j + 1] == '$')
-		handle_double_dollar(tools, j);
+		return(handle_double_dollar(tools, j));
 	else if (*j + 1 < len && (current_word[*j + 1] == '?'
 			|| ft_isalnum(current_word[*j + 1]) || current_word[*j
 				+ 1] == '_'))
