@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 02:51:10 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/14 22:40:01 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,15 @@ static void	redirect_io(t_exec *ctx)
 
 static void	execute_child_process(t_exec *ctx)
 {
+	t_lexical	*copy_redir;
+
 	setup_child_signals();
-	if (ctx->current_cmd->redirections)
+	copy_redir = ctx->current_cmd->redirections;
+	while (copy_redir)
 	{
-		if (ctx->current_cmd->redirections->token == TOKEN_HEREDOC)
-			redir_heredoc(&ctx->current_cmd, &ctx->current_cmd->redirections,
-				*ctx->tools);
+		if (copy_redir->token == TOKEN_HEREDOC)
+			redir_heredoc(&ctx->current_cmd, &copy_redir, *ctx->tools);
+		copy_redir = copy_redir->next;
 	}
 	redirect_io(ctx);
 	if (ctx->current_cmd->builtin != NULL)

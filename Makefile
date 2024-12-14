@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
+#    By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/12/13 23:08:43 by hchouai          ###   ########.fr        #
+#    Updated: 2024/12/14 22:38:41 by zchtaibi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,7 @@ SRCS = srcs/main.c \
 		srcs/main_utils.c\
 		srcs/clean.c\
 		srcs/parser/redirection_checker_utils.c\
+		srcs/parser/redirection_checker_utils1.c\
 
 OBJS = $(SRCS:.c=.o)
 

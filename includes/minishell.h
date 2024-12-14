@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 23:20:50 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/14 22:45:09 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ int							has_unclosed_quotes_or_parentheses(char *temp,
 int							has_invalid_redirections(t_lexical **tokens);
 int							has_semicolon(char *input, t_tools *tools);
 int							is_numeric(char *str);
+void						free_str_array(char **str);
 void						add_redirection(t_lexical **redirections,
 								t_lexical *redir_node);
 void						add_new_env_var(t_tools *tools, char *key,
