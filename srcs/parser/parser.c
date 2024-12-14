@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/14 13:16:49 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/14 19:25:16 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,52 +37,42 @@ void	process_command(t_lexical **temp, t_simple_cmds **current_cmd,
 	}
 }
 
-int	check_token(t_lexical *temp, int *heredoc_flag)
+static int	handle_file_errors(t_simple_cmds *current_cmd, t_tools *tools)
 {
-	if ((temp)->token == TOKEN_REDIRECT_IN
-		|| (temp)->token == TOKEN_REDIRECT_OUT || (temp)->token == TOKEN_HEREDOC
-		|| (temp)->token == TOKEN_APPEND)
+	if (current_cmd->fd_out == -1 || current_cmd->fd_in == -1)
 	{
-		if ((temp)->token == TOKEN_HEREDOC)
-			*heredoc_flag = 1;
+		ft_putstr_fd("Minishell : No such file or directory\n", 2);
+		tools->exit_status = 1;
+		free_cmds(&current_cmd);
 		return (1);
 	}
-	else
-		return (0);
+	return (0);
 }
 
-int	handle_filename(t_tools **tools, t_lexical **temp,
-		t_simple_cmds **current_cmd, int heredoc_flag)
+static void	process_command_tokens(t_lexical **temp,
+		t_simple_cmds **current_cmd, t_tools *tools)
 {
-	t_lexical	*filename;
-	char		*expanded;
-	char		*unescaped;
+	while (*temp && !check_token(*temp, &tools->heredoc_flag)
+		&& (*temp)->token != TOKEN_PIPE)
+		handle_words(temp, current_cmd, tools);
+}
 
-	(void)heredoc_flag;
-	(*tools)->flag = 0;
-	if (*temp && (*temp)->token == TOKEN_WORD)
+static int	process_current_command(t_tools *tools, t_lexical **temp,
+		t_simple_cmds **current_cmd, t_simple_cmds **cmds_head)
+{
+	process_command(temp, current_cmd, cmds_head);
+	process_command_tokens(temp, current_cmd, tools);
+	(*current_cmd)->num_redirections_heredoc = 0;
+	while (*temp && check_token(*temp, &tools->heredoc_flag))
 	{
-		filename = copy_node(*temp);
-		if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str,
-					'\'')))
-			filename->filename_flag = 2;
-		else
-			filename->filename_flag = 0;
-		expanded = expand_vars((*tools), filename->str);
-		free(filename->str);
-		filename->str = expanded;
-		unescaped = unescape_spaces(filename->str, (*tools)->flag);
-		if (!unescaped)
-		{
-			free_lexical_node(filename);
+		if (handle_redirect_and_check_errors(&tools, temp, current_cmd, *temp))
 			return (1);
-		}
-		free(filename->str);
-		filename->str = ft_strdup(unescaped);
-		free(unescaped);
-		add_redirection((&(*current_cmd)->redirections), filename);
-		*temp = (*temp)->next;
 	}
+	check_and_set_redirections(*current_cmd, &tools);
+	if (handle_file_errors(*current_cmd, tools))
+		return (1);
+	process_command_tokens(temp, current_cmd, tools);
+	check_and_set_builtin(*current_cmd);
 	return (0);
 }
 
@@ -92,43 +82,15 @@ t_simple_cmds	*process_tokens(t_lexical *tokens, t_tools *tools)
 	t_simple_cmds	*current_cmd;
 	t_lexical		*temp;
 
-	tools->flag = 0;
-	tools->heredoc_flag = 0;
 	cmds_head = NULL;
 	current_cmd = NULL;
 	temp = tokens;
+	tools->flag = 0;
+	tools->heredoc_flag = 0;
 	while (temp)
 	{
-		process_command(&temp, &current_cmd, &cmds_head);
-		while (temp && !check_token(temp, &tools->heredoc_flag)
-			&& temp->token != TOKEN_PIPE)
-			handle_words(&temp, &current_cmd, tools);
-		current_cmd->num_redirections_heredoc = 0;
-		while (temp && check_token(temp, &tools->heredoc_flag))
-		{
-			tools->flag = handle_redirections(&tools, &temp, &current_cmd,
-					tokens);
-			if (tools->flag == 1)
-			{
-				ft_putstr_fd((temp)->str, 2);
-				ft_putstr_fd(" : ambiguous redirect\n", 2);
-				tools->exit_status = 1;
-				free_cmds(&current_cmd);
-				return (NULL);
-			}
-		}
-		check_and_set_redirections(current_cmd, &tools);
-		if ((((current_cmd)->fd_out == -1) || ((current_cmd)->fd_in == -1)))
-		{
-			ft_putstr_fd("Minishell : No such file or directory\n", 2);
-			tools->exit_status = 1;
-			free_cmds(&current_cmd);
+		if (process_current_command(tools, &temp, &current_cmd, &cmds_head))
 			return (NULL);
-		}
-		while (temp && !check_token(temp, &tools->heredoc_flag)
-			&& temp->token != TOKEN_PIPE)
-			handle_words(&temp, &current_cmd, tools);
-		check_and_set_builtin(current_cmd);
 	}
 	return (cmds_head);
 }

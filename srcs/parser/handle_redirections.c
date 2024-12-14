@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 13:16:24 by mac               #+#    #+#             */
-/*   Updated: 2024/12/14 13:29:48 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/14 19:15:30 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,6 @@ static int	process_redirection_node(t_tools **tools, t_lexical **temp,
 	return (0);
 }
 
-static int	copy_and_flag_filename(t_tools *tools, t_lexical **temp,
-		t_lexical **filename)
-{
-	(void)*tools;
-	*filename = copy_node(*temp);
-	if (!(*filename))
-		return (1);
-	if (!(ft_strchr((*filename)->str, '"')) && !(ft_strchr((*filename)->str,
-				'\'')))
-		(*filename)->filename_flag = 2;
-	else
-		(*filename)->filename_flag = 0;
-	return (0);
-}
-
 static int	expand_and_unescape_filename(t_tools *tools, t_lexical *filename)
 {
 	char	*expanded;
@@ -74,7 +59,7 @@ static int	expand_and_unescape_filename(t_tools *tools, t_lexical *filename)
 	return (0);
 }
 
-static int	handle_filename(t_tools *tools, t_lexical **temp,
+static int	handle_fileename(t_tools *tools, t_lexical **temp,
 		t_simple_cmds *current_cmd)
 {
 	t_lexical	*filename;
@@ -101,7 +86,7 @@ int	handle_redirections(t_tools **tools, t_lexical **temp,
 		return (1);
 	if (*temp && (*temp)->token == TOKEN_WORD)
 	{
-		if (handle_filename(*tools, temp, *current_cmd))
+		if (handle_fileename(*tools, temp, *current_cmd))
 			return (1);
 	}
 	return (0);
