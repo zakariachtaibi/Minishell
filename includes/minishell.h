@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 23:20:50 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/14 19:03:27 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,4 +294,9 @@ void						count_words(t_lexical **temp, int *word_count);
 void						initialize_str_array(t_simple_cmds **current_cmd,
 								int word_count,
 								int *count_str, char ***new_str);
+
+int							handle_redirections(t_tools **tools,
+								t_lexical **temp,
+								t_simple_cmds **current_cmd, t_lexical *token);
+int							check_token(t_lexical *temp, int *heredoc_flag);
 #endif

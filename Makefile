@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
+#    By: mac <mac@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/12/13 23:08:43 by hchouai          ###   ########.fr        #
+#    Updated: 2024/12/14 13:21:26 by mac              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ SRCS = srcs/main.c \
 		srcs/parser/parser_utils.c\
 		srcs/parser/parser_utils2.c\
 		srcs/parser/parser_utils3.c\
-		srcs/parser/parser_utils4.c\
+		srcs/parser/handle_word.c\
+		srcs/parser/handle_redirections.c\
 		srcs/lexer/errors_checker.c\
 		srcs/lexer/validate_input.c\
 		srcs/parser/validate_syntax.c\

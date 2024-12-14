@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 20:01:32 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/14 13:16:49 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,55 +82,6 @@ int	handle_filename(t_tools **tools, t_lexical **temp,
 		free(unescaped);
 		add_redirection((&(*current_cmd)->redirections), filename);
 		*temp = (*temp)->next;
-	}
-	return (0);
-}
-
-int	handle_redirections(t_tools **tools, t_lexical **temp,
-		t_simple_cmds **current_cmd, t_lexical *token)
-{
-	t_lexical	*redir;
-	t_lexical	*filename;
-	char		*unescaped;
-	t_lexical	*node_todel;
-	char		*expanded;
-
-	(void)token;
-	(*tools)->flag = 0;
-	(*tools)->heredoc_flag = 0;
-	if (check_token(*temp, &(*tools)->heredoc_flag))
-	{
-		redir = copy_node(*temp);
-		add_redirection((&(*current_cmd)->redirections), redir);
-		(*current_cmd)->num_redirections++;
-		if ((*tools)->heredoc_flag == 1)
-			(*current_cmd)->num_redirections_heredoc++;
-		node_todel = copy_node(*temp);
-		*temp = (*temp)->next;
-		delete_node(&token, node_todel);
-		if (*temp && (*temp)->token == TOKEN_WORD)
-		{
-			filename = copy_node(*temp);
-			if (!(ft_strchr(filename->str, '"')) && !(ft_strchr(filename->str,
-						'\'')))
-				filename->filename_flag = 2;
-			else
-				filename->filename_flag = 0;
-			expanded = expand_vars((*tools), filename->str);
-			free(filename->str);
-			filename->str = expanded;
-			unescaped = unescape_spaces(filename->str, (*tools)->flag);
-			if (!unescaped)
-			{
-				free_lexical_node(filename);
-				return (1);
-			}
-			free(filename->str);
-			filename->str = ft_strdup(unescaped);
-			free(unescaped);
-			add_redirection((&(*current_cmd)->redirections), filename);
-			*temp = (*temp)->next;
-		}
 	}
 	return (0);
 }
