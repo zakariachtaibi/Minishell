@@ -6,7 +6,7 @@
 #    By: mac <mac@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/12/14 19:10:09 by mac              ###   ########.fr        #
+#    Updated: 2024/12/14 19:36:59 by mac              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,7 @@ SRCS = srcs/main.c \
 		srcs/parser/redirections_checker.c\
 		srcs/executor/builtins/builtins_utils2.c\
 		srcs/main_utils.c\
+		srcs/main_utils1.c\
 		srcs/clean.c\
 		srcs/parser/redirection_checker_utils.c\
 

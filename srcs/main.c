@@ -6,13 +6,13 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/14 13:17:06 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/14 19:36:02 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		g_sig_flag = 0;
+int			g_sig_flag = 0;
 
 void	handle_sigint(int sig)
 {
@@ -24,38 +24,6 @@ void	handle_sigint(int sig)
 		// rl_replace_line("", 0);
 		rl_redisplay();
 	}
-}
-
-void	process_shell_input(t_tools **tools, t_lexical **tokens,
-		t_simple_cmds **cmds, char *input)
-{
-	if (ft_strcmp(input, "") && ft_strcmp(input, "\n"))
-		add_history(input);
-	input = validat_input(input, (*tools));
-	if (input == NULL)
-		return ;
-	if (!*input)
-		input = ft_strdup("");
-	*tokens = tokenize(input);
-	if (tokens == NULL)
-	{
-		free(input);
-		return ;
-	}
-	*tokens = validate_syntax((*tokens), (*tools));
-	if (*tokens == NULL)
-	{
-		free(input);
-		return ;
-	}
-	*cmds = process_tokens((*tokens), (*tools));
-	execute_commands((*cmds), tools, (*tokens));
-	dup2((*tools)->std_out, 1);
-	dup2((*tools)->std_in, 0);
-	free(input);
-	free_cmds(cmds);
-	if (*tokens != NULL)
-		free_lexical(*tokens);
 }
 
 void	handle_shell_signals(void)

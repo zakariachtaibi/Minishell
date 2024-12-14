@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/14 19:26:12 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/14 19:36:36 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,4 +308,6 @@ int							check_token(t_lexical *temp, int *heredoc_flag);
 int							handle_redirect_and_check_errors(t_tools **tools,
 								t_lexical **temp,
 								t_simple_cmds **current_cmd, t_lexical *tokens);
+void						process_shell_input(t_tools **tools, t_lexical **tokens,
+								t_simple_cmds **cmds, char *input);
 #endif
