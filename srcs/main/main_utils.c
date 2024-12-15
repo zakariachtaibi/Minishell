@@ -6,11 +6,11 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:51:51 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/15 22:25:04 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/15 22:27:48 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 t_tools	*init_tools(void)
 {

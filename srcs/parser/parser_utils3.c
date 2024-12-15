@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/13 14:21:30 by mac               #+#    #+#             */
-/*   Updated: 2024/12/15 22:13:15 by hchouai          ###   ########.fr       */
+/*   Created: 2024/12/15 22:29:21 by hchouai           #+#    #+#             */
+/*   Updated: 2024/12/15 22:41:54 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,27 @@
 void	reallocate_str_array(t_simple_cmds **current_cmd, int *i,
 		int *word_count, int count_str)
 {
-	int	new_size;
+	int		new_size;
+	char	**new_str;
+	int		j;
 
 	if (*i >= (*word_count + count_str))
 	{
 		new_size = (*word_count + count_str) * 2;
-		(*current_cmd)->str = realloc((*current_cmd)->str, sizeof(char *)
-				* (new_size + 1));
-		if (!(*current_cmd)->str)
+		new_str = malloc(sizeof(char *) * (new_size + 1));
+		if (!new_str)
 		{
-			perror("realloc");
+			perror("malloc");
 			exit(EXIT_FAILURE);
 		}
+		j = 0;
+		while (j < *word_count + count_str)
+		{
+			new_str[j] = (*current_cmd)->str[j];
+			j++;
+		}
+		free((*current_cmd)->str);
+		(*current_cmd)->str = new_str;
 		*word_count = new_size - count_str;
 	}
 }
@@ -50,8 +59,8 @@ void	split_expanded_words(char *expanded, t_simple_cmds **current_cmd,
 	ft_free(tmp);
 }
 
-void	handle_expansion(char *expanded, t_simple_cmds **current_cmd,
-	int *i, t_tools *tools)
+void	handle_expansion(char *expanded, t_simple_cmds **current_cmd, int *i,
+		t_tools *tools)
 {
 	reallocate_str_array(current_cmd, i, &tools->word_count, tools->count_str);
 	(*current_cmd)->str[(*i)++] = expanded;
@@ -77,8 +86,8 @@ void	handle_words(t_lexical **temp, t_simple_cmds **current_cmd,
 	int		i;
 
 	count_words(temp, &tools->word_count);
-	initialize_str_array(current_cmd, tools->word_count,
-		&tools->count_str, &new_str);
+	initialize_str_array(current_cmd, tools->word_count, &tools->count_str,
+		&new_str);
 	i = tools->count_str;
 	while (*temp && (*temp)->token == TOKEN_WORD)
 	{

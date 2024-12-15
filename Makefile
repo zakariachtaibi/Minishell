@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mac <mac@student.42.fr>                    +#+  +:+       +#+         #
+#    By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/12/15 17:31:42 by mac              ###   ########.fr        #
+#    Updated: 2024/12/15 22:27:30 by hchouai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRCS = srcs/main.c \
+SRCS = srcs/main/main.c \
 		libft/ft_isdigit.c \
         libft/ft_putchar_fd.c \
         libft/ft_putendl_fd.c \
@@ -70,9 +70,9 @@ SRCS = srcs/main.c \
 		srcs/expander/expander_utils2.c\
 		srcs/parser/redirections_checker.c\
 		srcs/executor/builtins/builtins_utils2.c\
-		srcs/main_utils.c\
-		srcs/main_utils1.c\
-		srcs/clean.c\
+		srcs/main/main_utils.c\
+		srcs/main/main_utils1.c\
+		srcs/main/clean.c\
 		srcs/parser/redirection_checker_utils.c\
 		srcs/parser/redirection_checker_utils1.c\
 

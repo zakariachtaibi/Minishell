@@ -6,11 +6,11 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 13:13:20 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/15 19:39:15 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/15 23:12:07 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int			g_sig_flag = 0;
 

@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/15 22:24:54 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/15 23:11:02 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
-# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -237,7 +235,6 @@ void						increment_shlvl(t_tools **tools);
 t_tools						*init_tools(void);
 int							is_space(char *str);
 char						**split_ignoring_quotes(const char *str);
-bool						is_quote(char c);
 void						handle_sigint_child(int sig);
 char						*extract_word(const char **str);
 void						setup_child_signals(void);

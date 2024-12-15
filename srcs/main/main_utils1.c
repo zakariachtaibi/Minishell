@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 19:35:02 by mac               #+#    #+#             */
-/*   Updated: 2024/12/14 19:37:27 by mac              ###   ########.fr       */
+/*   Created: 2024/12/15 23:10:36 by hchouai           #+#    #+#             */
+/*   Updated: 2024/12/15 23:12:56 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 static int	tokenize_and_execute(t_tools **tools, t_lexical **tokens,
 		t_simple_cmds **cmds, char *input)
