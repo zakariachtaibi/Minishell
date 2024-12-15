@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:51:51 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/14 22:46:17 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:25:04 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	child_exit_cleanup(t_exec *ctx)
-{
-	free_cmds(&ctx->cmds_head);
-	free_tools(*ctx->tools);
-	free_lexical(ctx->tokens);
-}
 
 t_tools	*init_tools(void)
 {
@@ -38,11 +31,23 @@ t_tools	*init_tools(void)
 	return (new_tool);
 }
 
+void	append_envv_var(t_tools **tools, const char *key, const char *value)
+{
+	t_env_var	*new_var;
+
+	new_var = (t_env_var *)malloc(sizeof(t_env_var));
+	if (!new_var)
+		return ;
+	new_var->key = ft_strdup(key);
+	new_var->value = ft_strdup(value);
+	new_var->next = (*tools)->env_vars;
+	(*tools)->env_vars = new_var;
+}
+
 void	set_env_var(const char *key, const char *value, t_tools **tools)
 {
 	t_env_var	*current;
 	t_env_var	*env_var;
-	t_env_var	*new_var;
 
 	current = (*tools)->env_vars;
 	env_var = NULL;
@@ -61,15 +66,7 @@ void	set_env_var(const char *key, const char *value, t_tools **tools)
 		env_var->value = ft_strdup(value);
 	}
 	else
-	{
-		new_var = (t_env_var *)malloc(sizeof(t_env_var));
-		if (!new_var)
-			return ;
-		new_var->key = ft_strdup(key);
-		new_var->value = ft_strdup(value);
-		new_var->next = (*tools)->env_vars;
-		(*tools)->env_vars = new_var;
-	}
+		append_envv_var(tools, key, value);
 }
 
 void	free_str_array(char **str)

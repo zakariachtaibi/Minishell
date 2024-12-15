@@ -6,7 +6,7 @@
 /*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/15 20:12:54 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/15 22:24:54 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,6 @@ char						**convert_env_vars_to_array(t_env_var *env_vars);
 void						sort_env_vars(t_env_var *copy);
 void						free_env_vars(t_env_var *copy);
 void						free_env_var(t_env_var *env_vars);
-void						child_exit_cleanup(t_exec *ctx);
 void						setup_signal(void);
 void						handle_sigint(int sig);
 void						sigint2(int sig);
