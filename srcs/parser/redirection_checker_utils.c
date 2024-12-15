@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_checker_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:53:02 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/14 22:48:04 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/15 20:03:45 by hchouai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void	redir_heredoc(t_simple_cmds **cmd, t_lexical **redir, t_tools *tools)
 
 	if ((*cmd)->num_redirections_heredoc > 16)
 	{
-		ft_putstr_fd("minishell: max heredoc count exceeded\n", 2);
-		return ;
+		ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
+		exit (2);
 	}
 	ttname = create_temp_filename();
 	*redir = (*redir)->next;
