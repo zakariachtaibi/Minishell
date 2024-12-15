@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:51:51 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/05 02:12:28 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/14 22:46:17 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,21 @@ void	set_env_var(const char *key, const char *value, t_tools **tools)
 		new_var->next = (*tools)->env_vars;
 		(*tools)->env_vars = new_var;
 	}
+}
+
+void	free_str_array(char **str)
+{
+	int	i;
+
+	if (!str)
+		return ;
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
 }
 
 void	increment_shlvl(t_tools **tools)

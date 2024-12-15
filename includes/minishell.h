@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/14 19:36:36 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/15 17:33:27 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ int							has_unclosed_quotes_or_parentheses(char *temp,
 int							has_invalid_redirections(t_lexical **tokens);
 int							has_semicolon(char *input, t_tools *tools);
 int							is_numeric(char *str);
+void						free_str_array(char **str);
 void						add_redirection(t_lexical **redirections,
 								t_lexical *redir_node);
 void						add_new_env_var(t_tools *tools, char *key,
@@ -308,6 +309,7 @@ int							check_token(t_lexical *temp, int *heredoc_flag);
 int							handle_redirect_and_check_errors(t_tools **tools,
 								t_lexical **temp,
 								t_simple_cmds **current_cmd, t_lexical *tokens);
-void						process_shell_input(t_tools **tools, t_lexical **tokens,
+void						process_shell_input(t_tools **tools,
+								t_lexical **tokens,
 								t_simple_cmds **cmds, char *input);
 #endif

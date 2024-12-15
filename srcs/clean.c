@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:55:22 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 02:33:31 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/14 22:44:42 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	free_cmds(t_simple_cmds **cmds)
 {
 	t_simple_cmds	*current;
 	t_simple_cmds	*next;
-	int				i;
 
 	if (!cmds || !*cmds)
 		return ;
@@ -90,15 +89,7 @@ void	free_cmds(t_simple_cmds **cmds)
 	{
 		next = current->next;
 		if (current->str)
-		{
-			i = 0;
-			while (current->str[i])
-			{
-				free(current->str[i]);
-				i++;
-			}
-			free(current->str);
-		}
+			free_str_array(current->str);
 		if (current->redirections)
 			free_lexical(current->redirections);
 		if (current->hd_file_name)

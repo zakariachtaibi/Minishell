@@ -3,122 +3,99 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_checker_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:53:02 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/13 23:04:13 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/14 22:48:04 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*expand_var(char *input, size_t *i, t_tools *tools, size_t len)
+static char	*create_temp_filename(void)
 {
-	char	*new_expansion;
+	char	*ttname;
+	char	*temp;
+	char	*temp2;
 
-	new_expansion = NULL;
-	if (*i + 1 < len && ft_isdigit(input[*i + 1]))
-		*i += 2;
-	else if (*i + 1 < len && input[*i + 1] == '$')
-	{
-		new_expansion = ft_itoa(getpid());
-		*i += 2;
-	}
-	else if (*i + 1 < len && (input[*i + 1] == '?' || ft_isalnum(input[*i + 1])
-			|| input[*i + 1] == '_'))
-		new_expansion = expand_variable(tools, input, i);
-	else
-	{
-		if (input[*i + 1] == '\0')
-			new_expansion = ft_strdup("$");
-		else
-			new_expansion = ft_strdup("");
-		*i += 1;
-	}
-	return (new_expansion);
+	ttname = ttyname(1);
+	temp = ft_substr(ttname, 9, ft_strlen(ttname));
+	temp2 = ft_strjoin("/tmp/", temp);
+	free(temp);
+	return (temp2);
 }
 
-void	heredoc_loop(t_lexical **redir, t_tools *tools, int fd)
+static void	write_heredoc_input(int fd, t_tools *tools, char *input,
+		int filename_flag)
+{
+	char	*expanded;
+
+	expanded = input;
+	if (filename_flag == 2)
+	{
+		expanded = expand_inside_heredoc(tools, input);
+		free(input);
+	}
+	if (!expanded)
+		expanded = ft_strdup("");
+	write(fd, expanded, ft_strlen(expanded));
+	write(fd, "\n", 1);
+	free(expanded);
+}
+
+static int	process_heredoc_input(int fd, t_lexical *redir, t_tools *tools)
 {
 	char	*input;
-	char	*expanded;
 
 	while (1)
 	{
 		input = readline("> ");
-		if (!input)
-			break ;
-		if (ft_strcmp(input, (*redir)->str) == 0)
+		if (!input || ft_strcmp(input, redir->str) == 0)
 		{
 			free(input);
 			break ;
 		}
-		if ((*redir)->filename_flag == 2)
-		{
-			expanded = expand_inside_heredoc(tools, input);
-			if (!expanded)
-				expanded = ft_strdup("");
-			free(input);
-			input = expanded;
-		}
-		write(fd, input, strlen(input));
-		write(fd, "\n", 1);
-		free(input);
+		write_heredoc_input(fd, tools, input, redir->filename_flag);
 	}
+	return (0);
 }
 
-void	handle_heredoc_child(t_lexical **redir, t_tools *tools, char *ttname)
+static int	finalize_heredoc(t_simple_cmds *cmd, char *filename)
 {
-	int	fd;
+	cmd->fd_in = open(filename, O_RDONLY);
+	if (cmd->fd_in == -1)
+	{
+		perror("minishell");
+		return (0);
+	}
+	if (unlink(filename) == -1)
+		perror("minishell: temp file remove failed");
+	return (1);
+}
 
+void	redir_heredoc(t_simple_cmds **cmd, t_lexical **redir, t_tools *tools)
+{
+	char	*ttname;
+	int		fd;
+
+	if ((*cmd)->num_redirections_heredoc > 16)
+	{
+		ft_putstr_fd("minishell: max heredoc count exceeded\n", 2);
+		return ;
+	}
+	ttname = create_temp_filename();
+	*redir = (*redir)->next;
+	if ((*cmd)->fd_in > 0)
+		close((*cmd)->fd_in);
 	fd = open(ttname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror("minishell");
 		free(ttname);
-		exit(1);
-	}
-	heredoc_loop(redir, tools, fd);
-	close(fd);
-	free(ttname);
-	exit(0);
-}
-
-void	manage_heredoc_parent(t_simple_cmds **current_cmd, char *ttname,
-		int status)
-{
-	waitpid(-1, &status, 0);
-	if ((*current_cmd)->fd_in != 0 && (*current_cmd)->fd_in != -1)
-		close((*current_cmd)->fd_in);
-	if ((*current_cmd)->fd_in != -1)
-		(*current_cmd)->fd_in = open(ttname, O_RDONLY);
-	if (unlink(ttname) == -1)
-		perror("minishell: failed to remove heredoc temp file");
-	free(ttname);
-}
-
-void	redir_heredoc(t_simple_cmds **current_cmd, t_lexical **redir,
-		t_tools *tools)
-{
-	char	*ttname;
-	pid_t	pid_c;
-
-	ttname = generate_temporary_filename();
-	*redir = (*redir)->next;
-	if ((*current_cmd)->num_redirections_heredoc > 16)
-	{
-		ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
-		free(ttname);
-		exit(2);
-	}
-	pid_c = fork();
-	if (pid_c == 0)
-		handle_heredoc_child(redir, tools, ttname);
-	else if (pid_c < 0)
-	{
-		perror("fork fail!");
-		free(ttname);
 		return ;
 	}
-	manage_heredoc_parent(current_cmd, ttname, 0);
+	process_heredoc_input(fd, *redir, tools);
+	close(fd);
+	finalize_heredoc(*cmd, ttname);
+	free(ttname);
 }

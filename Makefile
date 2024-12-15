@@ -6,7 +6,7 @@
 #    By: mac <mac@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/20 00:35:07 by zchtaibi          #+#    #+#              #
-#    Updated: 2024/12/14 19:36:59 by mac              ###   ########.fr        #
+#    Updated: 2024/12/15 17:31:42 by mac              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,7 @@ SRCS = srcs/main.c \
 		srcs/main_utils1.c\
 		srcs/clean.c\
 		srcs/parser/redirection_checker_utils.c\
+		srcs/parser/redirection_checker_utils1.c\
 
 OBJS = $(SRCS:.c=.o)
 
