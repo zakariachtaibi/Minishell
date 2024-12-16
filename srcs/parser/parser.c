@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 14:11:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/16 14:29:03 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:33:47 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ static int	handle_file_errors(t_simple_cmds *current_cmd, t_tools *tools)
 {
 	if (current_cmd->fd_out == -1 || current_cmd->fd_in == -1)
 	{
-		ft_putstr_fd("Minishell : ",2);
-		ft_putstr_fd(current_cmd->redirections->next->str,2);
+		ft_putstr_fd("Minishell : ", 2);
+		ft_putstr_fd(current_cmd->redirections->next->str, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		tools->exit_status = 1;
 		free_cmds(&current_cmd);
