@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 23:10:36 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/15 23:12:56 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/16 13:53:05 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@ static int	tokenize_and_execute(t_tools **tools, t_lexical **tokens,
 		return (0);
 	*cmds = process_tokens(*tokens, *tools);
 	execute_commands(*cmds, tools, *tokens);
+	if ((*tools)->exit_status == 57)
+	{
+		free_cmds(cmds);
+		free_tools(*tools);
+		free_lexical(*tokens);
+		exit (2);
+	}
 	return (1);
 }
 

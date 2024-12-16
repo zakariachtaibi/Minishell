@@ -6,7 +6,7 @@
 /*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:49:59 by hchouai           #+#    #+#             */
-/*   Updated: 2024/11/21 15:47:17 by zchtaibi         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:08:59 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	builtin_exit(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 {
 	int	exit_status;
 
-	(void)tokens;
 	exit_status = tools->exit_status;
 	if (cmd->str[1] == NULL)
 	{
@@ -54,6 +53,7 @@ int	builtin_exit(t_tools *tools, t_simple_cmds *cmd, t_lexical *tokens)
 		return (1);
 	}
 	exit_status = ft_atoi(cmd->str[1]);
+	perform_exit_cleanup(cmd, tokens, tools);
 	exit(exit_status);
 }
 

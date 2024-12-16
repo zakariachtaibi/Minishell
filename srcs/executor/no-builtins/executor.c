@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 13:26:26 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/15 23:11:33 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:05:08 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ static void	execute_child_process(t_exec *ctx)
 	while (copy_redir)
 	{
 		if (copy_redir->token == TOKEN_HEREDOC)
-			redir_heredoc(&ctx->current_cmd, &copy_redir, *ctx->tools);
+			redir_heredoc(&ctx->current_cmd, &copy_redir,
+				*ctx->tools, ctx->tokens);
 		copy_redir = copy_redir->next;
 	}
 	redirect_io(ctx);
@@ -87,9 +88,7 @@ static void	execute_child_process(t_exec *ctx)
 		execute_cmd(ctx->current_cmd, ctx->tools, ctx->tokens);
 		ctx->e = (*ctx->tools)->exit_status;
 	}
-	free_cmds(&ctx->cmds_head);
-	free_tools(*ctx->tools);
-	free_lexical(ctx->tokens);
+	perform_exit_cleanup(ctx->cmds_head, ctx->tokens, *ctx->tools);
 	exit(ctx->e);
 }
 

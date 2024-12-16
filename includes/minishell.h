@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchouai <hchouai@student.42.fr>            +#+  +:+       +#+        */
+/*   By: zchtaibi <zchtaibi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:55:53 by hchouai           #+#    #+#             */
-/*   Updated: 2024/12/15 23:11:02 by hchouai          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:09:02 by zchtaibi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,8 @@ int							check_cd_arg_count(t_tools *tools,
 								t_simple_cmds *cmd);
 int							handle_home_path(t_tools *tools, char **path);
 void						redir_heredoc(t_simple_cmds **current_cmd,
-								t_lexical **redir, t_tools *tools);
+								t_lexical **redir, t_tools *tools,
+								t_lexical *tokens);
 int							ft_strlen_array(char **array);
 char						*unescape_spaces(char *str, int flag);
 void						free_lexical_node(t_lexical *node);
