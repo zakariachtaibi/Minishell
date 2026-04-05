@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>minishell — Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:           #060a06;
+    --bg-surface:   #0a0f0a;
+    --green:        #4ade80;
+    --green-dim:    rgba(74,222,128,0.4);
+    --green-ghost:  rgba(74,222,128,0.08);
+    --green-border: rgba(74,222,128,0.15);
+    --text:         rgba(232,245,233,0.75);
+    --text-dim:     rgba(232,245,233,0.4);
+    --text-ghost:   rgba(232,245,233,0.15);
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.4s ease forwards 0.1s;
+  }
+
+  .eyebrow-line { width: 24px; height: 1px; background: var(--green); }
+
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(52px, 10vw, 96px);
+    font-weight: 800;
+    color: rgba(232,245,233,0.92);
+    letter-spacing: -3px;
+    line-height: 0.9;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.4s ease forwards 0.2s;
+  }
+
+  .page-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    max-width: 400px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 0.4s ease forwards 0.3s;
+  }
+
+  .tags {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeUp 0.4s ease forwards 0.4s;
+  }
+
+  .tag {
+    padding: 4px 12px;
+    border: 1px solid var(--green-border);
+    color: var(--green);
+    font-size: 10px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Layout ── */
+  .demo-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    width: 100%;
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards 0.5s;
+  }
+
+  @media (max-width: 680px) {
+    .demo-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ── Terminal window ── */
+  .terminal {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--green-border);
+    background: var(--bg);
+  }
+
+  .titlebar {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(74,222,128,0.08);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-surface);
+  }
+
+  .traffic-lights { display: flex; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .titlebar-label { font-size: 10px; color: var(--green-dim); margin-left: 8px; flex: 1; }
+
+  .term-body {
+    padding: 14px;
+    height: 280px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hist-entry { margin-bottom: 2px; }
+
+  .prompt-line {
+    font-size: 10px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .p-user  { color: var(--green); }
+  .p-sep   { color: var(--green-dim); }
+  .p-cmd   { color: var(--text); }
+  .p-out   { font-size: 10px; color: rgba(74,222,128,0.55); margin-top: 1px; }
+  .p-err   { font-size: 10px; color: rgba(255,95,87,0.6); margin-top: 1px; }
+
+  .cursor-block {
+    width: 6px;
+    height: 12px;
+    background: var(--green);
+    display: inline-block;
+    margin-left: 1px;
+    animation: blink 0.9s step-start infinite;
+  }
+
+  .term-footer {
+    padding: 6px 14px;
+    border-top: 1px solid rgba(74,222,128,0.06);
+    font-size: 9px;
+    color: rgba(74,222,128,0.2);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── Right panel ── */
+  .right-panel { display: flex; flex-direction: column; gap: 16px; }
+
+  /* ── Info card ── */
+  .info-card {
+    border-radius: 12px;
+    border: 1px solid var(--green-border);
+    background: var(--bg);
+    padding: 16px;
+  }
+
+  .info-card-title {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-dim);
+    margin-bottom: 12px;
+  }
+
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .feature-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 10px;
+    line-height: 1.5;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .feature-row.visible { opacity: 1; transform: translateX(0); }
+
+  .feat-icon { color: var(--green); flex-shrink: 0; width: 12px; }
+  .feat-name { color: var(--text-dim); }
+  .feat-desc { color: rgba(232,245,233,0.25); font-size: 9px; }
+
+  /* ── Stats ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    border: 1px solid var(--green-border);
+    border-radius: 8px;
+    padding: 12px;
+    background: var(--bg);
+    text-align: center;
+  }
+
+  .stat-val {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green);
+    font-family: 'Syne', sans-serif;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 8px;
+    color: var(--text-ghost);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── Replay ── */
+  .replay-btn {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--green-border);
+    border-radius: 8px;
+    background: var(--green-ghost);
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    text-transform: uppercase;
+  }
+
+  .replay-btn:hover {
+    background: rgba(74,222,128,0.15);
+    border-color: rgba(74,222,128,0.3);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 40px;
+    font-size: 10px;
+    color: rgba(74,222,128,0.2);
+    text-align: center;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    animation: fadeUp 0.4s ease forwards 0.9s;
+  }
+
+  .footer a {
+    color: rgba(74,222,128,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer a:hover { color: var(--green); }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="eyebrow">
+    <span class="eyebrow-line"></span>
+    Systems Project · 42 Network · C
+    <span class="eyebrow-line"></span>
+  </div>
+  <h1 class="page-title">minishell</h1>
+  <p class="page-sub">
+    A Bash-like shell built in C from scratch. Lexer, parser, executor,
+    pipes, redirections, signals — no shortcuts, no libraries.
+  </p>
+  <div class="tags">
+    <span class="tag">C</span>
+    <span class="tag">fork / execve</span>
+    <span class="tag">pipes</span>
+    <span class="tag">heredoc</span>
+    <span class="tag">signals</span>
+    <span class="tag">readline</span>
+  </div>
+</header>
+
+<div class="demo-layout">
+
+  <!-- Terminal -->
+  <div class="terminal">
+    <div class="titlebar">
+      <div class="traffic-lights">
+        <div class="dot" style="background:#ff5f57"></div>
+        <div class="dot" style="background:#febc2e"></div>
+        <div class="dot" style="background:#28c840"></div>
+      </div>
+      <span class="titlebar-label">minishell — houda@42</span>
+    </div>
+
+    <div class="term-body" id="term-body">
+      <!-- history injected here -->
+      <div class="prompt-line" id="current-line">
+        <span class="p-user">houda@42</span><span class="p-sep">:~$ </span>
+        <span id="typed-text"></span>
+        <span class="cursor-block" id="cursor"></span>
+      </div>
+    </div>
+
+    <div class="term-footer">
+      <span>C · Linux · Processes · Pipes</span>
+      <span>42 Network</span>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="right-panel">
+
+    <div class="info-card">
+      <div class="info-card-title">features unlocked</div>
+      <div class="feature-list" id="feature-list">
+        <div class="feature-row" data-at="0"><span class="feat-icon">▸</span><div><div class="feat-name">pipes <span class="feat-desc">| chains stdout → stdin</span></div></div></div>
+        <div class="feature-row" data-at="1"><span class="feat-icon">▸</span><div><div class="feat-name">env vars <span class="feat-desc">$VAR expansion</span></div></div></div>
+        <div class="feature-row" data-at="2"><span class="feat-icon">▸</span><div><div class="feat-name">redirections <span class="feat-desc">&lt; &gt; &gt;&gt; &lt;&lt;</span></div></div></div>
+        <div class="feature-row" data-at="3"><span class="feat-icon">▸</span><div><div class="feat-name">built-ins <span class="feat-desc">echo cd pwd export unset env exit</span></div></div></div>
+        <div class="feature-row" data-at="4"><span class="feat-icon">▸</span><div><div class="feat-name">signals <span class="feat-desc">ctrl-C ctrl-D ctrl-\</span></div></div></div>
+        <div class="feature-row" data-at="5"><span class="feat-icon">▸</span><div><div class="feat-name">exit status <span class="feat-desc">$? last pipeline</span></div></div></div>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-cmds">0</div>
+        <div class="stat-label">commands</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-pipes">0</div>
+        <div class="stat-label">pipes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-builtins">0</div>
+        <div class="stat-label">built-ins</div>
+      </div>
+    </div>
+
+    <button class="replay-btn" onclick="replay()">↺ replay demo</button>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <a href="https://github.com/hchouai/minishell" target="_blank">github.com/hchouai/minishell</a>
+  &nbsp;·&nbsp; hchouai · zchtaibi &nbsp;·&nbsp; 42 Network
+</footer>
+
+<script>
+const COMMANDS = [
+  { input: "ls -la | grep .c | wc -l", output: "42",                  pipes: 2, builtins: 0, feat: 0 },
+  { input: "export USER=houda",         output: "",                    pipes: 0, builtins: 1, feat: 1 },
+  { input: "echo $USER",                output: "houda",               pipes: 0, builtins: 1, feat: 2 },
+  { input: "echo hello > out.txt",      output: "",                    pipes: 0, builtins: 1, feat: 3 },
+  { input: "cat out.txt >> log.txt",    output: "",                    pipes: 0, builtins: 0, feat: 4 },
+  { input: "echo $?",                   output: "0",                   pipes: 0, builtins: 1, feat: 5 },
+  { input: "exit",                      output: "logout",              pipes: 0, builtins: 1, feat: -1 },
+];
+
+let step      = 0;
+let cmdCount  = 0;
+let pipeCount = 0;
+let builtinCount = 0;
+let history   = [];
+let timers    = [];
+
+function $(id) { return document.getElementById(id); }
+
+function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+function addTimer(fn, ms) { timers.push(setTimeout(fn, ms)); return ms; }
+
+function renderHistory() {
+  const body = $("term-body");
+  const currentLine = $("current-line");
+
+  // remove old history entries
+  body.querySelectorAll(".hist-entry").forEach(el => el.remove());
+
+  history.forEach(h => {
+    const entry = document.createElement("div");
+    entry.className = "hist-entry";
+    entry.innerHTML = `
+      <div class="prompt-line">
+        <span class="p-user">houda@42</span><span class="p-sep">:~$ </span>
+        <span class="p-cmd">${h.input}</span>
+      </div>
+      ${h.output ? `<div class="${h.isErr ? 'p-err' : 'p-out'}">${h.output}</div>` : ""}
+    `;
+    body.insertBefore(entry, currentLine);
+  });
+}
+
+function unlockFeature(idx) {
+  if (idx < 0) return;
+  const rows = document.querySelectorAll(".feature-row");
+  rows.forEach(r => {
+    if (parseInt(r.dataset.at) <= idx) r.classList.add("visible");
+  });
+}
+
+function runStep() {
+  if (step >= COMMANDS.length) {
+    // reset after pause
+    timers.push(setTimeout(replay, 2200));
+    return;
+  }
+
+  const cmd = COMMANDS[step];
+  const typed = $("typed-text");
+  typed.textContent = "";
+
+  let i = 0;
+  const typeInterval = setInterval(() => {
+    typed.textContent = cmd.input.slice(0, i + 1);
+    i++;
+    if (i >= cmd.input.length) {
+      clearInterval(typeInterval);
+
+      // show output after short pause
+      setTimeout(() => {
+        // push to history
+        history.push({ input: cmd.input, output: cmd.output });
+        renderHistory();
+        typed.textContent = "";
+
+        // update stats
+        cmdCount++;
+        pipeCount    += cmd.pipes;
+        builtinCount += cmd.builtins;
+        $("stat-cmds").textContent     = cmdCount;
+        $("stat-pipes").textContent    = pipeCount;
+        $("stat-builtins").textContent = builtinCount;
+
+        // unlock feature
+        unlockFeature(cmd.feat);
+
+        step++;
+        setTimeout(runStep, 420);
+      }, 300);
+    }
+  }, 62);
+}
+
+function replay() {
+  clearTimers();
+  step = 0; cmdCount = 0; pipeCount = 0; builtinCount = 0; history = [];
+
+  $("stat-cmds").textContent     = "0";
+  $("stat-pipes").textContent    = "0";
+  $("stat-builtins").textContent = "0";
+  $("typed-text").textContent    = "";
+
+  document.querySelectorAll(".feature-row").forEach(r => r.classList.remove("visible"));
+
+  // clear history DOM
+  document.querySelectorAll(".hist-entry").forEach(el => el.remove());
+
+  runStep();
+}
+
+replay();
+</script>
+</body>
+</html>
