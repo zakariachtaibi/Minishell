@@ -94,7 +94,7 @@ make re     # fclean + build
 
 ## Live Demo
 
-👉 [Open interactive demo →](https://hchouai.github.io/minishell/)
+👉 [Open interactive demo →](https://zakariachtaibi.github.io/Minishell/)
 
 ---
 
